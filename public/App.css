@@ -1,0 +1,60 @@
+@font-face {
+    font-family: Gruppo;
+    src: url('./Gruppo-Regular.ttf')
+}
+
+html{
+    font-family: Gruppo;
+    font-size: 2em;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+#root{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.Home{
+    width: 100%;
+    height: 100%;
+}
+
+#HomeBody{
+    height: 90%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#HomeLogo{
+    font-size: 2em;
+    --animate-duration: 5s;
+    margin-bottom: 5px;
+}
+
+#HomeDetail{
+    /* --animate-duration: 5s; */
+}
+
+.Header{
+    width: 100%;
+    height: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#HeaderRight{
+    display: flex;
+}
+
+.MenuItem{
+    margin-right: 15px;
+}

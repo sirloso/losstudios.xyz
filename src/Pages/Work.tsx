@@ -1,12 +1,64 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { Line } from 'rc-progress'
+
 import Header from '../Components/Header'
+import Footer from '../Components/WorkFooter'
+
 
 const Work = () => {
+    const [loading,udpateLoading] = useState(false)
+    const [percentage,updatePercentage] = useState(20)
+    const back = () => {}
+    
+    useEffect(()=>{
+        if(loading)
+        if(percentage === 100) udpateLoading(false) 
+    },[percentage])
+    
+    if(percentage<100) setTimeout(()=>{ updatePercentage(20 + percentage) },1000)
+    if(percentage<100) setTimeout(()=>{ updatePercentage(20 + percentage) },2000)
+    if(percentage<100) setTimeout(()=>{ updatePercentage(20 + percentage) },3000)
+    if(percentage<100) setTimeout(()=>{ updatePercentage(20 + percentage) },4000)
+    if(percentage<100) setTimeout(()=>{ updatePercentage(20 + percentage) },5000)
+
+    const canvas = useRef(null)
+
+    // attatch three
+    useEffect(()=>{
+        if(!loading)
+        if(canvas){
+            console.log("requiring")
+           require("../Logic/index.js") 
+           console.log('done');
+           
+        }
+    },[loading])
+
     return(
         <div id="Work">
             <Header showWork={false} showAbout showLogo />
-            <div id="Work">
-
+            <div className="Work">
+                {
+                    loading && (
+                        <div className="Loading">
+                            <div>loading</div>
+                            <Line className={"ProgressBar"} percent={percentage} strokeLinecap="square" strokeColor={"black"} trailColor={"white"}/>
+                        </div>
+                    )
+                }
+                {
+                    !loading && (
+                        <div ref={canvas} id="scene" >
+                        </div>
+                    )
+                }
+            </div>
+            <div id="FooterContainer">
+                <Footer
+                    centerCamera={back}
+                    back={back}
+                    contact={back}
+                />
             </div>
         </div>
     )

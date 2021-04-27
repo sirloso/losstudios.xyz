@@ -3,3 +3,9 @@ export interface HeaderProps{
     showLogo?: boolean
     showAbout?: boolean
 }
+
+export interface FooterProps{
+    centerCamera(): void
+    back(): void
+    contact(): void
+}

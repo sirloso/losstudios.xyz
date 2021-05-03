@@ -2,6 +2,7 @@
 const THREE = require('three')
 const TWEEN = require('tween')
 const Tile = require("./tile").Tile
+const Panel = require('./Animations').Panel
 const DAT = require('dat.gui')
 
 const gui = new DAT.GUI()
@@ -64,6 +65,15 @@ for (let i = 0; i < tiles.length; i++) {
     tiles[i].tc.mesh.position.set(colOffset, rowOffest, 0)
 }
 
+let backPanel = new Panel()
+
+scene.add(backPanel.mesh)
+backPanel.mesh.position.set(1.5,3.4,-29)
+
+// gui.add(backPanel.mesh.position,"x")
+// gui.add(backPanel.mesh.position,"y")
+// gui.add(backPanel.mesh.position,"z")
+
 camera.position.set(startX, startY, startZ)
 light = new THREE.AmbientLight(0x00FFFF, 1);
 
@@ -114,11 +124,12 @@ function onMouseDown(event) {
     event.preventDefault()
     if (event.type === 'mousedown' && lastobj && !reading) {
         let tmp = lastobj
+        console.log(lastobj)
         lastobj.hover(1)
         setTimeout(
             () => { tmp.hover(2) }, 2000
         )
-        zoomIn()
+        // zoomIn()
     }
 }
 
@@ -133,12 +144,12 @@ let control = {
     resetCamera
 }
 
-gui.add(control, 'zoomIn')
-gui.add(control, 'zoomOut')
-gui.add(control, 'resetCamera')
-gui.add(camera.position,'x')
-gui.add(camera.position,'y')
-gui.add(camera.position,'z')
+// gui.add(control, 'zoomIn')
+// gui.add(control, 'zoomOut')
+// gui.add(control, 'resetCamera')
+// gui.add(camera.position,'x')
+// gui.add(camera.position,'y')
+// gui.add(camera.position,'z')
 
 // threejs functions
 function resetCamera() {
@@ -230,7 +241,15 @@ function animate() {
             intersects[0].point.y
         )
         document.getElementById('scene').style.cursor = 'pointer'
+        //reset the tiles if we hover on the back board
+        if(intersects[0].object === backPanel.mesh && lastobj){
+            console.log("no tile")
+            // set rotation to zero
+            lastobj._rotate(0, 0)
+            // lastobj = null
+        }
         lastobj = intersects[0].object
+
     } else {
         if (lastobj) {
             document.getElementById('scene').style.cursor = 'default'

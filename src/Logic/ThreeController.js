@@ -32,19 +32,21 @@ export class ThreeController {
         this.registerCanvas = this.registerCanvas.bind(this)
         this.title = canvasTitle
         let textures = []
+
         // todo: make this variable on the projects uploaded
         for(let i = 0;i<6;i++){
             //note textures[4] is front facing
+            let color = Math.floor(Math.random()*16777215).toString(16)
             textures.push(
                 new THREE.MeshBasicMaterial({
-                    color:new THREE.Color('black')
+                    color:new THREE.Color(`#${color}`)
                 })
             )
         }
 
-        textures[4] = new THREE.MeshBasicMaterial({
-                    color:new THREE.Color('red')
-                })
+        // textures[4] = new THREE.MeshBasicMaterial({
+        //             color:new THREE.Color('red')
+        //         })
 
         this.mesh = new THREE.Mesh(this.geometry, textures)
         this.obj = this.mesh

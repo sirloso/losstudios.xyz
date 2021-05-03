@@ -8,6 +8,7 @@ export class Panel{
     mesh: three.Mesh
     photos: Array<string>
     visiible: boolean
+    homeColor: three.Color 
 
     constructor(){
         this.updateVisibility = this.updateVisibility.bind(this)
@@ -16,11 +17,13 @@ export class Panel{
         // set up geometry and mesh
         this.geometry = new three.BoxGeometry(20,20,0.1)
         let textures:Array<three.MeshBasicMaterial> = []
+        let color = Math.floor(Math.random()*16777215).toString(16)
+        this.homeColor = new three.Color(`#${color}`)
+
         for(let i = 0;i<6;i++){
-            let color = Math.floor(Math.random()*16777215).toString(16)
             textures.push( 
                 new three.MeshBasicMaterial({
-                    color:new three.Color(`#${color}`)
+                    color: this.homeColor
                 })
             )
         }
@@ -43,12 +46,16 @@ export class Panel{
         }
     }
 
-    hover(){
+    hover(newColor:three.Color){
         try{
-            console.log("panel hover")
+            this.mesh.material[4].color = newColor
         }catch(e){
-            console.log("unable to update and show gallery",e) 
+            console.log("unable to update panel color",e) 
         }
     }
 
+
+    resetColor(){
+        this.mesh.material[4].color = this.homeColor
+    }
 }

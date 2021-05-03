@@ -241,13 +241,21 @@ function animate() {
             intersects[0].point.y
         )
         document.getElementById('scene').style.cursor = 'pointer'
+
+
+        // update back panel to color of tile
+        let meshMaterials = intersects[0].object.material
+
+        if(meshMaterials[4]) backPanel.hover(meshMaterials[4].color)
+
         //reset the tiles if we hover on the back board
         if(intersects[0].object === backPanel.mesh && lastobj){
-            console.log("no tile")
             // set rotation to zero
             lastobj._rotate(0, 0)
             // lastobj = null
+            backPanel.resetColor()
         }
+
         lastobj = intersects[0].object
 
     } else {
@@ -257,6 +265,8 @@ function animate() {
             // set rotation to zero
             lastobj._rotate(0, 0)
             lastobj = null
+
+            backPanel.resetColor()
         }
     }
 

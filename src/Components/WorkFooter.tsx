@@ -4,10 +4,10 @@ import { FooterProps } from "../Logic/types"
 const Footer = (props: FooterProps) => {
     return(
         <div className="Footer">
-            <div id="BackButton" onClick={props.back}>
+            <div className="hover" id="BackButton" onClick={props.back}>
                 back
             </div>
-            <div id="CenterCameraButton" onClick={props.centerCamera}>
+            <div className="hover" id="CenterCameraButton" onClick={props.centerCamera}>
                 center camera
             </div>
         </div>

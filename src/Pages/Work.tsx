@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Line } from 'rc-progress'
 
+import { zoomOut, setup } from '../Logic/index.js'
+
 import Header from '../Components/Header'
 import Footer from '../Components/WorkFooter'
 
@@ -8,7 +10,7 @@ import Footer from '../Components/WorkFooter'
 const Work = () => {
     const [loading,udpateLoading] = useState(false)
     const [percentage,updatePercentage] = useState(20)
-    const back = () => {}
+    let back = zoomOut
     
     useEffect(()=>{
         if(loading)
@@ -28,9 +30,8 @@ const Work = () => {
         if(!loading)
         if(canvas){
             console.log("requiring")
-           require("../Logic/index.js") 
-           console.log('done');
-           
+            setup()    
+            console.log('done');
         }
     },[loading])
 

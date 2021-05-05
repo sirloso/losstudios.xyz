@@ -7,7 +7,9 @@ const DAT = require('dat.gui')
 
 const gui = new DAT.GUI()
 
-let camera, lastobj, lastTap, hiddenObj, clearMouse
+
+let camera, lastobj, lastTap, clearMouse,zoomed, zooming, scene, renderer, backPanel
+zoomed = false
 let modalMode = false
 let tiles = []
 var vec = new THREE.Vector3(); // create once and reuse
@@ -30,6 +32,8 @@ let rc = new THREE.Raycaster()
 let m = new THREE.Vector2()
 renderer = new THREE.WebGLRenderer({ antialias: true })
 
+
+
 // window listeners
 window.addEventListener('resize', onWindowResize, false);
 window.addEventListener('mousemove', onMouseMove, false);
@@ -47,35 +51,37 @@ for (let i = 0; i < 6; i++) {
     tiles.push(new Tile(geometry, `shaya`))
 }
 
-let sceneElement = document.getElementById('scene')
-console.log(sceneElement);
-let sceneBoundingBox = sceneElement.getBoundingClientRect()
-renderer.setSize(sceneBoundingBox.width, sceneBoundingBox.height)
 
-sceneElement.appendChild(renderer.domElement);
-let scene = new THREE.Scene()
-scene.background = new THREE.Color('white')
+export const setup = () => {
+    let sceneElement = document.getElementById('scene')
+    let sceneBoundingBox = sceneElement.getBoundingClientRect()
+    renderer.setSize(sceneBoundingBox.width, sceneBoundingBox.height)
 
-// todo: make the row based on the height
-// lay tiles out
-for (let i = 0; i < tiles.length; i++) {
-    scene.add(tiles[i].tc.obj)
-    let colOffset = i % TILES_PER_ROW * NUM_ROWS
-    let rowOffest = Math.floor(i / TILES_PER_ROW) * NUM_ROWS
-    tiles[i].tc.mesh.position.set(colOffset, rowOffest, 0)
+    sceneElement.appendChild(renderer.domElement);
+    scene = new THREE.Scene()
+    scene.background = new THREE.Color('white')
+
+    // todo: make the row based on the height
+    // lay tiles out
+    for (let i = 0; i < tiles.length; i++) {
+        scene.add(tiles[i].tc.obj)
+        let colOffset = i % TILES_PER_ROW * NUM_ROWS
+        let rowOffest = Math.floor(i / TILES_PER_ROW) * NUM_ROWS
+        tiles[i].tc.mesh.position.set(colOffset, rowOffest, 0)
+    }
+
+    backPanel = new Panel()
+
+    scene.add(backPanel.mesh)
+    backPanel.mesh.position.set(1.5, 3.4, -29)
+
+    camera.position.set(startX, startY, startZ)
+    light = new THREE.AmbientLight(0x00FFFF, 1);
+
+    animate()
 }
 
-let backPanel = new Panel()
 
-scene.add(backPanel.mesh)
-backPanel.mesh.position.set(1.5,3.4,-29)
-
-// gui.add(backPanel.mesh.position,"x")
-// gui.add(backPanel.mesh.position,"y")
-// gui.add(backPanel.mesh.position,"z")
-
-camera.position.set(startX, startY, startZ)
-light = new THREE.AmbientLight(0x00FFFF, 1);
 
 // window functions
 // let width = document.body.clientWidth 
@@ -122,14 +128,22 @@ function onMouseMove(event) {
 
 function onMouseDown(event) {
     event.preventDefault()
-    if (event.type === 'mousedown' && lastobj && !reading) {
-        let tmp = lastobj
-        console.log(lastobj)
-        lastobj.hover(1)
-        setTimeout(
-            () => { tmp.hover(2) }, 2000
-        )
-        // zoomIn()
+    console.log("HELLO", lastobj)
+    if (zooming && !lastobj) return
+    try {
+        if (event.type === 'mousedown' && lastobj && !reading) {
+            if (lastobj === backPanel.mesh) return
+            let tmp = lastobj
+            console.log(lastobj)
+            if (lastobj.hover)
+                lastobj.hover(1)
+            // setTimeout(
+            //     () => { tmp.hover(2) }, 2000
+            // )
+            zoomIn()
+        }
+    } catch (e) {
+        console.log("FUCK", e)
     }
 }
 
@@ -162,26 +176,43 @@ function resetCamera() {
     camera.position.set(startX, startY, startZ)
     camera.lookAt(new THREE.Vector3(startX, startY, startZ))
     document.getElementById('reset').style.setProperty('color', 'black')
-    if (hiddenObj) hiddenObj.visible = true
+    // if (hiddenObj) hiddenObj.visible = true
 }
 
 function zoomIn() {
     if (!lastobj) return
 
-    var direction = new THREE.Vector3();
-    hiddenObj = lastobj
-    lastobj.getWorldDirection(direction);
-    camera.position.copy(lastobj.position).add(direction.multiplyScalar(1));
-    camera.lookAt(lastobj.position);
-    modalMode = true
-    setTimeout(() => {
-        hiddenObj.visible = false
-        reading = true
-        lastobj = null
-        // document.getElementById('modalWrapper').style.setProperty('visibility', 'visible')
-        // document.getElementById('back').style.setProperty('color', 'red')
-        // document.getElementById('reset').style.setProperty('color', 'black')
-    }, 1500)
+    let to = {
+        x: 1.5,
+        y: 3.3,
+        z: -15.1
+    }
+
+    zooming = true
+    lastobj = null
+
+    let tween = new TWEEN.Tween(from())
+        .to(to, 1000)
+        .easing(TWEEN.Easing.Linear.None)
+        .onUpdate(function () {
+            camera.position.set(this.x, this.y, this.z);
+            // camera.lookAt(new THREE.Vector3(0,0,0));
+        })
+        .onComplete(function () {
+            // camera.position.set(startX,startY,startZ)
+            // camera.lookAt(new THREE.Vector3(0,0,0));
+            setTimeout(()=>{
+                zooming = false
+                zoomed = true
+            //     lastobj = null
+            },500)
+            panelView = true
+        })
+        .start();
+
+    // camera.position.set(startX, startY, startZ)
+    // camera.fov = 75
+    camera.updateProjectionMatrix();
 }
 
 let from = () => {
@@ -192,16 +223,16 @@ let from = () => {
     }
 }
 
-function zoomOut() {
+export function zoomOut() {
     let to = {
-        x: startX / 2,
-        y: startY / 2,
-        z: startZ / 2
+        x: startX ,
+        y: startY ,
+        z: startZ 
     }
-    hiddenObj.visible = true
-    document.getElementById('modalWrapper').style.setProperty('visibility', 'hidden')
-    document.getElementById('reset').style.setProperty('color', 'red')
-    document.getElementById('back').style.setProperty('color', 'black')
+    // hiddenObj.visible = true
+    // document.getElementById('modalWrapper').style.setProperty('visibility', 'hidden')
+    // document.getElementById('reset').style.setProperty('color', 'red')
+    // document.getElementById('back').style.setProperty('color', 'black')
     reading = false
 
     let tween = new TWEEN.Tween(from())
@@ -214,6 +245,7 @@ function zoomOut() {
         .onComplete(function () {
             // camera.position.set(startX,startY,startZ)
             // camera.lookAt(new THREE.Vector3(0,0,0));
+            zoomed = false
         })
         .start();
 
@@ -246,14 +278,14 @@ function animate() {
         // update back panel to color of tile
         let meshMaterials = intersects[0].object.material
 
-        if(meshMaterials[4]) backPanel.hover(meshMaterials[4].color)
+        if (meshMaterials[4]) backPanel.hover(meshMaterials[4].color)
 
         //reset the tiles if we hover on the back board
-        if(intersects[0].object === backPanel.mesh && lastobj){
+        if (intersects[0].object === backPanel.mesh && lastobj) {
             // set rotation to zero
             lastobj._rotate(0, 0)
             // lastobj = null
-            backPanel.resetColor()
+            if (!zooming && !zoomed) backPanel.resetColor()
         }
 
         lastobj = intersects[0].object
@@ -266,14 +298,13 @@ function animate() {
             lastobj._rotate(0, 0)
             lastobj = null
 
-            backPanel.resetColor()
+            if (!zooming && !zoomed) backPanel.resetColor()
         }
     }
 
     renderer.render(scene, camera);
 }
 
-animate()
 
 function sleep(num) {
     return new Promise(resolve => setTimeout(resolve, num))

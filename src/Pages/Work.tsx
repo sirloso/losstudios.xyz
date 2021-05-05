@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Line } from 'rc-progress'
 
-import { zoomOut, setup } from '../Logic/index.js'
+import { zoomOut, setup } from '../Logic/index'
 
 import Header from '../Components/Header'
 import Footer from '../Components/WorkFooter'

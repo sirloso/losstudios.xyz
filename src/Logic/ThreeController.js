@@ -39,7 +39,8 @@ export class ThreeController {
             let color = Math.floor(Math.random()*16777215).toString(16)
             textures.push(
                 new THREE.MeshBasicMaterial({
-                    color:new THREE.Color(`#${color}`)
+                    // color:new THREE.Color(`#${color}`)
+                    color: 'black'
                 })
             )
         }

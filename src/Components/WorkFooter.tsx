@@ -7,9 +7,6 @@ const Footer = (props: FooterProps) => {
             <div className="hover" id="BackButton" onClick={props.back}>
                 back
             </div>
-            <div className="hover" id="CenterCameraButton" onClick={props.centerCamera}>
-                center camera
-            </div>
         </div>
     )
 }

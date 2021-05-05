@@ -23,7 +23,8 @@ export class Panel{
         for(let i = 0;i<6;i++){
             textures.push( 
                 new three.MeshBasicMaterial({
-                    color: this.homeColor
+                    color: "red",//this.homeColor,
+                    wireframe: false
                 })
             )
         }

@@ -1,4 +1,3 @@
-// require('regenerator-runtime/runtime')
 const THREE = require('three')
 const TWEEN = require('tween')
 const Tile = require("./tile").Tile
@@ -8,7 +7,8 @@ const DAT = require('dat.gui')
 const gui = new DAT.GUI()
 
 
-let camera, lastobj, lastTap, clearMouse,zoomed, zooming, scene, renderer, backPanel
+let camera, lastobj, lastTap, clearMouse, zoomed, zooming, scene, renderer, backPanel
+let composer
 zoomed = false
 let modalMode = false
 let tiles = []
@@ -31,7 +31,8 @@ camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight,
 let rc = new THREE.Raycaster()
 let m = new THREE.Vector2()
 renderer = new THREE.WebGLRenderer({ antialias: true })
-
+renderer.autoClear = false
+renderer.setClearColor(0x101000);
 
 
 // window listeners
@@ -40,9 +41,6 @@ window.addEventListener('mousemove', onMouseMove, false);
 window.addEventListener('mousedown', onMouseDown, false)
 window.addEventListener('touchmove', onTouchMove, false);
 window.addEventListener('touchend', onDoubleClick, false);
-window.zoomOut = zoomOut
-window.resetCamera = resetCamera
-window.onFooterHover = onFooterHover
 
 // geometry
 let geometry = new THREE.BoxGeometry(2, 2, 0.125);
@@ -72,25 +70,14 @@ export const setup = () => {
 
     backPanel = new Panel()
 
-    scene.add(backPanel.mesh)
     backPanel.mesh.position.set(1.5, 3.4, -29)
+    scene.add(backPanel.mesh)
 
     camera.position.set(startX, startY, startZ)
-    light = new THREE.AmbientLight(0x00FFFF, 1);
 
     animate()
 }
 
-
-
-// window functions
-// let width = document.body.clientWidth 
-// if(width < 800){
-//     let _modal = document.getElementById('modal')
-//     let text = _modal.children[1]
-//     let e = document.createElement('div')
-//     let b = document.createElement('div')
-// }
 
 function onDoubleClick() {
     event.preventDefault()
@@ -128,22 +115,16 @@ function onMouseMove(event) {
 
 function onMouseDown(event) {
     event.preventDefault()
-    console.log("HELLO", lastobj)
     if (zooming && !lastobj) return
     try {
         if (event.type === 'mousedown' && lastobj && !reading) {
             if (lastobj === backPanel.mesh) return
-            let tmp = lastobj
-            console.log(lastobj)
             if (lastobj.hover)
                 lastobj.hover(1)
-            // setTimeout(
-            //     () => { tmp.hover(2) }, 2000
-            // )
             zoomIn()
         }
     } catch (e) {
-        console.log("FUCK", e)
+        console.log(e)
     }
 }
 
@@ -158,13 +139,6 @@ let control = {
     resetCamera
 }
 
-// gui.add(control, 'zoomIn')
-// gui.add(control, 'zoomOut')
-// gui.add(control, 'resetCamera')
-// gui.add(camera.position,'x')
-// gui.add(camera.position,'y')
-// gui.add(camera.position,'z')
-
 // threejs functions
 function resetCamera() {
     if (modalMode) return
@@ -175,8 +149,6 @@ function resetCamera() {
 
     camera.position.set(startX, startY, startZ)
     camera.lookAt(new THREE.Vector3(startX, startY, startZ))
-    document.getElementById('reset').style.setProperty('color', 'black')
-    // if (hiddenObj) hiddenObj.visible = true
 }
 
 function zoomIn() {
@@ -196,22 +168,15 @@ function zoomIn() {
         .easing(TWEEN.Easing.Linear.None)
         .onUpdate(function () {
             camera.position.set(this.x, this.y, this.z);
-            // camera.lookAt(new THREE.Vector3(0,0,0));
         })
         .onComplete(function () {
-            // camera.position.set(startX,startY,startZ)
-            // camera.lookAt(new THREE.Vector3(0,0,0));
-            setTimeout(()=>{
+            setTimeout(() => {
                 zooming = false
                 zoomed = true
-            //     lastobj = null
-            },500)
-            panelView = true
+            }, 500)
         })
         .start();
 
-    // camera.position.set(startX, startY, startZ)
-    // camera.fov = 75
     camera.updateProjectionMatrix();
 }
 
@@ -225,14 +190,11 @@ let from = () => {
 
 export function zoomOut() {
     let to = {
-        x: startX ,
-        y: startY ,
-        z: startZ 
+        x: startX,
+        y: startY,
+        z: startZ
     }
-    // hiddenObj.visible = true
-    // document.getElementById('modalWrapper').style.setProperty('visibility', 'hidden')
-    // document.getElementById('reset').style.setProperty('color', 'red')
-    // document.getElementById('back').style.setProperty('color', 'black')
+
     reading = false
 
     let tween = new TWEEN.Tween(from())
@@ -240,11 +202,8 @@ export function zoomOut() {
         .easing(TWEEN.Easing.Linear.None)
         .onUpdate(function () {
             camera.position.set(this.x, this.y, this.z);
-            // camera.lookAt(new THREE.Vector3(0,0,0));
         })
         .onComplete(function () {
-            // camera.position.set(startX,startY,startZ)
-            // camera.lookAt(new THREE.Vector3(0,0,0));
             zoomed = false
         })
         .start();
@@ -301,6 +260,7 @@ function animate() {
             if (!zooming && !zoomed) backPanel.resetColor()
         }
     }
+
 
     renderer.render(scene, camera);
 }

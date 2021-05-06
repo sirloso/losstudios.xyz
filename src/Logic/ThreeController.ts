@@ -1,6 +1,12 @@
-const THREE = require('three')
+import * as THREE from 'three'
 class Rotater{
-    constructor(width,height,center){
+    _width: number
+    _height: number
+    w: number
+    h: number
+    rmax: number
+    center: {x:number,y:number}
+    constructor(width:number,height:number,center:{x:number,y:number}){
         this._width = width
         this._height = height 
 
@@ -12,7 +18,7 @@ class Rotater{
         this.center = center
     }
 
-    calculateRotation(x,y){
+    calculateRotation(x:number,y:number){
         x = this.center.x - x 
         y = this.center.y - y
         // creates tilt effect
@@ -23,7 +29,15 @@ class Rotater{
 }
 
 export class ThreeController {
-    constructor(geometry,  canvasTitle = 'defaultCanvas0',tag) {
+    geometry: THREE.BufferGeometry
+    c: HTMLElement
+    tag: string
+    title: string
+    mesh: THREE.Mesh
+    obj: THREE.Mesh
+    rotator: Rotater
+    canvasTexture: THREE.CanvasTexture
+    constructor(geometry: THREE.BufferGeometry,  canvasTitle = 'defaultCanvas0',tag:string) {
         this.geometry = geometry
         this.tag = tag
         this.redraw = this.redraw.bind(this)
@@ -36,26 +50,24 @@ export class ThreeController {
         // todo: make this variable on the projects uploaded
         for(let i = 0;i<6;i++){
             //note textures[4] is front facing
-            let color = Math.floor(Math.random()*16777215).toString(16)
             textures.push(
                 new THREE.MeshBasicMaterial({
-                    // color:new THREE.Color(`#${color}`)
                     color: 'black'
                 })
             )
         }
 
-        // textures[4] = new THREE.MeshBasicMaterial({
-        //             color:new THREE.Color('red')
-        //         })
-
         this.mesh = new THREE.Mesh(this.geometry, textures)
         this.obj = this.mesh
+        //@ts-ignore
         this.mesh.hover = this.hover
+        //@ts-ignore
         this.mesh._rotate = this._rotate
 
         this.rotator = new Rotater(
+            //@ts-ignore
             this.geometry.parameters.width,
+            //@ts-ignore
             this.geometry.parameters.width,
             this.mesh.position
         )
@@ -74,27 +86,30 @@ export class ThreeController {
     }
 
     async registerCanvas() {
-        // this.c = document.getElementById(this.tag)
-        // this.mesh.material[4] = new THREE.MeshBasicMaterial({
-        //     map: new THREE.CanvasTexture(this.c)
-        // })
+        this.c = document.getElementById(this.tag)
+        this.mesh.material[4] = new THREE.MeshBasicMaterial({
+            //@ts-ignore
+            map: new THREE.CanvasTexture(this.c)
+        })
     }
 
     async redraw() {
-        // let tmp = this.mesh.material[4]
-        // this.mesh.material[4] = new THREE.MeshBasicMaterial({
-        //     map: new THREE.CanvasTexture(this.c)
-        // })
-        // await this.sleep(100)
-        // try{
-        //     tmp.dispose()
-        // }catch(e){
-        //     console.log(e);
-        // }
+        let tmp = this.mesh.material[4]
+        this.mesh.material[4] = new THREE.MeshBasicMaterial({
+            //@ts-ignore
+            map: new THREE.CanvasTexture(this.c)
+        })
+        await this.sleep(100)
+        try{
+            tmp.dispose()
+        }catch(e){
+            console.log(e);
+        }
     }
 
     async hover(m) {
-        //  this.parentRedraw(m)
+        //@ts-ignore
+         this.parentRedraw(m)
     }
 
     sleep(num) {

@@ -2,13 +2,12 @@ const THREE = require('three')
 const TWEEN = require('tween')
 const Tile = require("./tile").Tile
 const Panel = require('./Animations').Panel
-const DAT = require('dat.gui')
+// const DAT = require('dat.gui')
 
-const gui = new DAT.GUI()
+// const gui = new DAT.GUI()
 
 
 let camera, lastobj, lastTap, clearMouse, zoomed, zooming, scene, renderer, backPanel
-let composer
 zoomed = false
 let modalMode = false
 let tiles = []
@@ -44,9 +43,9 @@ window.addEventListener('touchend', onDoubleClick, false);
 
 // geometry
 let geometry = new THREE.BoxGeometry(2, 2, 0.125);
+let titles = ['one','two','trhe','four','fix','six']
 for (let i = 0; i < 6; i++) {
-    // tiles.push(new c.Tile(geometry, `${i}\nstudio`))
-    tiles.push(new Tile(geometry, `shaya`))
+    tiles.push(new Tile(geometry, titles[i]))
 }
 
 
@@ -119,8 +118,8 @@ function onMouseDown(event) {
     try {
         if (event.type === 'mousedown' && lastobj && !reading) {
             if (lastobj === backPanel.mesh) return
-            if (lastobj.hover)
-                lastobj.hover(1)
+            // this was used to draw the small squares
+            if (lastobj.hover) lastobj.hover(1)
             zoomIn()
         }
     } catch (e) {
@@ -237,7 +236,7 @@ function animate() {
         // update back panel to color of tile
         let meshMaterials = intersects[0].object.material
 
-        if (meshMaterials[4]) backPanel.hover(meshMaterials[4].color)
+        if (meshMaterials[4]) backPanel.hover(meshMaterials[4])
 
         //reset the tiles if we hover on the back board
         if (intersects[0].object === backPanel.mesh && lastobj) {

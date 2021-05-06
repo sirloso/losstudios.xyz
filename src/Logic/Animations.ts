@@ -47,9 +47,8 @@ export class Panel{
         }
     }
 
-    hover(newColor:three.Color){
+    hover(newColor:three.MeshBasicMaterial){
         try{
-            this.mesh.material[4].color = newColor
         }catch(e){
             console.log("unable to update panel color",e) 
         }

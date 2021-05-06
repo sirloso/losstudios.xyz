@@ -1,4 +1,5 @@
 const p5 = require('p5')
+
 export class P5Controller {
     constructor(title,tag) {
         this.init = this.init.bind(this)
@@ -72,85 +73,40 @@ export class P5Controller {
     }
 
     async draw() {
-        // if (this.mode === 0) {
-        //     // note: reason for 2 for loops is that the p.fill messes something up
-        //     //      when I create text and square in the same loop
-        //     // draw squares
-        //     let rowCount = this.rowCount
-        //     let rectW = this.rectW
-        //     let rectH = this.rectW
-
-        //     // draw text
-        //     for (let i = 0; i < this.len; i++) {
-        //         let offset = i % rowCount * rectW
-        //         let offsetRow = Math.floor(i / rowCount) * rectW
-        //         if (i % 2 !== 0) {
-        //             this.p.fill(255, 0, 0)
-        //         } else {
-        //             this.p.fill(0, 0, 0)
-        //         }
-        //         this.p.textFont(this.gruppo)
-
-        //         this.p.text(this.testBin[i], this.textX + offset, this.textY + offsetRow)
-        //         this.p.textSize(this.fontSize);
-        //         this.p.textAlign(this.p.CENTER)
-
-        //         this.textData.push({
-        //             x: this.textX + offset,
-        //             y: this.textY + offsetRow,
-        //             data: this.testBin[i]
-        //         })
-        //     }
-        //     this.p.fill(255, 255, 255)
-        //     this.p.rect(
-        //         0, 0, this.rectW, this.rectH
-        //     )
-        //     await this.sleep(100)
-        //     this.p.fill(0, 0, 0)
-        //     this.p.text(1, this.textX, this.textY)
-        //     this.p.textSize(this.fontSize)
-        //     this.p.textAlign(this.p.CENTER)
-        //     this.p.noLoop()
-        // this.parentRedraw()
-        // } else if (this.mode === 2) {
-        //     // main 
-        //     let w = this.w 
-        //     let h = this.h
-        //     this.p.fill(25,25,25)
-        //     this.p.rect(0, 0, w, h)
-        //     // await this.sleep(100)
-        //     this.p.fill(255,255,255)
-        //     this.p.textSize(120)
-        //     this.p.textAlign(this.p.CENTER)
-        //     this.p.text(this.title, w / 2, h / 2 +25)
-        //     this.p.noLoop()
-        //     this.parentRedraw()
-        // } else {
-        //     // draw the squares 
-        //     // for(let i=0;i<this.t.length;i++){
-        //         do{
-        //             let i = Math.floor(Math.random()*this.squareData.length)
-        //             this.redrawSquare(this.squareData[i],this.textData[i],true)
-        //             await this.sleep(0.00001)
-        //             this.parentRedraw()
-        //     }while(this.mode === 1)
-        //     this.p.noLoop()
-        // }
-        // if(!this.c){
-        //     this.c = document.getElementById('defaultCanvas0')
-        //     await this.sleep(100)
-        //     this.registerCanvas()
-        //     this.parentRedraw()
-        // }
+        console.log(this.title)
+         if (this.mode === 2) {
+            // main 
+            let w = this.w 
+            let h = this.h
+            this.p.fill(25,25,25)
+            this.p.rect(0, 0, w, h)
+            // await this.sleep(100)
+            this.p.fill(255,255,255)
+            this.p.textFont("Gruppo")
+            this.p.textSize(100)
+            this.p.textAlign(this.p.CENTER)
+            this.p.text(this.title, w / 2, h / 2 +25)
+            this.p.noLoop()
+            this.parentRedraw()
+        } 
+        if(!this.c){
+            this.c = document.getElementById('defaultCanvas0')
+            await this.sleep(100)
+            this.registerCanvas()
+            this.parentRedraw()
+        }
     }
 
     preload() {
-        // this.gruppo = this.p.loadFont('./Gruppo-Regular.ttf')
+        this.gruppo = this.p.loadFont('./Gruppo-Regular.c1045fba.ttf')
     }
 
     setup() {
         this._c = this.p.createCanvas(this.w,this.h)
         this._c.id(this.tag)
+        // this._c.cl
+        this._c.canvas.style.visibility = "hidden"
+        console.log(this._c.canvas)
     }
 
     animate(i = 0) {

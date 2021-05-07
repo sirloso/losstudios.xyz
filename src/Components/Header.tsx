@@ -6,8 +6,7 @@ import { HeaderProps } from '../Logic/types'
 const Header = (props: HeaderProps) => {
     return(
         <div className="Header">
-            <div id="HeaderLeft" onClick={()=>{
-            }}>
+            <div id="HeaderLeft" onClick={()=>{ }}>
                 {
                     props.showLogo && (
                         <div>

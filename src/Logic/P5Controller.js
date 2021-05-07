@@ -106,7 +106,6 @@ export class P5Controller {
         this._c.id(this.tag)
         // this._c.cl
         this._c.canvas.style.visibility = "hidden"
-        console.log(this._c.canvas)
     }
 
     animate(i = 0) {

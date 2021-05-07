@@ -15,7 +15,8 @@ export class Panel{
         this.hover = this.hover.bind(this)
 
         // set up geometry and mesh
-        this.geometry = new three.BoxGeometry(25,20,0.1)
+        if(window.innerWidth< 800) this.geometry = new three.BoxGeometry(25,45,0.1)
+        else this.geometry = new three.BoxGeometry(25,20,0.1)
         let textures:Array<three.MeshBasicMaterial> = []
         let color = Math.floor(Math.random()*16777215).toString(16)
         this.homeColor = new three.Color(`#${color}`)

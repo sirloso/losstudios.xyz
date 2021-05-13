@@ -17,13 +17,14 @@ var vec = new THREE.Vector3(); // create once and reuse
 let NUM_ROWS = 3
 let TILES_PER_ROW = 2
 
-let startX = 1.5
-let startY = 3.0
-let startZ = 5.5
+// let startX = 1.5
+// let startY = 3.0
+// let startZ = 5.5
 
-// let startX = 0
-// let startY = 0
-// let startZ = 4
+let startX = 0
+let startY = 0
+let startZ = 4
+
 
 let reading = false
 // todo: fix this
@@ -32,6 +33,9 @@ let offsetY = 0//.10
 
 // scene setup 
 camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+// gui.add(camera.position,"x")
+// gui.add(camera.position,"y")
+// gui.add(camera.position,"z")
 let rc = new THREE.Raycaster()
 let m = new THREE.Vector2()
 renderer = new THREE.WebGLRenderer({ antialias: true })
@@ -56,12 +60,13 @@ window.addEventListener('touchstart', onTouchStart, false);
 
 // geometry
 let geometry = new THREE.BoxGeometry(2, 2, 0.125);
-let titles = ['one','two','trhe','four','fix','six']
-for (let i = 0; i < 6; i++) {
+let titles = ['one','two','trhe','four','fix','8','a','b','c','d','e','1','2','3','4','123123']
+
+for (let i = 0; i < titles.length; i++) {
     tiles.push(new Tile(geometry, titles[i]))
 }
 
-    tileGroup = new THREE.Group()
+tileGroup = new THREE.Group()
 
 export const setup = () => {
     let sceneElement = document.getElementById('scene')
@@ -75,11 +80,12 @@ export const setup = () => {
 
     // todo: make the row based on the height
     // lay tiles out
+    console.log(tiles.length)
     for (let i = 0; i < tiles.length; i++) {
         // scene.add(tiles[i].tc.obj)
-        tileGroup.add(tiles[i].tc.obj)
         if(window.innerWidth < 800){
-            let rowOffest = i *  3 - 9
+            let rowOffest = i * -3  //- 9
+            console.log(i,rowOffest)
             tiles[ i ].tc.mesh.position.set(0.5, rowOffest, 0)
         }else{
             let colOffset = i % TILES_PER_ROW * NUM_ROWS
@@ -87,6 +93,7 @@ export const setup = () => {
 
             tiles[i].tc.mesh.position.set(colOffset, rowOffest, 0)
         }
+        tileGroup.add(tiles[i].tc.obj)
     }
 
     scene.add(tileGroup)
@@ -129,13 +136,21 @@ function onTouchMove(event) {
     let position = new THREE.Vector3()
     // position.setPositionFromMatrix( tileGroup.matrixWorld );
 
-
     let speed = 0.001
 
     let move =  event.touches[ 0 ].pageY 
     var deltaY = (move - sy );
+    var box = new THREE.Box3().setFromObject( tileGroup );
+    let height = box.max.y - box.min.y
+
+    if( tileGroup.position.y + (deltaY*speed) < 0 ) return
+    if( tileGroup.position.y + (deltaY*speed) > height - 2 ){
+        return
+    } 
+
     tileGroup.position.y += ( deltaY * speed );
 
+    console.log(box.min.y,box.max.y,box.max.y - box.min.y)
 }
 
 function onTouchStart(event){

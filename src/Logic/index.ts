@@ -80,12 +80,10 @@ export const setup = () => {
 
     // todo: make the row based on the height
     // lay tiles out
-    console.log(tiles.length)
     for (let i = 0; i < tiles.length; i++) {
         // scene.add(tiles[i].tc.obj)
         if(window.innerWidth < 800){
             let rowOffest = i * -3  //- 9
-            console.log(i,rowOffest)
             tiles[ i ].tc.mesh.position.set(0.5, rowOffest, 0)
         }else{
             let colOffset = i % TILES_PER_ROW * NUM_ROWS
@@ -150,7 +148,6 @@ function onTouchMove(event) {
 
     tileGroup.position.y += ( deltaY * speed );
 
-    console.log(box.min.y,box.max.y,box.max.y - box.min.y)
 }
 
 function onTouchStart(event){

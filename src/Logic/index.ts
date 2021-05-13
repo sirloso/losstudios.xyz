@@ -21,9 +21,9 @@ let TILES_PER_ROW = 2
 // let startY = 3.0
 // let startZ = 5.5
 
-let startX = 0
+let startX = -1
 let startY = 0
-let startZ = 4
+let startZ = 6
 
 
 let reading = false
@@ -84,7 +84,7 @@ export const setup = () => {
         // scene.add(tiles[i].tc.obj)
         if(window.innerWidth < 800){
             let rowOffest = i * -3  //- 9
-            tiles[ i ].tc.mesh.position.set(0.5, rowOffest, 0)
+            tiles[ i ].tc.mesh.position.set(0.5, rowOffest, -1)
         }else{
             let colOffset = i % TILES_PER_ROW * NUM_ROWS
             let rowOffest = Math.floor(i / TILES_PER_ROW) * NUM_ROWS

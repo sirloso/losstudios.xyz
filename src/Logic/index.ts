@@ -220,17 +220,6 @@ function onFooterHover(state) {
 
 
 // threejs functions
-function resetCamera() {
-    if (modalMode) return
-    // reset all rotations
-    // for (let o of tiles)
-    //     if (o.tc.obj.rotation.x !== 0 || o.tc.obj.rotation.y !== 0)
-            // o.tc.obj._rotate(0, 0)
-
-    // camera.position.set(startX, startY, startZ)
-    // camera.lookAt(new THREE.Vector3(startX, startY, startZ))
-}
-
 function zoomIn() {
     if (!lastobj) return
 
@@ -279,6 +268,7 @@ export function zoomOut() {
         })
         .onComplete(function () {
             zoomed = false
+            scrolling = false
         })
         .start();
 
@@ -286,6 +276,7 @@ export function zoomOut() {
     camera.fov = 75
     camera.updateProjectionMatrix();
     modalMode = false
+
 }
 
 tiles.forEach((tile) => {

@@ -10,9 +10,45 @@ export class P5Controller {
         this.title = title
         this.tag = tag
         this.parentRedraw = ()=>{}
-        new p5(this.init, 'p5')
+        // new p5(this.init, 'p5')
+        this.start()
     }
+    start(){
+        this.canvas = document.createElement("canvas")
+        this.canvas.id = this.tag
+        this.canvas.style.visibility = "hidden"
 
+        let width = 256
+        let height = 256
+        this.canvas.style.width = width + 'px'
+        this.canvas.style.height = height + 'px'
+
+        this.canvas.width = width * window.devicePixelRatio
+        this.canvas.height = height * window.devicePixelRatio
+
+        let ctx = this.canvas.getContext("2d")
+
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+        let fontSize = window.innerWidth < 800 ? 150 : 40
+        
+        ctx.fillStyle = "white"
+        ctx.font = `${fontSize}px Gruppo`;
+
+        let height2 = ctx.canvas.height / 2
+
+        ctx.textAlign = "center"
+        ctx.textBaseline = "middle"
+
+        let width2 = ctx.canvas.width / 2
+        ctx.fillText(this.title,width2,height2);
+
+        document.getElementById("scene").appendChild(this.canvas)
+        setTimeout(()=>{
+            if(this.registerCanvas) this.registerCanvas()
+        },2000)
+    }
     init(p) {
         this.testBin = ''
         for (let c of this.title) {

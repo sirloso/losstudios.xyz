@@ -30,7 +30,7 @@ class Rotater{
 
 export class ThreeController {
     geometry: THREE.BufferGeometry
-    c: HTMLElement
+    c:HTMLCanvasElement 
     tag: string
     title: string
     mesh: THREE.Mesh
@@ -73,7 +73,7 @@ export class ThreeController {
         )
     }
 
-    _rotate(x,y){
+    _rotate(x:number,y:number){
         if(x===0 && y===0){
             this.mesh.rotation.x = 0
             this.mesh.rotation.y = 0
@@ -86,11 +86,16 @@ export class ThreeController {
     }
 
     async registerCanvas() {
-        this.c = document.getElementById(this.tag)
+        this.c = document.getElementById(this.tag) as HTMLCanvasElement
+        let ctx = this.c.getContext("2d")
+
+        let texture = new THREE.CanvasTexture(ctx.canvas) 
+
         this.mesh.material[4] = new THREE.MeshBasicMaterial({
-            //@ts-ignore
-            map: new THREE.CanvasTexture(this.c)
+            map: texture
         })
+
+        this.mesh.material[4].map.minFilter = THREE.LinearMipmapNearestFilter
     }
 
     async redraw() {
@@ -99,7 +104,6 @@ export class ThreeController {
             //@ts-ignore
             map: new THREE.CanvasTexture(this.c)
         })
-        await this.sleep(100)
         try{
             tmp.dispose()
         }catch(e){
@@ -108,6 +112,7 @@ export class ThreeController {
     }
 
     async hover(m) {
+        console.log("hover")
         //@ts-ignore
          this.parentRedraw(m)
     }

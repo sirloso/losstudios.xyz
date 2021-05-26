@@ -6,13 +6,15 @@ const Tile = require("./tile").Tile
 const Panel = require('./Animations').Panel
 // const DAT = require('dat.gui')
 // const gui = new DAT.GUI()
+const mobile = window.innerWidth < 800
 
-let camera, lastobj, lastTap, clearMouse, zoomed, zooming, scene, renderer, backPanel, tileGroup
+let camera, lastobj, lastTap, clearMouse, zoomed, zooming, scene, renderer, backPanel, tileGroup,scrolling
 zoomed = false
 let modalMode = false
 let tiles = []
 var vec = new THREE.Vector3(); // create once and reuse
 
+scrolling = false
 
 let NUM_ROWS = 3
 let TILES_PER_ROW = 2
@@ -20,13 +22,23 @@ let TILES_PER_ROW = 2
 // let startX = 1.5
 // let startY = 3.0
 // let startZ = 5.5
+// let startX = -1
+// let startY = 0
+// let startZ = 6
 
-let startX = -1
-let startY = 0
-let startZ = 6
+const desktopCamera = {
+    x: 1.5,
+    y: 3.0,
+    z: 5.5
+}
+const mobileCamera = {
+    x: -1,
+    y: 0,
+    z: 6
+}
 
+const cameraPosition = mobile ? mobileCamera : desktopCamera
 
-let reading = false
 // todo: fix this
 let offsetX = 0//-.001
 let offsetY = 0//.10
@@ -52,9 +64,10 @@ renderer.setClearColor(0x101000);
 // window listeners
 window.addEventListener('resize', onWindowResize, false);
 window.addEventListener('mousemove', onMouseMove, false);
-// window.addEventListener('mousedown', onMouseDown, false)
+window.addEventListener('mousedown', onMouseDown, false)
 window.addEventListener('touchmove', onTouchMove, false);
 window.addEventListener('touchstart', onTouchStart, false);
+window.addEventListener('touchend',onTouchEnd,false)
 
 // window.addEventListener('touchend', onDoubleClick, false);
 
@@ -62,13 +75,10 @@ window.addEventListener('touchstart', onTouchStart, false);
 let geometry = new THREE.BoxGeometry(2, 2, 0.125);
 let titles = ['one','two','trhe','four','fix','8','a','b','c','d','e','1','2','3','4','123123']
 
-for (let i = 0; i < titles.length; i++) {
-    tiles.push(new Tile(geometry, titles[i]))
-}
 
 tileGroup = new THREE.Group()
 
-export const setup = () => {
+export const setup = async () => {
     let sceneElement = document.getElementById('scene')
     let sceneBoundingBox = sceneElement.getBoundingClientRect()
     renderer.setSize(sceneBoundingBox.width, sceneBoundingBox.height)
@@ -76,12 +86,15 @@ export const setup = () => {
     sceneElement.appendChild(renderer.domElement);
     scene = new THREE.Scene()
     scene.background = new THREE.Color('white')
-
+    for (let i = 0; i < titles.length; i++) {
+        tiles.push(new Tile(geometry, titles[i]))
+        // await tiles[i].setup()
+    }
 
     // todo: make the row based on the height
     // lay tiles out
     for (let i = 0; i < tiles.length; i++) {
-        // scene.add(tiles[i].tc.obj)
+        tileGroup.add(tiles[i].tc.obj)
         if(window.innerWidth < 800){
             let rowOffest = i * -3  //- 9
             tiles[ i ].tc.mesh.position.set(0.5, rowOffest, -1)
@@ -90,11 +103,11 @@ export const setup = () => {
             let rowOffest = Math.floor(i / TILES_PER_ROW) * NUM_ROWS
 
             tiles[i].tc.mesh.position.set(colOffset, rowOffest, 0)
+            scene.add(tiles[i].tc.obj)
         }
-        tileGroup.add(tiles[i].tc.obj)
     }
 
-    scene.add(tileGroup)
+    if(mobile) scene.add(tileGroup)
 
     // scene.add(boxHelper)
     backPanel = new Panel()
@@ -102,7 +115,7 @@ export const setup = () => {
     backPanel.mesh.position.set(1.5, 3.4, -29)
     scene.add(backPanel.mesh)
 
-    camera.position.set(startX, startY, startZ)
+    camera.position.set(cameraPosition.x,cameraPosition.y,cameraPosition.z)
     // controls.target.set( 0, 0, 0 ); // view direction perpendicular to XY-plane
     // controls.enableZoom = true; // optional
     // controls.update()
@@ -124,11 +137,31 @@ function onDoubleClick() {
     }
     lastTap = new Date().getTime();
 }
-
+ 
 let sy = 0
+
+function onTouchEnd(event){
+    console.log("scrolling",scrolling)
+    event.preventDefault()
+    if (zooming && !lastobj ) return
+    try {
+        if (lastobj && !scrolling) {
+            if (lastobj === backPanel.mesh) return
+            // this was used to draw the small squares
+            // if (lastobj.hover) lastobj.hover(1)
+            zoomIn()
+        }
+    } catch (e) {
+        console.log(e)
+        scrolling = false
+    }
+        scrolling = false
+    console.log("scrolling",scrolling)
+}
 
 function onTouchMove(event) {
     // event.preventDefault()
+    scrolling = true
     m.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1 + offsetX
     m.y = - (event.touches[0].clientY / window.innerHeight) * 2 + 1 + offsetY
     let position = new THREE.Vector3()
@@ -147,7 +180,6 @@ function onTouchMove(event) {
     } 
 
     tileGroup.position.y += ( deltaY * speed );
-
 }
 
 function onTouchStart(event){
@@ -171,7 +203,7 @@ function onMouseDown(event) {
     event.preventDefault()
     if (zooming && !lastobj) return
     try {
-        if (event.type === 'mousedown' && lastobj && !reading) {
+        if (event.type === 'mousedown' && lastobj && !scrolling) {
             if (lastobj === backPanel.mesh) return
             // this was used to draw the small squares
             if (lastobj.hover) lastobj.hover(1)
@@ -191,12 +223,12 @@ function onFooterHover(state) {
 function resetCamera() {
     if (modalMode) return
     // reset all rotations
-    for (let o of tiles)
-        if (o.tc.obj.rotation.x !== 0 || o.tc.obj.rotation.y !== 0)
+    // for (let o of tiles)
+    //     if (o.tc.obj.rotation.x !== 0 || o.tc.obj.rotation.y !== 0)
             // o.tc.obj._rotate(0, 0)
 
-    camera.position.set(startX, startY, startZ)
-    camera.lookAt(new THREE.Vector3(startX, startY, startZ))
+    // camera.position.set(startX, startY, startZ)
+    // camera.lookAt(new THREE.Vector3(startX, startY, startZ))
 }
 
 function zoomIn() {
@@ -237,16 +269,10 @@ let from = () => {
 }
 
 export function zoomOut() {
-    let to = {
-        x: startX,
-        y: startY,
-        z: startZ
-    }
-
-    reading = false
+    scrolling = true 
 
     let tween = new TWEEN.Tween(from())
-        .to(to, 1000)
+        .to({...cameraPosition}, 1000)
         .easing(TWEEN.Easing.Linear.None)
         .onUpdate(function () {
             camera.position.set(this.x, this.y, this.z);
@@ -256,11 +282,15 @@ export function zoomOut() {
         })
         .start();
 
-    camera.position.set(startX, startY, startZ)
+    camera.position.set(cameraPosition.x,cameraPosition.y,cameraPosition.z)
     camera.fov = 75
     camera.updateProjectionMatrix();
     modalMode = false
 }
+
+tiles.forEach((tile) => {
+    tile.discard()
+});
 
 // animation
 function animate() {
@@ -274,39 +304,46 @@ function animate() {
     var intersects = rc.intersectObjects(scene.children);
 
     // knowing this will only contain one object
-    if (intersects[0] && !reading && !clearMouse && window.innerWidth < 800) {
-        // intersects[0].object._rotate(
-        //     intersects[0].point.x,
-        //     intersects[0].point.y
-        // )
+    if (intersects[0] && !scrolling && !clearMouse && !mobile) {
+            intersects[0].object._rotate(
+                intersects[0].point.x,
+                intersects[0].point.y
+            )
         document.getElementById('scene').style.cursor = 'pointer'
-
 
         // update back panel to color of tile
         let meshMaterials = intersects[0].object.material
 
-        if (meshMaterials[4]) backPanel.hover(meshMaterials[4])
+        // if (meshMaterials[4]) backPanel.hover(meshMaterials[4])
+        backPanel.hover(meshMaterials[4])
 
         //reset the tiles if we hover on the back board
         if (intersects[0].object === backPanel.mesh && lastobj) {
             // set rotation to zero
-            // lastobj._rotate(0, 0)
+            lastobj._rotate(0, 0)
             // lastobj = null
             if (!zooming && !zoomed) backPanel.resetColor()
         }
 
         lastobj = intersects[0].object
 
-    } else {
+    }else {
         if (lastobj) {
             document.getElementById('scene').style.cursor = 'default'
             vec.set(0, 0, 0)
             // set rotation to zero
-            // lastobj._rotate(0, 0)
-            lastobj = null
-
+            lastobj._rotate(0,0)
             if (!zooming && !zoomed) backPanel.resetColor()
+            lastobj = null
         }
+    }
+    if(mobile){
+            if(intersects[0] && !scrolling && !clearMouse){
+                let meshMaterials = intersects[0].object.material
+
+                if (meshMaterials[4]) backPanel.hover(meshMaterials[4])
+            }
+
     }
 
     // controls.update()

@@ -50,6 +50,11 @@ export class Panel{
 
     hover(newColor:three.MeshBasicMaterial){
         try{
+            let newMesh = new three.MeshBasicMaterial()
+            newMesh.copy(newColor)
+            let oldm:three.MeshBasicMaterial = this.mesh.material[4]
+            this.mesh.material[4] = newColor
+            if(oldm) oldm.dispose()
         }catch(e){
             console.log("unable to update panel color",e) 
         }
@@ -57,6 +62,6 @@ export class Panel{
 
 
     resetColor(){
-        this.mesh.material[4].color = this.homeColor
+        this.mesh.material[4] = new three.MeshBasicMaterial({color: this.homeColor})
     }
 }

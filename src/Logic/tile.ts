@@ -7,6 +7,7 @@ export class Tile {
     images: Array<string>
     _canvas: HTMLElement
     canvasID: string
+    color: string
 
     pc: P5Controller
 
@@ -24,6 +25,12 @@ export class Tile {
         //@ts-ignore
         this.tc.discard = this.discard
         this.images = images
+
+        this.tc.registerCanvas()
+    }
+
+    setColor(color:string){
+        this.color = color
     }
 
     discard() {

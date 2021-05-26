@@ -37,7 +37,9 @@ export class ThreeController {
     obj: THREE.Mesh
     rotator: Rotater
     canvasTexture: THREE.CanvasTexture
-    constructor(geometry: THREE.BufferGeometry,  canvasTitle = 'defaultCanvas0',tag:string) {
+    hero: string
+    heroTexture: THREE.Texture
+    constructor(geometry: THREE.BufferGeometry,  canvasTitle = 'defaultCanvas0',tag:string,hero: string) {
         this.geometry = geometry
         this.tag = tag
         this.redraw = this.redraw.bind(this)
@@ -45,7 +47,15 @@ export class ThreeController {
         this._rotate = this._rotate.bind(this)
         this.registerCanvas = this.registerCanvas.bind(this)
         this.title = canvasTitle
+        this.hero = hero
         let textures = []
+
+        let heroTexture = new THREE.TextureLoader().load( hero,(result)=>{
+            console.log(result)
+            this.heroTexture = result
+            //@ts-ignore
+            this.obj.hero = result
+        } );
 
         // todo: make this variable on the projects uploaded
         for(let i = 0;i<6;i++){
@@ -112,9 +122,8 @@ export class ThreeController {
     }
 
     async hover(m) {
-        console.log("hover")
+        console.log("hover tile")
         //@ts-ignore
-         this.parentRedraw(m)
     }
 
     sleep(num) {

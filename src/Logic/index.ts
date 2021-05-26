@@ -87,7 +87,7 @@ export const setup = async () => {
     scene = new THREE.Scene()
     scene.background = new THREE.Color('white')
     for (let i = 0; i < titles.length; i++) {
-        tiles.push(new Tile(geometry, titles[i]))
+        tiles.push(new Tile(geometry, titles[i],"https://nsc.nyc3.digitaloceanspaces.com/028b1fcfd219e13b4ccb9730fce149e2.jpg"))
         // await tiles[i].setup()
     }
 
@@ -230,6 +230,7 @@ function zoomIn() {
     }
 
     zooming = true
+    zoomed = false
     lastobj = null
 
     let tween = new TWEEN.Tween(from())
@@ -303,10 +304,8 @@ function animate() {
         document.getElementById('scene').style.cursor = 'pointer'
 
         // update back panel to color of tile
-        let meshMaterials = intersects[0].object.material
-
-        // if (meshMaterials[4]) backPanel.hover(meshMaterials[4])
-        backPanel.hover(meshMaterials[4])
+        let img = intersects[0].object.hero
+        backPanel.hover(img)
 
         //reset the tiles if we hover on the back board
         if (intersects[0].object === backPanel.mesh && lastobj) {
@@ -330,9 +329,8 @@ function animate() {
     }
     if(mobile){
             if(intersects[0] && !scrolling && !clearMouse){
-                let meshMaterials = intersects[0].object.material
-
-                if (meshMaterials[4]) backPanel.hover(meshMaterials[4])
+                let img = intersects[0].object.hero
+                backPanel.hover(img)
             }
 
     }

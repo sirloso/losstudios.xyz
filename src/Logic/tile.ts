@@ -4,18 +4,17 @@ import { P5Controller } from './P5Controller'
 
 export class Tile {
     tc: ThreeController
-    images: Array<string>
     _canvas: HTMLElement
     canvasID: string
     color: string
 
     pc: P5Controller
 
-    constructor(geometry: Three.BufferGeometry, title = 'los studios', images: Array<string> = []) {
+    constructor(geometry: Three.BufferGeometry, title = 'los studios', image: string ) {
         this.discard = this.discard.bind(this)
         let tag = this.getTag(title)
         this.pc = new P5Controller(title,tag)
-        this.tc = new ThreeController(geometry, title, tag)
+        this.tc = new ThreeController(geometry, title, tag,image)
 
         //@ts-ignore
         this.pc.registerCanvas = this.tc.registerCanvas
@@ -24,7 +23,7 @@ export class Tile {
         this.pc.parentRedraw = this.tc.redraw
         //@ts-ignore
         this.tc.discard = this.discard
-        this.images = images
+
 
         this.tc.registerCanvas()
     }

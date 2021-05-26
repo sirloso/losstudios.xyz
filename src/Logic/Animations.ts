@@ -24,7 +24,7 @@ export class Panel{
         for(let i = 0;i<6;i++){
             textures.push( 
                 new three.MeshBasicMaterial({
-                    color: "red",//this.homeColor,
+                    color: this.homeColor,
                     wireframe: false
                 })
             )
@@ -48,12 +48,17 @@ export class Panel{
         }
     }
 
-    hover(newColor:three.MeshBasicMaterial){
+    hover(newColor: three.Texture){
         try{
-            let newMesh = new three.MeshBasicMaterial()
-            newMesh.copy(newColor)
+            console.log("hover panel")
+            if(!newColor) return
+            // let newMesh = new three.MeshBasicMaterial()
+            // newMesh.copy(newColor)
+            // let oldm:three.MeshBasicMaterial = this.mesh.material[4]
+            // this.mesh.material[4] = newColor
+            // if(oldm) oldm.dispose()
             let oldm:three.MeshBasicMaterial = this.mesh.material[4]
-            this.mesh.material[4] = newColor
+            this.mesh.material[4] = new three.MeshBasicMaterial({map:newColor})
             if(oldm) oldm.dispose()
         }catch(e){
             console.log("unable to update panel color",e) 

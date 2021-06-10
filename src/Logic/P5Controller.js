@@ -1,4 +1,3 @@
-const p5 = require('p5')
 
 export class P5Controller {
     constructor(title,tag) {

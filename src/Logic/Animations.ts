@@ -50,7 +50,6 @@ export class Panel{
 
     hover(newColor: three.Texture){
         try{
-            console.log("hover panel")
             if(!newColor) return
             // let newMesh = new three.MeshBasicMaterial()
             // newMesh.copy(newColor)

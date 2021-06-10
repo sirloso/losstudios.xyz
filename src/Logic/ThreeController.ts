@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-class Rotater{
+export class Rotater{
     _width: number
     _height: number
     w: number
@@ -51,7 +51,6 @@ export class ThreeController {
         let textures = []
 
         let heroTexture = new THREE.TextureLoader().load( hero,(result)=>{
-            console.log(result)
             this.heroTexture = result
             //@ts-ignore
             this.obj.hero = result
@@ -97,6 +96,7 @@ export class ThreeController {
 
     async registerCanvas() {
         this.c = document.getElementById(this.tag) as HTMLCanvasElement
+        if(!this.c) return
         let ctx = this.c.getContext("2d")
 
         let texture = new THREE.CanvasTexture(ctx.canvas) 
@@ -122,7 +122,6 @@ export class ThreeController {
     }
 
     async hover(m) {
-        console.log("hover tile")
         //@ts-ignore
     }
 

@@ -4,13 +4,32 @@ import { Link } from 'react-router-dom'
 import { HeaderProps } from '../Logic/types'
 
 const Header = (props: HeaderProps) => {
+    const stopWork = ()=>{ 
+        //@ts-ignore
+        window.stopWork = true
+        //@ts-ignore
+        window.stopHome = false
+    }
+    const stopHome = ()=>{ 
+        //@ts-ignore
+        window.stopWork = false
+        //@ts-ignore
+        window.stopHome = true
+    }
+
+    const stopBoth = () =>{
+        //@ts-ignore
+        window.stopWork = true
+        //@ts-ignore
+        window.stopHome = true
+    }
     return(
         <div className="Header">
             <div id="HeaderLeft" onClick={()=>{ }}>
                 {
                     props.showLogo && (
                         <div>
-                            <Link to="/">
+                            <Link to="/" onClick={stopWork}>
                                 Los Studios
                             </Link>
                         </div>
@@ -21,7 +40,7 @@ const Header = (props: HeaderProps) => {
                 {
                     props.showWork && (
                         <div className="MenuItem">
-                            <Link to="/work">
+                            <Link to="/work" onClick={stopHome}>
                                 work
                             </Link>
                         </div>
@@ -30,7 +49,7 @@ const Header = (props: HeaderProps) => {
                 <div className="MenuItem">
                     {
                         props.showAbout && (
-                            <Link to="/about">
+                            <Link to="/about" onClick={stopBoth}>
                                 about
                             </Link>
                         )

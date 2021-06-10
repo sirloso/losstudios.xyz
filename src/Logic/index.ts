@@ -286,6 +286,8 @@ tiles.forEach((tile) => {
 
 // animation
 function animate() {
+    //@ts-ignore
+    if(window.stopWork) return
     sleep(100)
     requestAnimationFrame(animate);
     TWEEN.update()

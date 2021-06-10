@@ -8,7 +8,7 @@ import Footer from '../Components/WorkFooter'
 
 
 const Work = () => {
-    const [loading,udpateLoading] = useState(false)
+    const [loading,udpateLoading] = useState(true)
     const [percentage,updatePercentage] = useState(20)
     let back = zoomOut
     
@@ -17,11 +17,11 @@ const Work = () => {
         if(percentage === 100) udpateLoading(false) 
     },[percentage])
     
+    if(percentage<100) setTimeout(()=>{ updatePercentage(20 + percentage) },500)
     if(percentage<100) setTimeout(()=>{ updatePercentage(20 + percentage) },1000)
+    if(percentage<100) setTimeout(()=>{ updatePercentage(20 + percentage) },1500)
     if(percentage<100) setTimeout(()=>{ updatePercentage(20 + percentage) },2000)
-    if(percentage<100) setTimeout(()=>{ updatePercentage(20 + percentage) },3000)
-    if(percentage<100) setTimeout(()=>{ updatePercentage(20 + percentage) },4000)
-    if(percentage<100) setTimeout(()=>{ updatePercentage(20 + percentage) },5000)
+    if(percentage<100) setTimeout(()=>{ updatePercentage(20 + percentage) },2500)
 
     const canvas = useRef(null)
 

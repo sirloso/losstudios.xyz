@@ -4,4 +4,4 @@
   status = 200
 
 [ build ]
-  NODE_VERSION  = 14
+  environment = { NODE_VERSION = "14.15.3" }

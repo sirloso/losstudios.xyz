@@ -1,7 +1,6 @@
 {
   "name": "losstudios.xyz",
   "version": "1.0.0",
-  "main": "index.html",
   "license": "MIT",
   "dependencies": {
     "@reach/router": "^1.3.4",
@@ -10,9 +9,7 @@
     "@types/three": "^0.127.1",
     "animate.css": "^4.1.1",
     "dat.gui": "^0.7.7",
-    "fabric": "^4.4.0",
     "fontfaceobserver": "^2.1.0",
-    "p5": "^1.3.1",
     "postprocessing": "^6.21.4",
     "rc-progress": "^3.1.3",
     "react": "^16.13.1",
@@ -23,7 +20,7 @@
   },
   "scripts": {
     "start": "parcel ./public/index.html",
-    "build": "parcel build ./public/index.html "
+    "build": "parcel build ./public/index.html"
   },
   "devDependencies": {
     "parcel": "^2.0.0-beta.2",

@@ -18,6 +18,7 @@ let aboutPanel: Panel
 
 let interaction
 
+let cssrenderer: CSS3DRenderer
 let renderer = new THREE.WebGLRenderer({ antialias: true })
 renderer.autoClear = false
 renderer.setClearColor(0x000000, 0);
@@ -165,7 +166,8 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 
 	scene.add(aboutPanel.obj)
 
-	animate(renderer, titlePanel.renderer, camera, scene)
+	cssrenderer = titlePanel.renderer
+	animate(renderer, cssrenderer, camera, scene)
 
 }
 export const setup = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElement) => {
@@ -212,7 +214,8 @@ export const setup = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElem
 
 	scene.add(aboutPanel.obj)
 
-	animate(renderer, titlePanel.renderer, camera, scene)
+	cssrenderer = titlePanel.renderer
+	animate(renderer, cssrenderer, camera, scene)
 }
 
 const createPanel = (div: HTMLElement, sceneBoundingBox: DOMRect, color: string = "red", createRenderer: boolean = true) => {
@@ -245,4 +248,17 @@ function animate(renderer: THREE.Renderer, cssrenderer: CSS3DRenderer, camera: T
 	rc.setFromCamera(m, camera);
 
 	requestAnimationFrame(() => { animate(renderer, cssrenderer, camera, scene) });
+}
+
+window.addEventListener( 'resize', onWindowResize, false );
+
+function onWindowResize(){
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    cssrenderer.setSize(window.innerWidth, window.innerHeight )
+    camera.updateProjectionMatrix();
+	cssrenderer.render(scene, camera)
+	renderer.render(scene, camera);
 }

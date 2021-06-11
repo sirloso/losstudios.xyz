@@ -1,3 +1,5 @@
+import { ReactComponentElement } from 'react'
+import { CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer'
 import * as THREE from 'three'
 export class Rotater{
     _width: number
@@ -29,6 +31,7 @@ export class Rotater{
 }
 
 export class ThreeController {
+    opacity = 0.2
     geometry: THREE.BufferGeometry
     c:HTMLCanvasElement 
     tag: string
@@ -37,9 +40,10 @@ export class ThreeController {
     obj: THREE.Mesh
     rotator: Rotater
     canvasTexture: THREE.CanvasTexture
+    _hero: ReactComponentElement<any>
     hero: string
     heroTexture: THREE.Texture
-    constructor(geometry: THREE.BufferGeometry,  canvasTitle = 'defaultCanvas0',tag:string,hero: string) {
+    constructor(geometry: THREE.BufferGeometry,  canvasTitle = 'defaultCanvas0',tag:string,hero: ReactComponentElement<any>,id: string) {
         this.geometry = geometry
         this.tag = tag
         this.redraw = this.redraw.bind(this)
@@ -49,21 +53,24 @@ export class ThreeController {
         this.colorize = this.colorize.bind(this)
         this.resetColor = this.resetColor.bind(this)
         this.title = canvasTitle
-        this.hero = hero
+        this._hero = hero
+        this.hero = id
         let textures = []
 
-        new THREE.TextureLoader().load( hero,(result)=>{
-            this.heroTexture = result
-            //@ts-ignore
-            this.obj.hero = result
-        } );
+        // new THREE.TextureLoader().load( hero,(result)=>{
+        //     this.heroTexture = result
+        //     //@ts-ignore
+        //     this.obj.hero = result
+        // } );
 
         // todo: make this variable on the projects uploaded
         for(let i = 0;i<6;i++){
             //note textures[4] is front facing
             textures.push(
-                new THREE.MeshBasicMaterial({
-                    color: 'black'
+                new THREE.MeshPhongMaterial({
+                    color: 'black',
+                    opacity: this.opacity,
+                    transparent: true
                 })
             )
         }
@@ -79,6 +86,8 @@ export class ThreeController {
         this.mesh.colorize = this.colorize
         //@ts-ignore
         this.mesh.resetColor = this.resetColor
+        //@ts-ignore
+        this.mesh.registerCanvas = this.registerCanvas
 
         this.rotator = new Rotater(
             //@ts-ignore
@@ -87,6 +96,9 @@ export class ThreeController {
             this.geometry.parameters.width,
             this.mesh.position
         )
+        
+        //@ts-ignore
+        this.obj.hero = this.hero
     }
 
     _rotate(x:number,y:number){
@@ -107,6 +119,12 @@ export class ThreeController {
         let ctx = this.c.getContext("2d")
 
         let texture = new THREE.CanvasTexture(ctx.canvas) 
+
+        //@ts-ignore
+        for (let i =0;i<this.mesh.material.length;i++){
+            this.mesh.material[i].transperant = false
+            this.mesh.material[i].opacity = 1
+        }
 
         this.mesh.material[4] = new THREE.MeshBasicMaterial({
             map: texture
@@ -137,8 +155,10 @@ export class ThreeController {
     }
 
     colorize(){
-        this.mesh.material[4] = new THREE.MeshBasicMaterial({
-           color: "orange"
+        this.mesh.material[4] = new THREE.MeshPhongMaterial({
+           color: "black",
+           transparent: true,
+           opacity: this.opacity 
         })
     }
 

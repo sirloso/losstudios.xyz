@@ -1,5 +1,6 @@
 import React from 'react'
 import "animate.css"
+import 'react-slideshow-image/dist/styles.css'
 import { Router, Link } from "@reach/router"
 
 import Home from './Pages/Home'

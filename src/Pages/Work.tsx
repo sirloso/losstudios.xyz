@@ -9,34 +9,35 @@ import { WorkProps } from '../Logic/types'
 
 
 const Work = (props: WorkProps) => {
-    const [loading,udpateLoading] = useState(true)
-    const [percentage,updatePercentage] = useState(20)
+    const [loading, udpateLoading] = useState(true)
+    const [percentage, updatePercentage] = useState(20)
     let back = zoomOut
-    
-    useEffect(()=>{
-        if(loading)
-        if(percentage === 100) udpateLoading(false) 
-    },[percentage])
-    
-    if(percentage<100) setTimeout(()=>{ updatePercentage(20 + percentage) },500)
-    if(percentage<100) setTimeout(()=>{ updatePercentage(20 + percentage) },1000)
-    if(percentage<100) setTimeout(()=>{ updatePercentage(20 + percentage) },1500)
-    if(percentage<100) setTimeout(()=>{ updatePercentage(20 + percentage) },2000)
-    if(percentage<100) setTimeout(()=>{ updatePercentage(20 + percentage) },2500)
+
+    useEffect(() => {
+        if (loading)
+            if (percentage === 100) udpateLoading(false)
+    }, [percentage])
+
+    if (percentage < 100) setTimeout(() => { updatePercentage(20 + percentage) }, 500)
+    if (percentage < 100) setTimeout(() => { updatePercentage(20 + percentage) }, 1000)
+    if (percentage < 100) setTimeout(() => { updatePercentage(20 + percentage) }, 1500)
+    if (percentage < 100) setTimeout(() => { updatePercentage(20 + percentage) }, 2000)
+    if (percentage < 100) setTimeout(() => { updatePercentage(20 + percentage) }, 2500)
 
     const canvas = useRef(null)
+    const [GalleryArray,updateGallery] = useState([])
 
     // attatch three
-    useEffect(()=>{
-        if(!loading)
-        if(canvas){
-            console.log("requiring")
-            setup()    
-            console.log('done');
-        }
-    },[loading])
+    useEffect(() => {
+        if (!loading)
+            if (canvas) {
+                console.log("requiring")
+                setup(GalleryArray)
+                console.log('done');
+            }
+    }, [loading])
 
-    return(
+    return (
         <div id="Work">
             <Header showWork={false} showAbout showLogo />
             <div className="Work">
@@ -44,16 +45,32 @@ const Work = (props: WorkProps) => {
                     loading && (
                         <div className="Loading">
                             <div>loading</div>
-                            <Line className={"ProgressBar"} percent={percentage} strokeLinecap="square" strokeColor={"black"} trailColor={"white"}/>
+                            <Line className={"ProgressBar"} percent={percentage} strokeLinecap="square" strokeColor={"black"} trailColor={"white"} />
                         </div>
                     )
                 }
                 {
                     !loading && (
-                        <div ref={canvas} id="scene" >
+                        <div id="scenes">
+                            <div ref={canvas} id="webglScene" >
+                            </div>
+                            <div ref={canvas} id="cssScene" >
+                            </div>
                         </div>
                     )
                 }
+                            <div id="GalleryArray">
+                                {
+                                    GalleryArray.map((el,idx)=>{
+                                        return <div className="gallery" key={idx}>
+                                            {el.gallery}
+                                        </div>
+                                    })
+                                }
+                            </div>
+                            <div id="workwork">
+                                work helllosdjfalksjdflajsdflkajsdlfjk
+                            </div>
             </div>
             <div id="FooterContainer">
                 <Footer

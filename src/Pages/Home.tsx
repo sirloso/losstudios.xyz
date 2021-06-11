@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 
 import Header from '../Components/Header'
-import { setup } from '../Logic/homeAnimator'
+import { setup,handleLogoMouseEnter,handleLogoMouseLeave } from '../Logic/homeAnimator'
 
 const Home = () => {
     const [detail,updateDetail] = useState(false)
@@ -25,8 +25,20 @@ const Home = () => {
         <div className="Home">
             <Header showLogo={false} showWork showAbout/>
             <div id="HomeBody" ref={home}>
-                <div id="HomeLogo" className="animate__animated animate__fadeIn">
+                <div id="HomeLogo" 
+                onTouchStartCapture={handleLogoMouseEnter}
+                onTouchEndCapture={handleLogoMouseLeave}
+                onMouseEnter={handleLogoMouseEnter}
+                onMouseLeave={handleLogoMouseLeave}
+                className="hover animate__animated animate__fadeIn">
                     Los Studios
+                </div>
+                <div id="HomeAbout" className="animate__animated animate__fadeIn ">
+                    panel about
+                    lorem ipsum 
+                    asdflsdkfjalksdjfa
+                    asdlfkjasdlfkjasd
+                    asldkfjalskdfjl
                 </div>
                 <div id="renderers">
                     <div id="css" ref={css}/>

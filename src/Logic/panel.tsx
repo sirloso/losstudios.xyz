@@ -14,7 +14,13 @@ export class Panel {
     divMaterial: Three.MeshBasicMaterial
     renderer: CSS3DRenderer
 
-    constructor(geometry: Three.BufferGeometry, div: HTMLElement,sceneBoundingBox:DOMRect, color: string|Three.Color = "white") {
+    constructor(
+        geometry: Three.BufferGeometry,
+        div: HTMLElement,
+        sceneBoundingBox:DOMRect,
+        color: string|Three.Color = "white",
+        createRenderer: boolean = true
+    ) {
 	this.geometry = geometry
 	this.obj = new Three.Object3D()
 
@@ -28,7 +34,8 @@ export class Panel {
 		blending: Three.NoBlending,
 	} )
 
-	this.setupCSSRenderer(sceneBoundingBox)
+	if(createRenderer) this.setupCSSRenderer(sceneBoundingBox)
+
 	div.style.opacity = "0.999"
 	this.divObj =  new CSS3DObject(div) 
 
@@ -44,8 +51,8 @@ export class Panel {
 	this.mesh.castShadow = true
 	this.mesh.receiveShadow = true
 
-	this.divObj.position.set(0,0,50)
-	this.mesh.position.set(0,0,50)
+	// this.divObj.position.set(0,0,50)
+	// this.mesh.position.set(0,0,50)
 
 	this.obj.add(this.mesh)
     }

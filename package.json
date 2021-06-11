@@ -7,6 +7,7 @@
     "@types/fabric": "^4.2.5",
     "@types/react-router-dom": "^5.1.7",
     "@types/three": "^0.127.1",
+    "@types/tweenjs": "^1.0.3",
     "animate.css": "^4.1.1",
     "dat.gui": "^0.7.7",
     "fontfaceobserver": "^2.1.0",
@@ -16,6 +17,7 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "three": "^0.128.0",
+    "three.interaction": "^0.2.3",
     "tween": "^0.9.0"
   },
   "scripts": {

@@ -1534,6 +1534,11 @@
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
 
+"@types/createjs-lib@*":
+  version "0.0.29"
+  resolved "https://registry.yarnpkg.com/@types/createjs-lib/-/createjs-lib-0.0.29.tgz#fae82e3ba8606663b190e789cec7d9c728fc41d7"
+  integrity sha1-+uguO6hgZmOxkOeJzsfZxyj8Qdc=
+
 "@types/fabric@^4.2.5":
   version "4.2.5"
   resolved "https://registry.yarnpkg.com/@types/fabric/-/fabric-4.2.5.tgz#095e412b49c896e2fa0d441bd2fceb6690074c4d"
@@ -1601,6 +1606,13 @@
   version "0.127.1"
   resolved "https://registry.yarnpkg.com/@types/three/-/three-0.127.1.tgz#0978054e5daa6485946a3f1518a76412186ae81f"
   integrity sha512-e90iYq3zde3axANg7BPZY0fKrez1AzveamIIFk23PMh9WtCx91geokDy+yEAIymdIldgUpvezAP6+zCV3oekXw==
+
+"@types/tweenjs@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@types/tweenjs/-/tweenjs-1.0.3.tgz#8baad3e626659e94a285c586f280abbee9724fcb"
+  integrity sha512-jf/riSjb8yvlGQNqWzYhDTl04ZHSqlUfuCXL4NI9rglqwjm0jLlxR/40i4T8QLI5jhydQViG/DhvLCfAGNrjAQ==
+  dependencies:
+    "@types/createjs-lib" "*"
 
 abab@^2.0.0:
   version "2.0.5"
@@ -5795,6 +5807,11 @@ terser@^5.2.0, terser@^5.6.1:
     commander "^2.20.0"
     source-map "~0.7.2"
     source-map-support "~0.5.19"
+
+three.interaction@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/three.interaction/-/three.interaction-0.2.3.tgz#f7947b4e44649a822335b03b1dcc68c659d71c04"
+  integrity sha512-gipj4E9WSASSys3SC5uU8HPmHodTDYmggJqKN5yjl6S2vG966EkGLu67jkXQoyB/yvGx38C72vHwdjICAh+avg==
 
 three@^0.128.0:
   version "0.128.0"

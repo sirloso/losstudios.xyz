@@ -57,8 +57,16 @@ body{
     justify-content: center;
 }
 
-#HomeDetail{
-    /* --animate-duration: 5s; */
+.hover:hover{
+    cursor: pointer;
+}
+
+#HomeAbout{
+    --animate-duration: 5s;
+    margin-left: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .Header{

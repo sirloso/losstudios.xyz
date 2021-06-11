@@ -6,6 +6,7 @@ import { setup,handleLogoMouseEnter,handleLogoMouseLeave } from '../Logic/homeAn
 const Home = () => {
     const [detail,updateDetail] = useState(false)
     const [loaded,updateLoaded] = useState(false)
+    const [animate,updateAnimate] = useState(false)
     const home = useRef()
     const css = useRef()
     const webgl = useRef()
@@ -16,7 +17,14 @@ const Home = () => {
         setup(home.current,css.current,webgl.current)
         updateLoaded(true)
        }
+       if(loaded && !animate){
+        setTimeout(()=>{
+            handleLogoMouseEnter()
+            updateAnimate(true)
+        },2000)
+       }
     }, [loaded]);
+
 
     setTimeout(()=>{
         if(!detail) updateDetail(true)
@@ -34,11 +42,17 @@ const Home = () => {
                     Los Studios
                 </div>
                 <div id="HomeAbout" className="animate__animated animate__fadeIn ">
-                    panel about
-                    lorem ipsum 
-                    asdflsdkfjalksdjfa
-                    asdlfkjasdlfkjasd
-                    asldkfjalskdfjl
+                    <div id="leftAlign">
+                        a creative technology studio <br />
+                        focused on
+                    </div>
+                    <div id="rightAlign">
+                        hardware
+                        <br/>
+                        &
+                        <br/>
+                        unconventional web design
+                    </div>
                 </div>
                 <div id="renderers">
                     <div id="css" ref={css}/>

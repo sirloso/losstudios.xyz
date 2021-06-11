@@ -34,7 +34,7 @@ let scene = new THREE.Scene()
 let controls: OrbitControls
 
 export const handleLogoMouseEnter = () => {
-	console.log("starting move forward")
+	if(aboutPanel.obj.position.z == 0) return
 	let pos = {
 		x: 0,
 		y: 57,
@@ -47,14 +47,13 @@ export const handleLogoMouseEnter = () => {
 	}
 	new TWEEN	
 	.Tween(
-		pos,2000
+		pos,4000
 	)
 	.to(
 		end
 	)
         // .easing(TWEEN.Easing.Linear.In)
         .onUpdate(function () {
-	console.log("moving forward")
             aboutPanel.obj.position.set(pos.x,pos.y,pos.z);
         })
         .onComplete(function () {
@@ -65,7 +64,6 @@ export const handleLogoMouseEnter = () => {
 
 	console.log(TWEEN.Easing)
 export const handleLogoMouseLeave = () => {
-	console.log("starting move backward")
 	let pos = {
 		x: aboutPanel.obj.position.x,
 		y: aboutPanel.obj.position.y,
@@ -85,7 +83,6 @@ export const handleLogoMouseLeave = () => {
 	)
         // .easing(TWEEN.Easing.Linear.Out)
         .onUpdate(function () {
-		console.log("moving backward")
             aboutPanel.obj.position.set(pos.x,pos.y,pos.z);
         })
         .onComplete(function () {
@@ -113,7 +110,7 @@ export const setup = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElem
 
 	// los studios panel
 	titlePanel = createPanel(homeTitle, sceneBoundingBox, "white")
-	titlePanel.obj.position.set(360,-190,0)
+	titlePanel.obj.position.set(380,-210,0)
 
 
 	css.appendChild(titlePanel.renderer.domElement)
@@ -122,10 +119,10 @@ export const setup = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElem
 	scene.add(titlePanel.obj)
 
 	let homeAbout = document.getElementById("HomeAbout")
-	homeAbout.style.width = "450px"
-	homeAbout.style.height = "450px"
+	homeAbout.style.width = "500px"
+	homeAbout.style.height = "500px"
 
-	aboutPanel = createPanel(homeAbout, sceneBoundingBox, "blue", false)
+	aboutPanel = createPanel(homeAbout, sceneBoundingBox, "black", false)
 	aboutPanel.obj.position.set(0,57,-30000)
 	// aboutPanel.obj.position.set(0,57,0)
 

@@ -63,10 +63,23 @@ body{
 
 #HomeAbout{
     --animate-duration: 5s;
-    margin-left: 35px;
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
+    color: white
+}
+#leftAlign{
+    text-align: left;
+    width: 100%;
+    height: 45%;
+    margin-top: 10px;
+}
+#rightAlign{
+    /* margin-top: 200px; */
+    text-align: right;
+    width: 100%;
+    margin-bottom: 10px;
 }
 
 .Header{

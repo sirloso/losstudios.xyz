@@ -1,7 +1,4 @@
-import Tween from 'tween'
-import { ThreeController } from './ThreeController'
 import * as three from 'three'
-import { Tile } from './tile'
 
 export class Panel{
     geometry: three.BoxGeometry 

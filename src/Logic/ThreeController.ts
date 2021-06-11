@@ -46,11 +46,13 @@ export class ThreeController {
         this.hover = this.hover.bind(this)
         this._rotate = this._rotate.bind(this)
         this.registerCanvas = this.registerCanvas.bind(this)
+        this.colorize = this.colorize.bind(this)
+        this.resetColor = this.resetColor.bind(this)
         this.title = canvasTitle
         this.hero = hero
         let textures = []
 
-        let heroTexture = new THREE.TextureLoader().load( hero,(result)=>{
+        new THREE.TextureLoader().load( hero,(result)=>{
             this.heroTexture = result
             //@ts-ignore
             this.obj.hero = result
@@ -68,10 +70,15 @@ export class ThreeController {
 
         this.mesh = new THREE.Mesh(this.geometry, textures)
         this.obj = this.mesh
+
         //@ts-ignore
         this.mesh.hover = this.hover
         //@ts-ignore
         this.mesh._rotate = this._rotate
+        //@ts-ignore
+        this.mesh.colorize = this.colorize
+        //@ts-ignore
+        this.mesh.resetColor = this.resetColor
 
         this.rotator = new Rotater(
             //@ts-ignore
@@ -127,5 +134,15 @@ export class ThreeController {
 
     sleep(num) {
         return new Promise(resolve => setTimeout(resolve, num))
+    }
+
+    colorize(){
+        this.mesh.material[4] = new THREE.MeshBasicMaterial({
+           color: "orange"
+        })
+    }
+
+    resetColor(){
+        this.registerCanvas()
     }
 }

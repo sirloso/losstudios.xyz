@@ -149,7 +149,7 @@ function onTouchEnd(event){
             if (lastobj === backPanel.mesh) return
             // this was used to draw the small squares
             // if (lastobj.hover) lastobj.hover(1)
-            zoomIn()
+            // zoomIn()
         }
     } catch (e) {
         console.log(e)
@@ -157,6 +157,26 @@ function onTouchEnd(event){
     }
         scrolling = false
     console.log("scrolling",scrolling)
+            let mouse = {x:0,y:0}
+
+            mouse.x = (event.changedTouches[0].clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.changedTouches[0].clientY / window.innerHeight) * 2 + 1;
+
+            rc.setFromCamera(mouse,camera)
+            let intersects = rc.intersectObjects(tileGroup.children);
+
+            let obj = intersects[0]
+            console.log(obj)
+            if(obj && !scrolling && !clearMouse && obj.object != backPanel ){
+                obj.object.colorize()
+                lastobj = obj
+            }else{
+                if(lastobj){
+                    vec.set(0, 0, 0)
+                    lastobj.object.resetColor()
+                    lastobj = null
+                }
+            }
 }
 
 function onTouchMove(event) {
@@ -201,7 +221,7 @@ function onMouseMove(event) {
 
 function onMouseDown(event) {
     event.preventDefault()
-    if (zooming && !lastobj) return
+    if (zooming && !lastobj && mobile) return
     try {
         if (event.type === 'mousedown' && lastobj && !scrolling) {
             if (lastobj === backPanel.mesh) return
@@ -221,7 +241,6 @@ function onFooterHover(state) {
 
 // threejs functions
 function zoomIn() {
-    console.log("zooming")
     if (!lastobj) return
 
     let to = {
@@ -249,7 +268,6 @@ function zoomIn() {
         .start();
 
     camera.updateProjectionMatrix();
-    console.log("zooming")
 }
 
 let from = () => {
@@ -295,7 +313,6 @@ function animate() {
     TWEEN.update()
 
     rc.setFromCamera(m, camera);
-
     // calculate objects intersecting the picking ray
     var intersects = rc.intersectObjects(scene.children);
 
@@ -322,7 +339,7 @@ function animate() {
         lastobj = intersects[0].object
 
     }else {
-        if (lastobj) {
+        if (lastobj && !mobile) {
             document.getElementById('scene').style.cursor = 'default'
             vec.set(0, 0, 0)
             // set rotation to zero
@@ -331,14 +348,6 @@ function animate() {
             lastobj = null
         }
     }
-    if(mobile){
-            if(intersects[0] && !scrolling && !clearMouse){
-                let img = intersects[0].object.hero
-                backPanel.hover(img)
-            }
-
-    }
-
     // controls.update()
     renderer.render(scene, camera);
 }

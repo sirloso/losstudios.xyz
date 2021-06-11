@@ -1,5 +1,5 @@
+import { navigate } from '@reach/router'
 import React from 'react'
-import { Link } from 'react-router-dom'
 
 import { HeaderProps } from '../Logic/types'
 
@@ -23,15 +23,29 @@ const Header = (props: HeaderProps) => {
         //@ts-ignore
         window.stopHome = true
     }
+    
+    const navAbout = () =>{
+        stopBoth()
+        navigate("/about")
+    } 
+    const navWork = () =>{
+        stopHome()
+        navigate("/work")
+    } 
+
+    const navHome = () =>{
+        stopWork()
+        navigate("/")
+
+    }
+
     return(
         <div className="Header">
             <div id="HeaderLeft" onClick={()=>{ }}>
                 {
                     props.showLogo && (
-                        <div>
-                            <Link to="/" onClick={stopWork}>
+                        <div onTouchEnd={navHome} onClick={navHome}>
                                 Los Studios
-                            </Link>
                         </div>
                     )
                 }
@@ -39,19 +53,17 @@ const Header = (props: HeaderProps) => {
             <div id="HeaderRight">
                 {
                     props.showWork && (
-                        <div className="MenuItem">
-                            <Link to="/work" onClick={stopHome}>
+                        <div className="MenuItem" onTouchEnd={navWork} onClick={navWork}>
                                 work
-                            </Link>
                         </div>
                     )
                 }
                 <div className="MenuItem">
                     {
                         props.showAbout && (
-                            <Link to="/about" onClick={stopBoth}>
+                            <div  onClick={navAbout} onTouchEnd={navAbout}>
                                 about
-                            </Link>
+                            </div>
                         )
                     }
                 </div>

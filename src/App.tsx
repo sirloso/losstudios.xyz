@@ -1,6 +1,6 @@
 import React from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
 import "animate.css"
+import { Router, Link } from "@reach/router"
 
 import Home from './Pages/Home'
 import Work from './Pages/Work'
@@ -10,16 +10,10 @@ import Header from './Components/Header'
 const App = (props:any) => {
     return(
         <div id="App">
-            <Router>
-                <Route exact path="/">
-                    <Home/>
-                </Route>
-                <Route path="/work">
-                    <Work />
-                </Route>
-                <Route path="/about">
-                    <About/>
-                </Route>
+            <Router >
+                    <Home path="/"/>
+                    <Work path="/work"/>
+                    <About path="/about"/>
             </Router>
         </div>
     )

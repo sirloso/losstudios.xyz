@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect } from 'react'
 
 import Header from '../Components/Header'
 import { setup,handleLogoMouseEnter,handleLogoMouseLeave } from '../Logic/homeAnimator'
+import { HomeProps } from '../Logic/types'
 
-const Home = () => {
+const Home = (props:HomeProps) => {
     const [detail,updateDetail] = useState(false)
     const [loaded,updateLoaded] = useState(false)
     const [animate,updateAnimate] = useState(false)
@@ -46,7 +47,7 @@ const Home = () => {
                 <div id="HomeAbout" className="animate__animated animate__fadeIn ">
                     <div id="leftAlign">
                         a creative technology studio <br />
-                        focused on
+                        specializing in
                     </div>
                     <div id="rightAlign">
                         hardware

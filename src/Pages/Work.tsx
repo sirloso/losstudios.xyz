@@ -5,9 +5,10 @@ import { zoomOut, setup } from '../Logic/index'
 
 import Header from '../Components/Header'
 import Footer from '../Components/WorkFooter'
+import { WorkProps } from '../Logic/types'
 
 
-const Work = () => {
+const Work = (props: WorkProps) => {
     const [loading,udpateLoading] = useState(true)
     const [percentage,updatePercentage] = useState(20)
     let back = zoomOut

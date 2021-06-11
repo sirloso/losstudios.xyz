@@ -29,8 +29,8 @@ export class Panel {
 
 	this.divMaterial = new Three.MeshBasicMaterial({
 		color: color,
-		// side: Three.DoubleSide,
-		opacity: 0.15,
+		side: Three.DoubleSide,
+		opacity: 1,
 		blending: Three.NoBlending,
 	} )
 

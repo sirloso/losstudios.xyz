@@ -1,7 +1,7 @@
 // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 // import { MapControls } from 'three/examples/jsm/controls/OrbitControls'
 const THREE = require('three')
-const TWEEN = require('tween')
+const TWEEN = require('@tweenjs/tween.js')
 const Tile = require("./tile").Tile
 const Panel = require('./Animations').Panel
 // const DAT = require('dat.gui')

@@ -12,11 +12,13 @@ const Home = () => {
     const webgl = useRef()
 
     useEffect(() => {
-       console.log(loaded)
+       console.log("Loaded",loaded)
        if(!loaded && (home && css && webgl)) {
+        //@ts-ignore
         setup(home.current,css.current,webgl.current)
         updateLoaded(true)
        }
+        //@ts-ignore
        if(loaded && !animate){
         setTimeout(()=>{
             handleLogoMouseEnter()

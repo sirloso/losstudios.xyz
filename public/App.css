@@ -62,7 +62,7 @@ body{
 }
 
 #HomeAbout{
-    --animate-duration: 5s;
+    --animate-duration: 15s;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -157,4 +157,13 @@ canvas{
 
 #css{
     z-index: 100;
+}
+
+@media only screen and (max-width: 800px) {
+    #rightAlign{
+        /* margin-top: 200px; */
+        text-align: left;
+        width: 100%;
+        margin-bottom: 10px;
+    }
 }

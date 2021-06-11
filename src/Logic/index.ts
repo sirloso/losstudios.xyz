@@ -221,6 +221,7 @@ function onFooterHover(state) {
 
 // threejs functions
 function zoomIn() {
+    console.log("zooming")
     if (!lastobj) return
 
     let to = {
@@ -232,12 +233,12 @@ function zoomIn() {
     zooming = true
     zoomed = false
     lastobj = null
-
-    let tween = new TWEEN.Tween(from())
+    let start = from()
+    let tween = new TWEEN.Tween(start)
         .to(to, 1000)
         .easing(TWEEN.Easing.Linear.None)
         .onUpdate(function () {
-            camera.position.set(this.x, this.y, this.z);
+            camera.position.set(start.x, start.y, start.z);
         })
         .onComplete(function () {
             setTimeout(() => {
@@ -248,6 +249,7 @@ function zoomIn() {
         .start();
 
     camera.updateProjectionMatrix();
+    console.log("zooming")
 }
 
 let from = () => {
@@ -260,12 +262,12 @@ let from = () => {
 
 export function zoomOut() {
     scrolling = true 
-
-    let tween = new TWEEN.Tween(from())
+    let start = from()
+    let tween = new TWEEN.Tween(start)
         .to({...cameraPosition}, 1000)
         .easing(TWEEN.Easing.Linear.None)
         .onUpdate(function () {
-            camera.position.set(this.x, this.y, this.z);
+            camera.position.set(start.x, start.y, start.z);
         })
         .onComplete(function () {
             zoomed = false

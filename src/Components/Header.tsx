@@ -44,7 +44,7 @@ const Header = (props: HeaderProps) => {
             <div id="HeaderLeft" onClick={()=>{ }}>
                 {
                     props.showLogo && (
-                        <div onTouchEnd={navHome} onClick={navHome}>
+                        <div className="hover" onTouchEnd={navHome} onClick={navHome}>
                                 Los Studios
                         </div>
                     )
@@ -53,12 +53,12 @@ const Header = (props: HeaderProps) => {
             <div id="HeaderRight">
                 {
                     props.showWork && (
-                        <div className="MenuItem" onTouchEnd={navWork} onClick={navWork}>
+                        <div className="Hover MenuItem" onTouchEnd={navWork} onClick={navWork}>
                                 work
                         </div>
                     )
                 }
-                <div className="MenuItem">
+                <div className="Hover MenuItem">
                     {
                         props.showAbout && (
                             <div  onClick={navAbout} onTouchEnd={navAbout}>

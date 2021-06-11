@@ -6,7 +6,6 @@
     <meta http-equiv="ScreenOrientation" content="autoRotate:disabled">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="icon" type="image/png" href=""/>
 
     <title>los studios</title>
     <meta name="title" content="sirloso react-tsx-template">
@@ -32,6 +31,37 @@
         content="https://metatags.io/assets/meta-tags-16a33a6a8531e519cc0936fbba0ad904e52d35f34a46c97a2c9f6f7dd7d336f2.png">
     </head>
     <body>
+        <script>
+            var canvas = document.createElement('canvas');
+            canvas.width = 16; canvas.height = 16;
+            var ctx = canvas.getContext('2d');
+
+            // background
+            let color = Math.floor(Math.random()*16777215).toString(16)
+            ctx.fillStyle = `#${color}`;
+            window.color = color
+            ctx.fillRect(0, 0, 16, 16);
+
+
+            // text
+            ctx.textAlign = "center"
+            ctx.textBaseline = "middle"
+            ctx.fillStyle = "white"
+
+            let fontSize = window.innerWidth < 800 ? 10 : 10
+            let height2 = ctx.canvas.height / 2
+
+            let width2 = ctx.canvas.width / 2
+            ctx.font = `${fontSize}px Gruppo`;
+            // ctx.fillText("ls",width2,height2);
+
+            var link = document.createElement('link');
+            console.log(link)
+            link.type = 'image/x-icon';
+            link.rel = 'shortcut icon';
+            link.href = canvas.toDataURL("image/x-icon");
+            document.getElementsByTagName('head')[0].appendChild(link);
+        </script>
         <div id='root'></div>
         <script src="../src/index.js"></script>
         <div id="p5"></div>

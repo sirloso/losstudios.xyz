@@ -18,7 +18,8 @@ export class Panel{
         if(window.innerWidth< 800) this.geometry = new three.BoxGeometry(25,45,0.1)
         else this.geometry = new three.BoxGeometry(25,20,0.1)
         let textures:Array<three.MeshBasicMaterial> = []
-        let color = Math.floor(Math.random()*16777215).toString(16)
+        //@ts-ignore
+        let color = window.color ? window.color : Math.floor(Math.random()*16777215).toString(16)
         this.homeColor = new three.Color(`#${color}`)
 
         for(let i = 0;i<6;i++){

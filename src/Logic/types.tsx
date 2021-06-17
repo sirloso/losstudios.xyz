@@ -14,6 +14,7 @@ export interface FooterProps{
 export interface SlideShowProps{
     images: Array<string>
     id: string
+    autoPlay?: boolean 
 }
 
 export interface HomeProps extends RouteComponentProps{}

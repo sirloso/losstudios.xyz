@@ -102,7 +102,7 @@ export class WorkPanel {
 
         // set up geometry and mesh
         if (window.innerWidth < 800) this.geometry = new Three.BoxGeometry(25, 45, 0.1)
-        else this.geometry = new Three.BoxGeometry(500, 500, 0.1)
+        else this.geometry = new Three.BoxGeometry(700, 500, 0.1)
         let textures: Array<Three.MeshBasicMaterial> = []
         //@ts-ignore
         let color = window.color ? window.color : Math.floor(Math.random() * 16777215).toString(16)
@@ -124,7 +124,7 @@ export class WorkPanel {
 
         let div = document.getElementById("workwork")
         div.style.opacity = "0.999"
-        div.style.width ="800px"
+        div.style.width ="500px"
         div.style.height = "500px"
         this.cssObj = new CSS3DObject(div)
         //@ts-ignore

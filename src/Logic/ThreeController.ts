@@ -32,6 +32,7 @@ export class Rotater{
 
 export class ThreeController {
     opacity = 0.2
+    // opacity = 1
     geometry: THREE.BufferGeometry
     c:HTMLCanvasElement 
     tag: string

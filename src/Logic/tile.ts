@@ -19,9 +19,11 @@ export class Tile {
 
         let titles = ga.map((el)=>el.title) 
         if(!titles.includes(title)){
+            console.log(images,title)
             //@ts-ignore
             this.gallery = SlideShow(images,title)
-            ga.push({ title:title ,gallery:this.gallery})
+            console.log("galleria",this.gallery)
+            ga.push({ title:title ,gallery:this.gallery[0]})
         } 
 
         this.tc = new ThreeController(geometry, title, tag,this.gallery[0],this.gallery[1])

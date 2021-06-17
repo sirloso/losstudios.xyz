@@ -43,7 +43,7 @@ export class P5Controller {
         let width2 = ctx.canvas.width / 2
         ctx.fillText(this.title,width2,height2);
 
-        document.getElementById("webglScene").appendChild(this.canvas)
+        document.getElementById("webgl").appendChild(this.canvas)
         setTimeout(()=>{
             // if(this.registerCanvas) this.registerCanvas()
         },2000)

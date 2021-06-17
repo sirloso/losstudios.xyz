@@ -13,11 +13,13 @@ const Home = (props:HomeProps) => {
     const css = useRef()
     const webgl = useRef()
 
+    const [GalleryArray,updateGallery] = useState([])
+
     useEffect(() => {
        console.log("Loaded",loaded)
        if(!loaded && (home && css && webgl)) {
         //@ts-ignore
-        setup(home.current,css.current,webgl.current)
+        setup(home.current,css.current,webgl.current,GalleryArray)
         updateLoaded(true)
        }
         //@ts-ignore
@@ -29,12 +31,7 @@ const Home = (props:HomeProps) => {
        }
     }, [loaded]);
 
-    let images = [
-            "https://nsc.nyc3.digitaloceanspaces.com/028b1fcfd219e13b4ccb9730fce149e2.jpg",
-            "https://nsc.nyc3.digitaloceanspaces.com/0916a7105953013e63163bdd14e400e5.jpg",
-            "https://nsc.nyc3.digitaloceanspaces.com/1b216267fbb791c07454464904b926dc.jpg"
-    ]
-    let ssid ="sdf"
+    console.log(GalleryArray)
 
     setTimeout(()=>{
         if(!detail) updateDetail(true)
@@ -64,7 +61,13 @@ const Home = (props:HomeProps) => {
                         unconventional web design
                     </div>
                     <div id="workwork">
-                       <SlideShow images={images} id={ssid}/>
+                        {
+                            GalleryArray.map((el)=>{
+                                {
+                                    el.gallery
+                                }
+                            })
+                        }
                     </div>
                 </div>
                 <div id="renderers">

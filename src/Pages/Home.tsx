@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 
 import Header from '../Components/Header'
+import { SlideShow } from '../Components/Gallery'
 import { setup,handleLogoMouseEnter,handleLogoMouseLeave } from '../Logic/homeAnimator'
 import { HomeProps } from '../Logic/types'
 
@@ -28,6 +29,12 @@ const Home = (props:HomeProps) => {
        }
     }, [loaded]);
 
+    let images = [
+            "https://nsc.nyc3.digitaloceanspaces.com/028b1fcfd219e13b4ccb9730fce149e2.jpg",
+            "https://nsc.nyc3.digitaloceanspaces.com/0916a7105953013e63163bdd14e400e5.jpg",
+            "https://nsc.nyc3.digitaloceanspaces.com/1b216267fbb791c07454464904b926dc.jpg"
+    ]
+    let ssid ="sdf"
 
     setTimeout(()=>{
         if(!detail) updateDetail(true)
@@ -55,6 +62,9 @@ const Home = (props:HomeProps) => {
                         &
                         <br/>
                         unconventional web design
+                    </div>
+                    <div id="workwork">
+                       <SlideShow images={images} id={ssid}/>
                     </div>
                 </div>
                 <div id="renderers">

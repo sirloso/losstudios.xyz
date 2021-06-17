@@ -2,7 +2,7 @@ import { Tween } from '@tweenjs/tween.js'
 import * as three from 'three'
 import { CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer'
 
-export class Panel {
+export class WorkPanel {
     geometry: three.BoxGeometry
     inTransition: boolean
     mesh: three.Mesh
@@ -39,6 +39,8 @@ export class Panel {
 
         let div = document.getElementById("workwork")
         div.style.opacity = "0.999"
+        div.style.width ="25px"
+        div.style.height = "20px"
         this.cssObj = new CSS3DObject(div)
         //@ts-ignore
         this.obj.css3dObject = this.cssObj
@@ -87,8 +89,10 @@ export class Panel {
             let div = document.getElementById(newColor)
             let tmpDiv = new CSS3DObject(div)
 
-            // this.obj.children[0] = tmpDiv
-            // this.obj.matrixWorldNeedsUpdate = true
+            console.log(div)
+
+            this.obj.children[0] = tmpDiv
+            this.obj.matrixWorldNeedsUpdate = true
         } catch (e) {
             console.log("unable to update panel color", e)
         }

@@ -1,6 +1,6 @@
 import * as THREE from 'three'
-import { Panel } from './panel'
-// import * as DAT from 'dat.gui'
+import { Panel,WorkPanel } from './panel'
+import * as DAT from 'dat.gui'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer';
 import { isMobile } from './values'
@@ -29,7 +29,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
 
 let hover = false
-// let gui = new DAT.GUI()
+let gui = new DAT.GUI()
 let scene = new THREE.Scene()
 
 // let controls = new OrbitControls(camera,renderer.domElement)
@@ -187,6 +187,10 @@ export const setup = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElem
 	// camera
 	camera.position.set(0, 0, 1000);
 
+	gui.add(camera.position,"x",-2000,2000)
+	gui.add(camera.position,"y",-2000,2000)
+	gui.add(camera.position,"z",-2000,2000)
+
 	// get div to use
 	let homeTitle = document.getElementById("HomeLogo")
 	homeTitle.style.width = "250px"
@@ -214,8 +218,24 @@ export const setup = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElem
 
 	scene.add(aboutPanel.obj)
 
+
+	// work
+	let backPanel = createWorkPanel()
+	scene.add(backPanel.obj)
+	backPanel.obj.position.set(1000, 0, 1)
+	camera.position.set(1000,0,1000)
+
 	cssrenderer = titlePanel.renderer
 	animate(renderer, cssrenderer, camera, scene)
+}
+
+const createWorkPanel = () => {
+    let backPanel = new WorkPanel()
+
+    for(const c of backPanel.obj.children){
+    }
+
+    return backPanel
 }
 
 const createPanel = (div: HTMLElement, sceneBoundingBox: DOMRect, color: string = "red", createRenderer: boolean = true) => {

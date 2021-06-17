@@ -86,3 +86,106 @@ export class Panel {
     }
 
 }
+
+export class WorkPanel {
+    geometry: Three.BoxGeometry
+    inTransition: boolean
+    mesh: Three.Mesh
+    photos: Array<string>
+    visiible: boolean
+    homeColor: Three.Color
+    obj: Three.Object3D
+    cssObj: CSS3DObject
+    constructor() {
+        this.updateVisibility = this.updateVisibility.bind(this)
+        this.hover = this.hover.bind(this)
+
+        // set up geometry and mesh
+        if (window.innerWidth < 800) this.geometry = new Three.BoxGeometry(25, 45, 0.1)
+        else this.geometry = new Three.BoxGeometry(500, 500, 0.1)
+        let textures: Array<Three.MeshBasicMaterial> = []
+        //@ts-ignore
+        let color = window.color ? window.color : Math.floor(Math.random() * 16777215).toString(16)
+        this.homeColor = new Three.Color(`#${color}`)
+
+        for (let i = 0; i < 6; i++) {
+            textures.push(
+                new Three.MeshBasicMaterial({
+                    color: this.homeColor,
+                    wireframe: false,
+                    side: Three.DoubleSide,
+                    opacity: 1,
+                    blending: Three.NoBlending,
+                })
+            )
+        }
+
+        this.obj = new Three.Object3D()
+
+        let div = document.getElementById("workwork")
+        div.style.opacity = "0.999"
+        div.style.width ="800px"
+        div.style.height = "500px"
+        this.cssObj = new CSS3DObject(div)
+        //@ts-ignore
+        this.obj.css3dObject = this.cssObj
+        this.obj.add(this.cssObj)
+
+        //@ts-ignore
+        this.mesh = new Three.Mesh(this.geometry, textures)
+        // this.mesh.hover = this.hover
+        //@ts-ignore
+        this.mesh._rotate = () => { }
+
+        this.obj.add(this.mesh)
+        //@ts-ignore
+        this.obj.hover = this.hover
+
+
+    }
+
+    updateVisibility(visiible: boolean = this.visiible) {
+        try {
+            // update mesh 
+            this.visiible = visiible
+        } catch (e) {
+            console.log("unable to update visibility", e)
+        }
+    }
+
+    hover(newColor: string) {
+        try {
+            if (!newColor || newColor == "") return
+            // let newMesh = new Three.MeshBasicMaterial()
+            // newMesh.copy(newColor)
+            // let oldm:Three.MeshBasicMaterial = this.mesh.material[4]
+            // this.mesh.material[4] = newColor
+            // if(oldm) oldm.dispose()
+
+            //todo: make this a 3d object
+            // let oldm: Three.MeshBasicMaterial = this.mesh.material[4]
+            // this.mesh.material[4] = new Three.MeshBasicMaterial({
+            //     map: newColor,
+            // })
+            // if (oldm) oldm.dispose()
+
+            // implementing div lookup here
+            // in the chance that react isn't fast enough to create gallery component
+            let div = document.getElementById(newColor)
+            let tmpDiv = new CSS3DObject(div)
+
+            console.log(div)
+
+            this.obj.children[0] = tmpDiv
+            this.obj.matrixWorldNeedsUpdate = true
+        } catch (e) {
+            console.log("unable to update panel color", e)
+        }
+    }
+
+
+    resetColor() {
+        this.mesh.material[4] = new Three.MeshBasicMaterial({ color: this.homeColor })
+    }
+}
+

@@ -11,6 +11,11 @@ export interface FooterProps{
     contact(): void
 }
 
+export interface SlideShowProps{
+    images: Array<string>
+    id: string
+}
+
 export interface HomeProps extends RouteComponentProps{}
 export interface WorkProps extends RouteComponentProps{}
 export interface AboutProps extends RouteComponentProps{}

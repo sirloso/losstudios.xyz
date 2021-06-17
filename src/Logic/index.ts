@@ -1,4 +1,4 @@
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 // import { MapControls } from 'three/examples/jsm/controls/OrbitControls'
 const THREE = require('three')
 const TWEEN = require('@tweenjs/tween.js')
@@ -87,6 +87,7 @@ export const setup = async (galleryArray: Array<any>) => {
     let sceneElement = document.getElementById('webglScene')
     let sceneBoundingBox = sceneElement.getBoundingClientRect()
     renderer.setSize(sceneBoundingBox.width, sceneBoundingBox.height)
+    renderer.setPixelRatio(window.devicePixelRatio);
 
     sceneElement.appendChild(renderer.domElement);
     scene = new THREE.Scene()
@@ -95,7 +96,7 @@ export const setup = async (galleryArray: Array<any>) => {
     let cssbb = cssSceneElement.getBoundingClientRect()
     cssRenderer.setSize(cssbb.width, cssbb.height)
     cssSceneElement.appendChild(cssRenderer.domElement);
-    controls = new OrbitControls(camera,cssRenderer.domElement)
+    // controls = new OrbitControls(camera,cssRenderer.domElement)
 
     scene.background = new THREE.Color('white')
     let g = [
@@ -144,6 +145,8 @@ export const setup = async (galleryArray: Array<any>) => {
     backPanel = new Panel()
 
     backPanel.obj.position.set(1.5, 3.4, -29)
+    for(const c of backPanel.obj.children){
+    }
     scene.add(backPanel.obj)
 
     camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z)
@@ -382,7 +385,7 @@ function animate() {
     requestAnimationFrame(animate);
     TWEEN.update()
 
-    controls.update()
+    // controls.update()
     renderer.render(scene, camera);
     cssRenderer.render(scene, camera)
 }

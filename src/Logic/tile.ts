@@ -12,21 +12,21 @@ export class Tile {
     gallery: [ReactComponentElement<any>,string]
     pc: P5Controller
 
-    constructor(geometry: Three.BufferGeometry, title = 'los studios', images: Array<string>,ga: Array<any> ) {
+    constructor(geometry: Three.BufferGeometry, title = 'los studios', images: Array<string>,ga: (title:string)=>void ) {
         this.discard = this.discard.bind(this)
         let tag = this.getTag(title)
         this.pc = new P5Controller(title,tag)
 
-        let titles = ga.map((el)=>el.title) 
-        if(!titles.includes(title)){
-            console.log(images,title)
-            //@ts-ignore
-            this.gallery = SlideShow(images,title)
-            console.log("galleria",this.gallery)
-            ga.push({ title:title ,gallery:this.gallery[0]})
-        } 
+        // let titles = ga.map((el)=>el.title) 
+        // if(!titles.includes(title)){
+        //     //@ts-ignore
+        //     this.gallery = SlideShow(images,title)
+        //     ga.push({ title:title ,gallery:this.gallery[0]})
+        // } 
 
-        this.tc = new ThreeController(geometry, title, tag,this.gallery[0],this.gallery[1])
+        ga(title)
+
+        this.tc = new ThreeController(geometry, title, tag)
 
         //@ts-ignore
         this.pc.registerCanvas = this.tc.registerCanvas

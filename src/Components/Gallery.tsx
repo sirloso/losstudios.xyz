@@ -14,7 +14,7 @@ export function SlideShow (images: Array<string>, id: string ){
 	}
 
 
-	return[
+	return(
 		<div className="slideShow animate__animated animate__fadeIn" key={id} id={id}>
 			<Fade  ref={slideRef} {...slideOpts} className="slideShow" easing="ease">
 			{
@@ -28,9 +28,8 @@ export function SlideShow (images: Array<string>, id: string ){
 					})
 				}
 			</Fade>
-		</div>,
-		id
-	]
+		</div>
+	)
 };
 
 export const SlideShow2 = (images: Array<string>,id: string) => {

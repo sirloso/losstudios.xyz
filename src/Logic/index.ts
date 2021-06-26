@@ -19,7 +19,8 @@ let tiles = []
 var vec = new THREE.Vector3(); // create once and reuse
 
 scrolling = false
-
+let offsetX = 0
+let offsetY = 0
 let NUM_ROWS = 3
 let TILES_PER_ROW = 2
 
@@ -43,10 +44,6 @@ const mobileCamera = {
 
 const cameraPosition = mobile ? mobileCamera : desktopCamera
 
-// todo: fix this
-let offsetX = 0//-.001
-let offsetY = 0//.10
-
 // scene setup 
 camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 // gui.add(camera.position,"x")
@@ -67,12 +64,12 @@ cssRenderer = new CSS3DRenderer()
 // controls.enableZoom = false
 
 // window listeners
-window.addEventListener('resize', onWindowResize, false);
-window.addEventListener('mousemove', onMouseMove, false);
-window.addEventListener('mousedown', onMouseDown, false)
-window.addEventListener('touchmove', onTouchMove, false);
-window.addEventListener('touchstart', onTouchStart, false);
-window.addEventListener('touchend', onTouchEnd, false)
+// window.addEventListener('resize', onWindowResize, false);
+// window.addEventListener('mousemove', onMouseMove, false);
+// window.addEventListener('mousedown', onMouseDown, false)
+// window.addEventListener('touchmove', onTouchMove, false);
+// window.addEventListener('touchstart', onTouchStart, false);
+// window.addEventListener('touchend', onTouchEnd, false)
 
 // window.addEventListener('touchend', onDoubleClick, false);
 

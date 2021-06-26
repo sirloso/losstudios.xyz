@@ -1,6 +1,7 @@
 import { Rotater } from './ThreeController'
 import * as Three from 'three'
 import { CSS3DObject, CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer'
+import { GUI } from 'dat.gui'
 
 export class Panel {
     canvasID: string
@@ -17,68 +18,68 @@ export class Panel {
     constructor(
         geometry: Three.BufferGeometry,
         div: HTMLElement,
-        sceneBoundingBox:DOMRect,
-        color: string|Three.Color = "white",
+        sceneBoundingBox: DOMRect,
+        color: string | Three.Color = "white",
         createRenderer: boolean = true
     ) {
-	this.geometry = geometry
-	this.obj = new Three.Object3D()
+        this.geometry = geometry
+        this.obj = new Three.Object3D()
 
         this.discard = this.discard.bind(this)
-	this._rotate = this._rotate.bind(this)
+        this._rotate = this._rotate.bind(this)
 
-	this.divMaterial = new Three.MeshBasicMaterial({
-		color: color,
-		side: Three.DoubleSide,
-		opacity: 1,
-		blending: Three.NoBlending,
-	} )
+        this.divMaterial = new Three.MeshBasicMaterial({
+            color: color,
+            side: Three.DoubleSide,
+            opacity: 1,
+            blending: Three.NoBlending,
+        })
 
-	if(createRenderer) this.setupCSSRenderer(sceneBoundingBox)
+        if (createRenderer) this.setupCSSRenderer(sceneBoundingBox)
 
-	div.style.opacity = "0.999"
-	this.divObj =  new CSS3DObject(div) 
+        div.style.opacity = "0.999"
+        this.divObj = new CSS3DObject(div)
 
-	//@ts-ignore
-	this.obj.css3dObject = this.divObj
+        //@ts-ignore
+        this.obj.css3dObject = this.divObj
 
-	this.obj.add(this.divObj)
+        this.obj.add(this.divObj)
 
 
-	this.mesh = new Three.Mesh(this.geometry,this.divMaterial) 
-	//@ts-ignore
-	this.obj.lightShadowMesh = this.mesh
-	this.mesh.castShadow = true
-	this.mesh.receiveShadow = true
+        this.mesh = new Three.Mesh(this.geometry, this.divMaterial)
+        //@ts-ignore
+        this.obj.lightShadowMesh = this.mesh
+        this.mesh.castShadow = true
+        this.mesh.receiveShadow = true
 
-	// this.divObj.position.set(0,0,50)
-	// this.mesh.position.set(0,0,50)
+        // this.divObj.position.set(0,0,50)
+        // this.mesh.position.set(0,0,50)
 
-	this.obj.add(this.mesh)
+        this.obj.add(this.mesh)
     }
 
-    setupCSSRenderer(sbb: DOMRect){
-	    this.renderer = new CSS3DRenderer()
-	    let r = this.renderer
+    setupCSSRenderer(sbb: DOMRect) {
+        this.renderer = new CSS3DRenderer()
+        let r = this.renderer
 
-	    r.setSize(sbb.width, sbb.height)
-	    r.domElement.style.position = 'absolute';
-	    r.domElement.style.top = "0";
+        r.setSize(sbb.width, sbb.height)
+        r.domElement.style.position = 'absolute';
+        r.domElement.style.top = "0";
     }
 
-    _rotate(x:number,y:number){
-        if(x===0 && y===0){
+    _rotate(x: number, y: number) {
+        if (x === 0 && y === 0) {
             this.mesh.rotation.x = 0
             this.mesh.rotation.y = 0
             return
         }
-        let rotation = this.rotator.calculateRotation(x,y)
-        if(!rotation) return
+        let rotation = this.rotator.calculateRotation(x, y)
+        if (!rotation) return
         this.mesh.rotation.x = rotation[0]
         this.mesh.rotation.y = rotation[1]
     }
 
-    setColor(color:string){
+    setColor(color: string) {
         this.color = color
     }
 
@@ -96,6 +97,7 @@ export class WorkPanel {
     homeColor: Three.Color
     obj: Three.Object3D
     cssObj: CSS3DObject
+    tmpDiv: CSS3DObject
     constructor() {
         this.updateVisibility = this.updateVisibility.bind(this)
         this.hover = this.hover.bind(this)
@@ -124,12 +126,11 @@ export class WorkPanel {
 
         let div = document.getElementById("workwork")
         div.style.opacity = "0.999"
-        div.style.width ="500px"
+        div.style.width = "500px"
         div.style.height = "500px"
         this.cssObj = new CSS3DObject(div)
         //@ts-ignore
-        this.obj.css3dObject = this.cssObj
-        this.obj.add(this.cssObj)
+        // this.obj.css3dObject = this.cssObj
 
         //@ts-ignore
         this.mesh = new Three.Mesh(this.geometry, textures)
@@ -137,7 +138,9 @@ export class WorkPanel {
         //@ts-ignore
         this.mesh._rotate = () => { }
 
+        console.log(this.mesh, this.cssObj)
         this.obj.add(this.mesh)
+        this.obj.add(this.cssObj)
         //@ts-ignore
         this.obj.hover = this.hover
 
@@ -153,7 +156,7 @@ export class WorkPanel {
         }
     }
 
-    hover(newColor: string) {
+    hover(newColor: string | CSS3DObject) {
         try {
             if (!newColor || newColor == "") return
             // let newMesh = new Three.MeshBasicMaterial()
@@ -171,13 +174,29 @@ export class WorkPanel {
 
             // implementing div lookup here
             // in the chance that react isn't fast enough to create gallery component
-            let div = document.getElementById(newColor)
-            let tmpDiv = new CSS3DObject(div)
+            if (!this.tmpDiv) {
+                console.log(typeof newColor)
+                if(typeof newColor === "string"){
 
-            console.log(div)
+                let div = document.getElementById(newColor)
+                this.tmpDiv = new CSS3DObject(div)
 
-            this.obj.children[0] = tmpDiv
-            this.obj.matrixWorldNeedsUpdate = true
+                this.cssObj.parent.remove(this.cssObj)
+                this.obj.matrixWorldNeedsUpdate = true
+
+                // this.tmpDiv.position.copy(this.obj.position)
+                this.obj.add(this.tmpDiv)
+
+                this.obj.matrixWorldNeedsUpdate = true
+
+                return this.tmpDiv
+                }else{
+                        this.cssObj.parent.remove(this.cssObj)
+                        this.obj.add(newColor)
+                        this.obj.matrixWorldNeedsUpdate = true
+                        this.tmpDiv = newColor
+                }
+            }
         } catch (e) {
             console.log("unable to update panel color", e)
         }
@@ -185,7 +204,12 @@ export class WorkPanel {
 
 
     resetColor() {
-        this.mesh.material[4] = new Three.MeshBasicMaterial({ color: this.homeColor })
+        if (this.tmpDiv) {
+            this.tmpDiv.parent.remove(this.tmpDiv)
+            this.obj.add(this.cssObj)
+            this.obj.matrixWorldNeedsUpdate = true
+            this.tmpDiv = null
+        }
     }
 }
 

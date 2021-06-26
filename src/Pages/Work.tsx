@@ -32,7 +32,7 @@ const Work = (props: WorkProps) => {
         if (!loading)
             if (canvas) {
                 console.log("requiring")
-                setup(GalleryArray)
+                // setup(GalleryArray)
                 console.log('done');
             }
     }, [loading])

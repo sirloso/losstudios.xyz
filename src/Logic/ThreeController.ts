@@ -41,10 +41,10 @@ export class ThreeController {
     obj: THREE.Mesh
     rotator: Rotater
     canvasTexture: THREE.CanvasTexture
-    _hero: ReactComponentElement<any>
     hero: string
+    heroDiv: CSS3DObject
     heroTexture: THREE.Texture
-    constructor(geometry: THREE.BufferGeometry,  canvasTitle = 'defaultCanvas0',tag:string,hero: ReactComponentElement<any>,id: string) {
+    constructor(geometry: THREE.BufferGeometry,  canvasTitle = 'defaultCanvas0',tag:string) {
         this.geometry = geometry
         this.tag = tag
         this.redraw = this.redraw.bind(this)
@@ -53,10 +53,11 @@ export class ThreeController {
         this.registerCanvas = this.registerCanvas.bind(this)
         this.colorize = this.colorize.bind(this)
         this.resetColor = this.resetColor.bind(this)
+        this.updateHeroDiv = this.updateHeroDiv.bind(this)
         this.title = canvasTitle
-        this._hero = hero
-        this.hero = id
+        this.hero = canvasTitle
         let textures = []
+
 
         // new THREE.TextureLoader().load( hero,(result)=>{
         //     this.heroTexture = result
@@ -71,13 +72,16 @@ export class ThreeController {
                 new THREE.MeshPhongMaterial({
                     color: 'black',
                     opacity: this.opacity,
-                    transparent: true
+                    transparent: true,
                 })
             )
         }
 
         this.mesh = new THREE.Mesh(this.geometry, textures)
         this.obj = this.mesh
+
+        //@ts-ignore
+        this.obj.hero = this.hero
 
         //@ts-ignore
         this.mesh.hover = this.hover
@@ -89,6 +93,8 @@ export class ThreeController {
         this.mesh.resetColor = this.resetColor
         //@ts-ignore
         this.mesh.registerCanvas = this.registerCanvas
+        //@ts-ignore
+        this.obj.controller = this
 
         this.rotator = new Rotater(
             //@ts-ignore
@@ -161,6 +167,11 @@ export class ThreeController {
            transparent: true,
            opacity: this.opacity 
         })
+    }
+
+    updateHeroDiv(div: CSS3DObject){
+        if(!this.heroDiv) this.heroDiv = div
+        console.log("updating hero div",div)
     }
 
     resetColor(){

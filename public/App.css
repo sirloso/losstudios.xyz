@@ -183,8 +183,8 @@ canvas {
 .gallery{
     width: 500px;
     height: 500px;
-    /* z-index: -100;
-    overflow: hidden; */
+    z-index: -100;
+    /* overflow: hidden; */
 }
 
 #GalleryArray{
@@ -195,6 +195,11 @@ canvas {
     left: 0;
     width: 200px;
     height: 200px;
+}
+
+#galleries{
+    z-index: -100;
+    visibility: hidden;
 }
 
 .slideShow{

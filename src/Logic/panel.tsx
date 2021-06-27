@@ -138,7 +138,6 @@ export class WorkPanel {
         //@ts-ignore
         this.mesh._rotate = () => { }
 
-        console.log(this.mesh, this.cssObj)
         this.obj.add(this.mesh)
         this.obj.add(this.cssObj)
         //@ts-ignore
@@ -175,7 +174,6 @@ export class WorkPanel {
             // implementing div lookup here
             // in the chance that react isn't fast enough to create gallery component
             if (!this.tmpDiv) {
-                console.log(typeof newColor)
                 if(typeof newColor === "string"){
 
                 let div = document.getElementById(newColor)
@@ -189,11 +187,18 @@ export class WorkPanel {
 
                 this.obj.matrixWorldNeedsUpdate = true
 
+                let arrows = Array.from(document.getElementsByClassName("arrow"))
+                arrows.forEach((e)=>{ 
+                    //@ts-ignore
+                    e.style.visibility = "hidden" 
+                }) 
+
                 return this.tmpDiv
                 }else{
                         this.cssObj.parent.remove(this.cssObj)
                         this.obj.add(newColor)
                         this.obj.matrixWorldNeedsUpdate = true
+                        console.log(newColor)
                         this.tmpDiv = newColor
                 }
             }

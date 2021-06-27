@@ -17,10 +17,13 @@ import {
     onTouchMove,
     onTouchStart,
     onTouchEnd,
-    zoomOut
+    zoomOutOfWork
 } from './homeInteractionHandlers'
 
-let scrolling,zooming,lastobj
+let scrolling,zooming
+let lastobj = {
+	lastobj: null
+}
 const TWEEN = require('@tweenjs/tween.js')
 
 let camera = new THREE.PerspectiveCamera(
@@ -40,8 +43,8 @@ let tileGroup: THREE.Group
 let interaction
 
 let cssrenderer: CSS3DRenderer
-let renderer = new THREE.WebGLRenderer({ antialias: true })
-renderer.autoClear = false
+let renderer = new THREE.WebGLRenderer({ alpha:true, antialias: true })
+// renderer.autoClear = false
 renderer.setClearColor(0x000000, 0);
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.shadowMap.enabled = true;
@@ -171,6 +174,7 @@ export const setup = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElem
 
 	// work
 	workPanel = createWorkPanel()
+	handlerObj.workPanel = workPanel
 	scene.add(workPanel.obj)
 	workPanel.obj.position.set(1000, 0, 1)
 	camera.position.set(1000, 0, 1000)
@@ -185,18 +189,20 @@ export const setup = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElem
 	]
 	let tiles = createTiles(titles, geometry, gallery, ga)
 	tileGroup = tiles.tileGroup
+	handlerObj.tileGroup = tileGroup
 	//@ts-ignore
 	window.tiles = tiles
 
 	// if(mobile) scene.add(tileGroup)
 	scene.add(tileGroup)
 
-	tileGroup.position.set(980,-17,850)
+	tileGroup.position.set(1070,-17,850)
 	// gui.add(tileGroup.position, "x")
 	// gui.add(tileGroup.position, "y")
 	// gui.add(tileGroup.position, "z")
 
 	cssrenderer = titlePanel.renderer
+	handlerObj.cssrenderer = cssrenderer
 	// controls = new OrbitControls(camera,cssrenderer.domElement)
 	// controls.target = new THREE.Vector3(980,-17,850)
 	animate(renderer, cssrenderer, camera, scene)
@@ -218,28 +224,47 @@ function animate(renderer: THREE.Renderer, cssrenderer: CSS3DRenderer, camera: T
 	cssrenderer.render(scene, camera)
 	renderer.render(scene, camera);
 
-	rc.setFromCamera(m, camera);
-
 	requestAnimationFrame(() => { animate(renderer, cssrenderer, camera, scene) });
 }
 
+const handlerObj = {
+	camera,
+	renderer,
+	cssrenderer,
+	scene,
+	zooming,
+	zoomed,
+	lastobj,
+	mobile: isMobile(),
+	workPanel,
+	scrolling,
+	rc,
+	tileGroup,
+	m,
+	event: undefined
+}
+
 window.addEventListener('resize', ()=>{
-	onWindowResize(camera,renderer,cssrenderer,scene)
+	onWindowResize(handlerObj)
 }, false);
 window.addEventListener('mousemove', (event)=>{
-	onMouseMove(event,m,camera,scrolling,isMobile(),scene,workPanel,lastobj,zooming,zoomed,rc,tileGroup)
+	handlerObj.event = event
+	onMouseMove(handlerObj)
 }, false);
 window.addEventListener('mousedown', (event)=>{
-	onMouseDown(event,zooming,lastobj,isMobile(),workPanel,scrolling,zoomed,camera)
+	handlerObj.event = event
+	onMouseDown(handlerObj)
 }, false)
 window.addEventListener('touchmove', (event)=>{
-	onTouchMove(event,scrolling,m,tileGroup)
+	handlerObj.event = event
+	onTouchMove(handlerObj)
 }, false);
 window.addEventListener('touchstart', onTouchStart, false);
 window.addEventListener('touchend', (event)=>{
-	onTouchEnd(event,scrolling,zooming,lastobj,workPanel,camera,tileGroup,rc)
+	handlerObj.event = event
+	onTouchEnd(handlerObj)
 }, false)
 
 export const zo = () => {
-	return zoomOut(camera,scrolling,zoomed)
+	return zoomOutOfWork(handlerObj)
 }

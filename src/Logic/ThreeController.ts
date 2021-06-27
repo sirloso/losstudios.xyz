@@ -171,7 +171,6 @@ export class ThreeController {
 
     updateHeroDiv(div: CSS3DObject){
         if(!this.heroDiv) this.heroDiv = div
-        console.log("updating hero div",div)
     }
 
     resetColor(){

@@ -163,6 +163,9 @@ canvas {
     z-index: 100;
 }
 
+#webglScene{
+}
+
 #cssScene,
 #webglScene {
     width: 100%;

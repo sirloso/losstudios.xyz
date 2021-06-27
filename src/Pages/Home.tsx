@@ -47,7 +47,6 @@ const Home = (props:HomeProps) => {
     }, [loaded]);
 
     useEffect(()=>{
-        console.log(GalleryArray)
     },[GalleryArray])
 
     setTimeout(()=>{

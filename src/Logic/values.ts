@@ -24,3 +24,9 @@ export const mobileCamera = {
 }
 
 export const cameraPosition = isMobile() ? mobileCamera : desktopCamera
+
+export const workPanelStartPos = {
+    x: 1000,
+    y: 0,
+    z: 600
+}

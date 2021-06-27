@@ -1,9 +1,11 @@
 const THREE = require("three")
 const TWEEN = require("@tweenjs/tween.js")
+import { createWorkPanel } from './homeThreeCreators'
 import {
 	offsetX,
 	offsetY,
-	cameraPosition
+	cameraPosition,
+    workPanelStartPos
 } from './values'
 export const handleLogoMouseEnter = () => {
 	// if(aboutPanel.obj.rotation.x == 0) return
@@ -71,17 +73,17 @@ export const handleLogoMouseLeave = () => {
 }
 
 let lastTap
-export function onDoubleClick(zooming,zoomed,camera,lastobj) {
+export function onDoubleClick(h) {
     event.preventDefault()
     var now = new Date().getTime();
     var timesince = now - lastTap;
     if ((timesince < 600) && (timesince > 0)) {
-        let tmp = lastobj
-        lastobj.hover(1)
+        let tmp = h.lastobj
+        h.lastobj.hover(1)
         setTimeout(
             () => { tmp.hover(2); }, 2000
         )
-        zoomIn(zooming,zoomed,camera,lastobj)
+        zoomIntoWork(h)
     }
     lastTap = new Date().getTime();
 }
@@ -89,13 +91,13 @@ export function onDoubleClick(zooming,zoomed,camera,lastobj) {
 let sy = 0
 let vec = new THREE.Vector3(); // create once and reuse
 let clearMouse
-export function onTouchEnd(event,scrolling,zooming,lastobj,backPanel,camera,tileGroup,rc) {
+export function onTouchEnd({ event,scrolling,zooming,lastobj,workPanel,camera,tileGroup,rc }) {
     console.log("scrolling", scrolling)
     event.preventDefault()
     if (zooming && !lastobj) return
     try {
         if (lastobj && !scrolling) {
-            if (lastobj === backPanel.mesh) return
+            if (lastobj === workPanel.mesh) return
             // this was used to draw the small squares
             // if (lastobj.hover) lastobj.hover(1)
             // zoomIn()
@@ -114,7 +116,7 @@ export function onTouchEnd(event,scrolling,zooming,lastobj,backPanel,camera,tile
     let intersects = rc.intersectObjects(tileGroup.children);
 
     let obj = intersects[0]
-    if (obj && !scrolling && !clearMouse && obj.object != backPanel) {
+    if (obj && !scrolling && !clearMouse && obj.object != workPanel) {
         obj.object.colorize()
         lastobj = obj
     } else {
@@ -127,34 +129,34 @@ export function onTouchEnd(event,scrolling,zooming,lastobj,backPanel,camera,tile
     scrolling = false
 }
 
-export function onTouchMove(event,scrolling,m,tileGroup) {
+export function onTouchMove( h ) {
     // event.preventDefault()
-    scrolling = true
-    m.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1 
-    m.y = - (event.touches[0].clientY / window.innerHeight) * 2 + 1 
+    h.scrolling = true
+    h.m.x = (h.event.touches[0].clientX / window.innerWidth) * 2 - 1 
+    h.m.y = - (h.event.touches[0].clientY / window.innerHeight) * 2 + 1 
     let position = new THREE.Vector3()
     // position.setPositionFromMatrix( tileGroup.matrixWorld );
 
     let speed = 0.001
 
-    let move = event.touches[0].pageY
+    let move = h.event.touches[0].pageY
     var deltaY = (move - sy);
-    var box = new THREE.Box3().setFromObject(tileGroup);
+    var box = new THREE.Box3().setFromObject(h.tileGroup);
     let height = box.max.y - box.min.y
 
-    if (tileGroup.position.y + (deltaY * speed) < 0) return
-    if (tileGroup.position.y + (deltaY * speed) > height - 2) {
+    if (h.tileGroup.position.y + (deltaY * speed) < 0) return
+    if (h.tileGroup.position.y + (deltaY * speed) > height - 2) {
         return
     }
 
-    tileGroup.position.y += (deltaY * speed);
+    h.tileGroup.position.y += (deltaY * speed);
 }
 
 export function onTouchStart(event) {
     sy = event.touches[0].pageY;
 }
 
-export function onWindowResize(camera,renderer,cssrenderer,scene) {
+export function onWindowResize({ camera,renderer,cssrenderer,scene } ) {
 	camera.aspect = window.innerWidth / window.innerHeight;
 
 	renderer.setSize(window.innerWidth, window.innerHeight);
@@ -166,16 +168,15 @@ export function onWindowResize(camera,renderer,cssrenderer,scene) {
 	renderer.render(scene, camera);
 }
 
-export function onMouseMove(event,m,camera,scrolling,mobile,scene,backPanel,lastobj,zooming,zoomed,rc,tileGroup) {
+export function onMouseMove(h) {
     event.preventDefault()
-    m.x = (event.clientX / window.innerWidth) * 2 - 1 + offsetX
-    m.y = - (event.clientY / window.innerHeight) * 2 + 1 + offsetY
-    rc.setFromCamera(m, camera);
-
+    h.m.x = (h.event.clientX / window.innerWidth) * 2 - 1 + offsetX
+    h.m.y = - (h.event.clientY / window.innerHeight) * 2 + 1 + offsetY
+    h.rc.setFromCamera(h.m, h.camera);
     // calculate objects intersecting the picking ray
-    var intersects = scene === undefined || tileGroup === undefined ? [] : rc.intersectObjects(tileGroup.children);
+    var intersects = h.scene === undefined || h.tileGroup === undefined ? [] : h.rc.intersectObjects(h.tileGroup.children);
     // knowing this will only contain one object
-    if (intersects[0] && !scrolling && !clearMouse && !mobile) {
+    if (intersects[0] && !h.scrolling && !clearMouse && !h.mobile) {
         // intersects[0].object._rotate(
         //     intersects[0].point.x,
         //     intersects[0].point.y
@@ -185,7 +186,7 @@ export function onMouseMove(event,m,camera,scrolling,mobile,scene,backPanel,last
         let intersected = intersects[0].object
         // update back panel to color of tile
         let img = intersected.controller.heroDiv || intersected.hero 
-        let obj = backPanel.hover(img)
+        let obj = h.workPanel.hover(img)
 
         // save created 3d object
         if(!intersected.controller.heroDiv) intersected.controller.updateHeroDiv(obj)
@@ -193,15 +194,14 @@ export function onMouseMove(event,m,camera,scrolling,mobile,scene,backPanel,last
         if (intersects[0].object.registerCanvas) intersects[0].object.registerCanvas()
 
         //reset the tiles if we hover on the back board
-        if (intersects[0].object === backPanel.mesh && lastobj) {
+        if (intersects[0].object === h.workPanel.mesh && h.lastobj) {
             // set rotation to zero
         //     lastobj._rotate(0, 0)
             // lastobj = null
-            if (!zooming && !zoomed) backPanel.resetColor()
+            if (!h.zooming && !h.zoomed) h.workPanel.resetColor()
         }
 
-        lastobj = intersects[0].object
-
+        h.lastobj = intersects[0].object
     } else {
         // if (lastobj && !mobile) {
             // if(lastobj.colorize)lastobj.colorize()
@@ -209,55 +209,54 @@ export function onMouseMove(event,m,camera,scrolling,mobile,scene,backPanel,last
             vec.set(0, 0, 0)
             // set rotation to zero
         //     lastobj._rotate(0, 0)
-            if (!zooming && !zoomed) backPanel.resetColor()
-        //     lastobj = null
+            if (!h.zooming && !h.zoomed) h.workPanel.resetColor()
+            h.lastobj = null
         // }
     }
 }
 
-export function onMouseDown(event,zooming,lastobj,mobile,backPanel,scrolling,zoomed,camera) {
-    event.preventDefault()
-    if (zooming && !lastobj && mobile) return
+export function onMouseDown(h) {
+    h.event.preventDefault()
+    if (h.zooming && !h.lastobj && h.mobile) return
     try {
-        if (event.type === 'mousedown' && lastobj && !scrolling) {
-            if (lastobj === backPanel.mesh) return
+        if (event.type === 'mousedown' && h.lastobj && !h.scrolling) {
+            if (h.lastobj === h.workPanel.mesh) return
             // this was used to draw the small squares
-            if (lastobj.hover) lastobj.hover(1)
-            zoomIn(zooming,zoomed,camera,lastobj)
+            if (h.lastobj.hover) h.lastobj.hover(1)
+            zoomIntoWork(h)
         }
     } catch (e) {
         console.log(e)
     }
 }
 
-function zoomIn(zooming,zoomed,camera,lastobj) {
-    if (!lastobj) return
+function zoomIntoWork(h) {
+    if (!h.lastobj) return
 
-    let to = {
-        x: 1.5,
-        y: 3.3,
-        z: -15.1
-    }
+    let to = workPanelStartPos
 
-    zooming = true
-    zoomed = false
-    lastobj = null
-    let start = from(camera)
+    h.zooming = true
+    h.zoomed = false
+    h.lastobj = null
+    let start = from(h.camera)
     let tween = new TWEEN.Tween(start)
         .to(to, 1000)
         .easing(TWEEN.Easing.Linear.None)
         .onUpdate(function () {
-            camera.position.set(start.x, start.y, start.z);
+            h.camera.position.set(start.x, start.y, start.z);
         })
         .onComplete(function () {
-            setTimeout(() => {
-                zooming = false
-                zoomed = true
-            }, 500)
+                h.zooming = false
+                h.zoomed = true
+            let arrows = Array.from(document.getElementsByClassName("arrow"))
+            arrows.forEach((e)=>{ 
+                //@ts-ignore
+                e.style.visibility = "visible" 
+            }) 
         })
         .start();
 
-    camera.updateProjectionMatrix();
+    h.camera.updateProjectionMatrix();
 }
 
 let from = (camera) => {
@@ -268,24 +267,42 @@ let from = (camera) => {
     }
 }
 
-export function zoomOut(camera,scrolling,zoomed) {
-    scrolling = true
-    let start = from(camera)
+export function zoomOutOfWork(h) {
+    h.scrolling = true
+    let start = from(h.camera)
     let tween = new TWEEN.Tween(start)
         .to({ ...cameraPosition }, 1000)
         .easing(TWEEN.Easing.Linear.None)
         .onUpdate(function () {
-            camera.position.set(start.x, start.y, start.z);
+            h.camera.position.set(start.x, start.y, start.z);
         })
         .onComplete(function () {
-            zoomed = false
-            scrolling = false
+            h.zoomed = false
+            h.scrolling = false
+            let arrows = Array.from(document.getElementsByClassName("arrow"))
+            arrows.forEach((e)=>{ 
+                //@ts-ignore
+                e.style.visibility = "hidden" 
+            }) 
         })
         .start();
 
-    camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z)
-    camera.fov = 75
-    camera.updateProjectionMatrix();
+    h.camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z)
+    h.camera.fov = 75
+    h.camera.updateProjectionMatrix();
 //     modalMode = false
 
+}
+
+const addWorkDesc = (h) => {
+    let newPanel = createWorkPanel() 
+
+    h.scene.add(newPanel)
+     
+
+    h.newPanel = h
+}
+
+const removeWorkDesc = (h) => {
+    // (h.newPanel)
 }

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 
 import Header from '../Components/Header'
 import { SlideShow } from '../Components/Gallery'
-import { setup } from '../Logic/homeAnimator'
+import { setupHome, setupWork } from '../Logic/homeAnimator'
 import {
     handleLogoMouseEnter,
     handleLogoMouseLeave
@@ -11,66 +11,72 @@ import { HomeProps } from '../Logic/types'
 import { useAppDispatch } from '../Logic/redux/workSlice'
 import { useGetWorksQuery } from '../Logic/redux/api'
 
-const Home = (props:HomeProps) => {
-    const [detail,updateDetail] = useState(false)
-    const [loaded,updateLoaded] = useState(false)
-    const [animate,updateAnimate] = useState(false)
+const Home = (props: HomeProps) => {
+    const [detail, updateDetail] = useState(false)
+    const [loaded, updateLoaded] = useState(false)
+    const [animate, updateAnimate] = useState(false)
     const home = useRef()
     const css = useRef()
     const webgl = useRef()
 
-    const [GalleryArray,updateGallery] = useState([])
+    const [GalleryArray, updateGallery] = useState([])
 
-	let gallery = [
-		"https://nsc.nyc3.digitaloceanspaces.com/028b1fcfd219e13b4ccb9730fce149e2.jpg",
-		"https://nsc.nyc3.digitaloceanspaces.com/0916a7105953013e63163bdd14e400e5.jpg",
-		"https://nsc.nyc3.digitaloceanspaces.com/1b216267fbb791c07454464904b926dc.jpg"
-	]
+    let gallery = [
+        "https://nsc.nyc3.digitaloceanspaces.com/028b1fcfd219e13b4ccb9730fce149e2.jpg",
+        "https://nsc.nyc3.digitaloceanspaces.com/0916a7105953013e63163bdd14e400e5.jpg",
+        "https://nsc.nyc3.digitaloceanspaces.com/1b216267fbb791c07454464904b926dc.jpg"
+    ]
 
     const createGallery = (tag: string) => {
-        let ss = SlideShow(gallery,tag)
+        let ss = SlideShow(gallery, tag)
         GalleryArray.push(ss)
         updateGallery(GalleryArray)
     }
 
-    const dispatch = useAppDispatch()
     const { data, error, isLoading } = useGetWorksQuery("no")
 
-    console.log("data",data)
-    console.log("isLoading",isLoading)
-    console.log("error",error)
+    console.log("data", data)
+    console.log("isLoading", isLoading)
+    console.log("error", error)
 
     useEffect(() => {
-       if(!loaded && (home && css && webgl)) {
+        if (!loaded && home && css && webgl) {
+            setupHome(home.current, css.current, webgl.current, createGallery)
+            updateLoaded(true)
+        }
+
         //@ts-ignore
-        setup(home.current,css.current,webgl.current,createGallery)
-        updateLoaded(true)
-       }
-        //@ts-ignore
-       if(loaded && !animate){
-        setTimeout(()=>{
-            handleLogoMouseEnter()
-            updateAnimate(true)
-        },2000)
-       }
+        if (loaded && !animate) {
+            setTimeout(() => {
+                handleLogoMouseEnter()
+                updateAnimate(true)
+            }, 2000)
+        }
     }, [loaded]);
 
-    useEffect(()=>{
-    },[GalleryArray])
+    useEffect(() => {
+    }, [GalleryArray])
 
-    setTimeout(()=>{
-        if(!detail) updateDetail(true)
-    },2000)
-    return(
+    useEffect(()=>{
+        if(data){
+            console.log("setting up work")
+            // setupWork(createGallery)
+        }
+    },[data])
+
+    setTimeout(() => {
+        if (!detail) updateDetail(true)
+    }, 2000)
+    return (
         <div className="Home">
-            <Header showLogo={false} showWork showAbout/>
+            <Header showLogo={false} showWork showAbout />
             <div id="HomeBody" ref={home}>
-                <div id="HomeLogo" 
-                onTouchStartCapture={handleLogoMouseEnter}
-                onTouchEndCapture={handleLogoMouseLeave}
-                onMouseEnter={handleLogoMouseEnter}
-                onMouseLeave={handleLogoMouseLeave}
-                className="hover animate__animated animate__fadeIn">
+                <div id="HomeLogo"
+                    onTouchStartCapture={handleLogoMouseEnter}
+                    onTouchEndCapture={handleLogoMouseLeave}
+                    onMouseEnter={handleLogoMouseEnter}
+                    onMouseLeave={handleLogoMouseLeave}
+                    className="hover animate__animated animate__fadeIn">
                     Los Studios
                 </div>
                 <div id="HomeAbout" className="animate__animated animate__fadeIn ">
@@ -80,27 +86,27 @@ const Home = (props:HomeProps) => {
                     </div>
                     <div id="rightAlign">
                         hardware
-                        <br/>
+                        <br />
                         &
-                        <br/>
+                        <br />
                         unconventional web design
                     </div>
 
                 </div>
-                    <div id="galleries">
-                        {
-                            GalleryArray.map((el)=>{
-                                return el
-                                
-                            })
-                        }
-                    </div>
-                    <div id="workwork"></div>
-            </div>
-                <div id="renderers">
-                    <div id="css" ref={css}/>
-                    <div id="webgl" ref={webgl}/>
+                <div id="galleries">
+                    {
+                        GalleryArray.map((el) => {
+                            return el
+
+                        })
+                    }
                 </div>
+                <div id="workwork"></div>
+            </div>
+            <div id="renderers">
+                <div id="css" ref={css} />
+                <div id="webgl" ref={webgl} />
+            </div>
         </div>
     )
 }

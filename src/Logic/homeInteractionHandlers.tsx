@@ -186,6 +186,7 @@ export function onMouseMove(h) {
         let intersected = intersects[0].object
         // update back panel to color of tile
         let img = intersected.controller.heroDiv || intersected.hero 
+
         let obj = h.workPanel.hover(img)
 
         // save created 3d object

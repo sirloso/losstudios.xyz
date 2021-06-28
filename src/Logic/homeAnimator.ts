@@ -128,7 +128,7 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 	animate(renderer, cssrenderer, camera, scene)
 
 }
-export const setup = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElement, ga: (title:string)=>void) => {
+export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElement, ga: (title:string)=>void) => {
 	if (isMobile()) {
 		setupMobile(home, css, webgl)
 		return
@@ -143,7 +143,7 @@ export const setup = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElem
 
 
 	// camera
-	// camera.position.set(0, 0, 1000);
+	camera.position.set(0, 0, 1000);
 
 
 	// get div to use
@@ -169,9 +169,21 @@ export const setup = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElem
 	aboutPanel.obj.position.set(0, 57, 0)
 	// aboutPanel.obj.rotateX(THREE.MathUtils.degToRad(95))
 
+	cssrenderer = titlePanel.renderer
+	handlerObj.cssrenderer = cssrenderer
+
+	// to placate the three gods
+	workPanel = createWorkPanel()
+	handlerObj.workPanel = workPanel
 
 	scene.add(aboutPanel.obj)
 
+	// controls = new OrbitControls(camera,cssrenderer.domElement)
+	// controls.target = new THREE.Vector3(980,-17,850)
+	animate(renderer, cssrenderer, camera, scene)
+}
+
+export const setupWork = (ga) => {
 	// work
 	workPanel = createWorkPanel()
 	handlerObj.workPanel = workPanel
@@ -201,11 +213,11 @@ export const setup = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElem
 	// gui.add(tileGroup.position, "y")
 	// gui.add(tileGroup.position, "z")
 
-	cssrenderer = titlePanel.renderer
-	handlerObj.cssrenderer = cssrenderer
-	// controls = new OrbitControls(camera,cssrenderer.domElement)
-	// controls.target = new THREE.Vector3(980,-17,850)
-	animate(renderer, cssrenderer, camera, scene)
+
+}
+
+export const setupAbout = () => {
+
 }
 
 function animate(renderer: THREE.Renderer, cssrenderer: CSS3DRenderer, camera: THREE.Camera, scene: THREE.Scene) {

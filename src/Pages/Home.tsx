@@ -35,10 +35,6 @@ const Home = (props: HomeProps) => {
 
     const { data, error, isLoading } = useGetWorksQuery("no")
 
-    console.log("data", data)
-    console.log("isLoading", isLoading)
-    console.log("error", error)
-
     useEffect(() => {
         if (!loaded && home && css && webgl) {
             setupHome(home.current, css.current, webgl.current, createGallery)
@@ -60,7 +56,8 @@ const Home = (props: HomeProps) => {
     useEffect(()=>{
         if(data){
             console.log("setting up work")
-            // setupWork(createGallery)
+            // setupWork(data)
+            // setupAbout()
         }
     },[data])
 

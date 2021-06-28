@@ -128,7 +128,7 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 	animate(renderer, cssrenderer, camera, scene)
 
 }
-export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElement, ga: (title:string)=>void) => {
+export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElement) => {
 	if (isMobile()) {
 		setupMobile(home, css, webgl)
 		return
@@ -183,7 +183,7 @@ export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTML
 	animate(renderer, cssrenderer, camera, scene)
 }
 
-export const setupWork = (ga) => {
+export const setupWork = ( ga: (title:string)=>void) => {
 	// work
 	workPanel = createWorkPanel()
 	handlerObj.workPanel = workPanel

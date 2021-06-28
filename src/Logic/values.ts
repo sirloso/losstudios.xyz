@@ -30,3 +30,10 @@ export const workPanelStartPos = {
     y: 0,
     z: 600
 }
+
+// export const apiBaseEndpoint = process.env.PRODUCTION ? "":"http://localhost:1337" 
+export const apiBaseEndpoint = "http://localhost:1337"
+
+export enum apiEndpointExtentions{
+    works  = "/works",
+}

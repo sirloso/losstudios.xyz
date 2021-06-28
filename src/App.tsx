@@ -8,13 +8,12 @@ import Work from './Pages/Work'
 import About from './Pages/About'
 import Header from './Components/Header'
 
+
 const App = (props:any) => {
     return(
-        <div id="App">
+        <div id="App" >
             <Router >
                     <Home path="/"/>
-                    <Work path="/work"/>
-                    <About path="/about"/>
             </Router>
         </div>
     )

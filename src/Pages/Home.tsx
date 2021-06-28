@@ -8,6 +8,8 @@ import {
     handleLogoMouseLeave
 } from '../Logic/homeInteractionHandlers'
 import { HomeProps } from '../Logic/types'
+import { useAppDispatch } from '../Logic/redux/workSlice'
+import { useGetWorksQuery } from '../Logic/redux/api'
 
 const Home = (props:HomeProps) => {
     const [detail,updateDetail] = useState(false)
@@ -30,6 +32,13 @@ const Home = (props:HomeProps) => {
         GalleryArray.push(ss)
         updateGallery(GalleryArray)
     }
+
+    const dispatch = useAppDispatch()
+    const { data, error, isLoading } = useGetWorksQuery("no")
+
+    console.log("data",data)
+    console.log("isLoading",isLoading)
+    console.log("error",error)
 
     useEffect(() => {
        if(!loaded && (home && css && webgl)) {

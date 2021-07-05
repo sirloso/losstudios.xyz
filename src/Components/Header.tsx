@@ -1,42 +1,43 @@
 import { navigate } from '@reach/router'
 import React from 'react'
 
+import { handlerObj } from '../Logic/homeAnimator'
+import { moveToHome, moveToWork, moveToAbout } from '../Logic/homeInteractionHandlers'
+
 import { HeaderProps } from '../Logic/types'
 
 const Header = (props: HeaderProps) => {
-    const stopWork = ()=>{ 
-        //@ts-ignore
-        window.stopWork = true
-        //@ts-ignore
-        window.stopHome = false
-    }
-    const stopHome = ()=>{ 
-        //@ts-ignore
-        window.stopWork = false
-        //@ts-ignore
-        window.stopHome = true
-    }
-
-    const stopBoth = () =>{
-        //@ts-ignore
-        window.stopWork = true
-        //@ts-ignore
-        window.stopHome = true
-    }
-    
     const navAbout = () =>{
-        stopBoth()
-        navigate("/about")
+        moveToAbout(handlerObj)
+        hideAbout()
     } 
+
     const navWork = () =>{
-        stopHome()
-        navigate("/work")
+        moveToWork(handlerObj)
+        hideWork()
     } 
 
     const navHome = () =>{
-        stopWork()
-        navigate("/")
+        moveToHome(handlerObj)
+        hideLogo()
+    }
 
+    const hideWork = () => {
+        props.updateAbout(true)
+        props.updateWork(false)
+        props.updateLogo(true)
+    }
+
+    const hideAbout = () => {
+        props.updateAbout(false)
+        props.updateWork(true)
+        props.updateLogo(true)
+    }
+
+    const hideLogo = () => {
+        props.updateAbout(true)
+        props.updateWork(true)
+        props.updateLogo(true)
     }
 
     return(

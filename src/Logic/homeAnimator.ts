@@ -1,9 +1,9 @@
 import * as THREE from 'three'
-import { WorkPanel,Panel } from './panel'
+import { WorkPanel, Panel } from './panel'
 import * as DAT from 'dat.gui'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer';
-import { SQUARE_SIZE } from './values';
+import { SQUARE_SIZE, tileGroupPosStart, workPanelPos } from './values';
 import {
 	createPanel,
 	createTiles,
@@ -11,16 +11,16 @@ import {
 } from './homeThreeCreators'
 import { isMobile } from './values'
 import {
-    onWindowResize,
-    onMouseMove,
-    onMouseDown,
-    onTouchMove,
-    onTouchStart,
-    onTouchEnd,
-    zoomOutOfWork
+	onWindowResize,
+	onMouseMove,
+	onMouseDown,
+	onTouchMove,
+	onTouchStart,
+	onTouchEnd,
+	zoomOutOfWork
 } from './homeInteractionHandlers'
 
-let scrolling,zooming
+let scrolling, zooming
 let lastobj = {
 	lastobj: null
 }
@@ -43,7 +43,7 @@ let tileGroup: THREE.Group
 let interaction
 
 let cssrenderer: CSS3DRenderer
-let renderer = new THREE.WebGLRenderer({ alpha:true, antialias: true })
+let renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
 // renderer.autoClear = false
 renderer.setClearColor(0x000000, 0);
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -128,6 +128,7 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 	animate(renderer, cssrenderer, camera, scene)
 
 }
+
 export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElement) => {
 	if (isMobile()) {
 		setupMobile(home, css, webgl)
@@ -178,21 +179,22 @@ export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTML
 
 	scene.add(aboutPanel.obj)
 
+	camera.updateMatrixWorld()
+
 	// controls = new OrbitControls(camera,cssrenderer.domElement)
 	// controls.target = new THREE.Vector3(980,-17,850)
 	animate(renderer, cssrenderer, camera, scene)
 }
 
-export const setupWork = ( ga: (title:string)=>void) => {
+export const setupWork = (ga: (title: string) => void) => {
 	// work
 	workPanel = createWorkPanel()
 	handlerObj.workPanel = workPanel
 	scene.add(workPanel.obj)
-	workPanel.obj.position.set(1000, 0, 1)
-	camera.position.set(1000, 0, 1000)
+	workPanel.obj.position.set(workPanelPos.x, workPanelPos.y, workPanelPos.z)
 
 	// tiles
-	let geometry = new THREE.BoxGeometry(SQUARE_SIZE,SQUARE_SIZE, 0.125);
+	let geometry = new THREE.BoxGeometry(SQUARE_SIZE, SQUARE_SIZE, 0.125);
 	let titles = ['one', 'two', 'trhe', 'four', 'fix', '8', 'a', 'b', 'c', 'd', 'e', '1', '2', '3', '4', '123123']
 	let gallery = [
 		"https://nsc.nyc3.digitaloceanspaces.com/028b1fcfd219e13b4ccb9730fce149e2.jpg",
@@ -208,12 +210,10 @@ export const setupWork = ( ga: (title:string)=>void) => {
 	// if(mobile) scene.add(tileGroup)
 	scene.add(tileGroup)
 
-	tileGroup.position.set(1070,-17,850)
+	tileGroup.position.set(tileGroupPosStart.x,tileGroupPosStart.y,tileGroupPosStart.z)
 	// gui.add(tileGroup.position, "x")
 	// gui.add(tileGroup.position, "y")
 	// gui.add(tileGroup.position, "z")
-
-
 }
 
 export const setupAbout = () => {
@@ -239,7 +239,7 @@ function animate(renderer: THREE.Renderer, cssrenderer: CSS3DRenderer, camera: T
 	requestAnimationFrame(() => { animate(renderer, cssrenderer, camera, scene) });
 }
 
-const handlerObj = {
+export const handlerObj = {
 	camera,
 	renderer,
 	cssrenderer,
@@ -256,23 +256,23 @@ const handlerObj = {
 	event: undefined
 }
 
-window.addEventListener('resize', ()=>{
+window.addEventListener('resize', () => {
 	onWindowResize(handlerObj)
 }, false);
-window.addEventListener('mousemove', (event)=>{
+window.addEventListener('mousemove', (event) => {
 	handlerObj.event = event
 	onMouseMove(handlerObj)
 }, false);
-window.addEventListener('mousedown', (event)=>{
+window.addEventListener('mousedown', (event) => {
 	handlerObj.event = event
 	onMouseDown(handlerObj)
 }, false)
-window.addEventListener('touchmove', (event)=>{
+window.addEventListener('touchmove', (event) => {
 	handlerObj.event = event
 	onTouchMove(handlerObj)
 }, false);
 window.addEventListener('touchstart', onTouchStart, false);
-window.addEventListener('touchend', (event)=>{
+window.addEventListener('touchend', (event) => {
 	handlerObj.event = event
 	onTouchEnd(handlerObj)
 }, false)

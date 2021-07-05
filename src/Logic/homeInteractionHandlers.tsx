@@ -2,74 +2,77 @@ const THREE = require("three")
 const TWEEN = require("@tweenjs/tween.js")
 import { createWorkPanel } from './homeThreeCreators'
 import {
-	offsetX,
-	offsetY,
-	cameraPosition,
-    workPanelStartPos
+    offsetX,
+    offsetY,
+    cameraPosition,
+    workStartPos,
+    workPanelFocusedPos,
+    homePos,
+    aboutPos
 } from './values'
 export const handleLogoMouseEnter = () => {
-	// if(aboutPanel.obj.rotation.x == 0) return
-	// // @ts-ignore
-	// window.setupHome = false
-	// let pos = {
-	// 	// x: 0,
-	// 	// y: 57,
-	// 	// z: -30000
-	// 	v:THREE.MathUtils.radToDeg(aboutPanel.obj.rotation.x)
-	// }
-	// let end = {
-	// 	// x:0,
-	// 	// y: 57,
-	// 	// z: 0
-	// 	v:0
-	// }
-	// new TWEEN	
-	// .Tween(
-	// 	pos,10000
-	// )
-	// .to(
-	// 	end
-	// )
-	// .easing(TWEEN.Easing.Cubic.Out)
-	// .onUpdate(function () {
-	//     aboutPanel.obj.rotation.set(THREE.MathUtils.degToRad(pos.v),0,0);
-	//     aboutPanel.obj.matrixWorldNeedsUpdate = true
-	// })
-	// .onComplete(function () {
-	// })
-	// .start();
-	// camera.updateProjectionMatrix();
+    // if(aboutPanel.obj.rotation.x == 0) return
+    // // @ts-ignore
+    // window.setupHome = false
+    // let pos = {
+    // 	// x: 0,
+    // 	// y: 57,
+    // 	// z: -30000
+    // 	v:THREE.MathUtils.radToDeg(aboutPanel.obj.rotation.x)
+    // }
+    // let end = {
+    // 	// x:0,
+    // 	// y: 57,
+    // 	// z: 0
+    // 	v:0
+    // }
+    // new TWEEN	
+    // .Tween(
+    // 	pos,10000
+    // )
+    // .to(
+    // 	end
+    // )
+    // .easing(TWEEN.Easing.Cubic.Out)
+    // .onUpdate(function () {
+    //     aboutPanel.obj.rotation.set(THREE.MathUtils.degToRad(pos.v),0,0);
+    //     aboutPanel.obj.matrixWorldNeedsUpdate = true
+    // })
+    // .onComplete(function () {
+    // })
+    // .start();
+    // camera.updateProjectionMatrix();
 }
 
 export const handleLogoMouseLeave = () => {
-	// let pos = {
-	// 	// x: aboutPanel.obj.position.x,
-	// 	// y: aboutPanel.obj.position.y,
-	// 	// z: aboutPanel.obj.position.z
-	// 	v: 0
-	// }
-	// let end = {
-	// 	// x:0,
-	// 	// y: 57,
-	// 	// z: -30000
-	// 	v: 95 
-	// }
-	// new TWEEN	
-	// .Tween(
-	// 	pos,2000
-	// )
-	// .to(
-	// 	end
-	// )
-	// .easing(TWEEN.Easing.Cubic.Out)
-	// .onUpdate(function () {
-	//     aboutPanel.obj.rotation.set(THREE.MathUtils.degToRad(pos.v),0,0);
-	//     aboutPanel.obj.matrixWorldNeedsUpdate = true
-	// })
-	// .onComplete(function () {
-	// })
-	// .start();
-	//     camera.updateProjectionMatrix();
+    // let pos = {
+    // 	// x: aboutPanel.obj.position.x,
+    // 	// y: aboutPanel.obj.position.y,
+    // 	// z: aboutPanel.obj.position.z
+    // 	v: 0
+    // }
+    // let end = {
+    // 	// x:0,
+    // 	// y: 57,
+    // 	// z: -30000
+    // 	v: 95 
+    // }
+    // new TWEEN	
+    // .Tween(
+    // 	pos,2000
+    // )
+    // .to(
+    // 	end
+    // )
+    // .easing(TWEEN.Easing.Cubic.Out)
+    // .onUpdate(function () {
+    //     aboutPanel.obj.rotation.set(THREE.MathUtils.degToRad(pos.v),0,0);
+    //     aboutPanel.obj.matrixWorldNeedsUpdate = true
+    // })
+    // .onComplete(function () {
+    // })
+    // .start();
+    //     camera.updateProjectionMatrix();
 }
 
 let lastTap
@@ -91,7 +94,8 @@ export function onDoubleClick(h) {
 let sy = 0
 let vec = new THREE.Vector3(); // create once and reuse
 let clearMouse
-export function onTouchEnd({ event,scrolling,zooming,lastobj,workPanel,camera,tileGroup,rc }) {
+
+export function onTouchEnd({ event, scrolling, zooming, lastobj, workPanel, camera, tileGroup, rc }) {
     console.log("scrolling", scrolling)
     event.preventDefault()
     if (zooming && !lastobj) return
@@ -129,11 +133,11 @@ export function onTouchEnd({ event,scrolling,zooming,lastobj,workPanel,camera,ti
     scrolling = false
 }
 
-export function onTouchMove( h ) {
+export function onTouchMove(h) {
     // event.preventDefault()
     h.scrolling = true
-    h.m.x = (h.event.touches[0].clientX / window.innerWidth) * 2 - 1 
-    h.m.y = - (h.event.touches[0].clientY / window.innerHeight) * 2 + 1 
+    h.m.x = (h.event.touches[0].clientX / window.innerWidth) * 2 - 1
+    h.m.y = - (h.event.touches[0].clientY / window.innerHeight) * 2 + 1
     let position = new THREE.Vector3()
     // position.setPositionFromMatrix( tileGroup.matrixWorld );
 
@@ -156,16 +160,16 @@ export function onTouchStart(event) {
     sy = event.touches[0].pageY;
 }
 
-export function onWindowResize({ camera,renderer,cssrenderer,scene } ) {
-	camera.aspect = window.innerWidth / window.innerHeight;
+export function onWindowResize({ camera, renderer, cssrenderer, scene }) {
+    camera.aspect = window.innerWidth / window.innerHeight;
 
-	renderer.setSize(window.innerWidth, window.innerHeight);
-	cssrenderer.setSize(window.innerWidth, window.innerHeight)
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    cssrenderer.setSize(window.innerWidth, window.innerHeight)
 
-	camera.updateProjectionMatrix();
+    camera.updateProjectionMatrix();
 
-	cssrenderer.render(scene, camera)
-	renderer.render(scene, camera);
+    cssrenderer.render(scene, camera)
+    renderer.render(scene, camera);
 }
 
 export function onMouseMove(h) {
@@ -185,19 +189,19 @@ export function onMouseMove(h) {
 
         let intersected = intersects[0].object
         // update back panel to color of tile
-        let img = intersected.controller.heroDiv || intersected.hero 
+        let img = intersected.controller.heroDiv || intersected.hero
 
         let obj = h.workPanel.hover(img)
 
         // save created 3d object
-        if(!intersected.controller.heroDiv) intersected.controller.updateHeroDiv(obj)
+        if (!intersected.controller.heroDiv) intersected.controller.updateHeroDiv(obj)
 
         if (intersects[0].object.registerCanvas) intersects[0].object.registerCanvas()
 
         //reset the tiles if we hover on the back board
         if (intersects[0].object === h.workPanel.mesh && h.lastobj) {
             // set rotation to zero
-        //     lastobj._rotate(0, 0)
+            //     lastobj._rotate(0, 0)
             // lastobj = null
             if (!h.zooming && !h.zoomed) h.workPanel.resetColor()
         }
@@ -205,13 +209,13 @@ export function onMouseMove(h) {
         h.lastobj = intersects[0].object
     } else {
         // if (lastobj && !mobile) {
-            // if(lastobj.colorize)lastobj.colorize()
-            document.body.style.cursor = 'default'
-            vec.set(0, 0, 0)
-            // set rotation to zero
+        // if(lastobj.colorize)lastobj.colorize()
+        document.body.style.cursor = 'default'
+        vec.set(0, 0, 0)
+        // set rotation to zero
         //     lastobj._rotate(0, 0)
-            if (!h.zooming && !h.zoomed) h.workPanel.resetColor()
-            h.lastobj = null
+        if (!h.zooming && !h.zoomed) h.workPanel.resetColor()
+        h.lastobj = null
         // }
     }
 }
@@ -234,7 +238,7 @@ export function onMouseDown(h) {
 function zoomIntoWork(h) {
     if (!h.lastobj) return
 
-    let to = workPanelStartPos
+    let to = workPanelFocusedPos
 
     h.zooming = true
     h.zoomed = false
@@ -247,13 +251,13 @@ function zoomIntoWork(h) {
             h.camera.position.set(start.x, start.y, start.z);
         })
         .onComplete(function () {
-                h.zooming = false
-                h.zoomed = true
+            h.zooming = false
+            h.zoomed = true
             let arrows = Array.from(document.getElementsByClassName("arrow"))
-            arrows.forEach((e)=>{ 
+            arrows.forEach((e) => {
                 //@ts-ignore
-                e.style.visibility = "visible" 
-            }) 
+                e.style.visibility = "visible"
+            })
         })
         .start();
 
@@ -281,29 +285,92 @@ export function zoomOutOfWork(h) {
             h.zoomed = false
             h.scrolling = false
             let arrows = Array.from(document.getElementsByClassName("arrow"))
-            arrows.forEach((e)=>{ 
+            arrows.forEach((e) => {
                 //@ts-ignore
-                e.style.visibility = "hidden" 
-            }) 
+                e.style.visibility = "hidden"
+            })
         })
         .start();
 
     h.camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z)
     h.camera.fov = 75
     h.camera.updateProjectionMatrix();
-//     modalMode = false
+    //     modalMode = false
 
 }
 
 const addWorkDesc = (h) => {
-    let newPanel = createWorkPanel() 
+    let newPanel = createWorkPanel()
 
     h.scene.add(newPanel)
-     
+
 
     h.newPanel = h
 }
 
 const removeWorkDesc = (h) => {
     // (h.newPanel)
+}
+
+export const moveToWork = (h) => {
+    h.scrolling = true
+
+    let start = from(h.camera)
+
+    let tween = new TWEEN.Tween(start)
+        .to(workStartPos , 2000)
+        .easing(TWEEN.Easing.Linear.None)
+        .onUpdate((o) => {
+            h.camera.position.set(start.x, start.y, start.z);
+            h.camera.updateProjectionMatrix();
+            h.scene.updateMatrixWorld()
+        })
+        .onComplete(function () {
+            h.zoomed = false
+            h.scrolling = false
+        })
+
+    tween.start()
+}
+
+export const moveToAbout = (h) => {
+    h.scrolling = true
+
+    let start = from(h.camera)
+
+    let tween = new TWEEN.Tween(start)
+        .to(aboutPos , 2000)
+        .easing(TWEEN.Easing.Linear.None)
+        .onUpdate((o) => {
+            h.camera.position.set(start.x, start.y, start.z);
+            h.camera.updateProjectionMatrix();
+            h.scene.updateMatrixWorld()
+        })
+        .onComplete(function () {
+            h.zoomed = false
+            h.scrolling = false
+        })
+
+    tween.start()
+}
+
+export const moveToHome = (h) => {
+    h.scrolling = true
+
+    let start = from(h.camera)
+
+    let tween = new TWEEN.Tween(start)
+        .to(homePos , 2000)
+        .easing(TWEEN.Easing.Linear.None)
+        .onUpdate((o) => {
+            h.camera.position.set(start.x, start.y, start.z);
+            h.camera.updateProjectionMatrix();
+            h.scene.updateMatrixWorld()
+        })
+        .onComplete(function () {
+            h.zoomed = false
+            h.scrolling = false
+        })
+
+    tween.start()
 }

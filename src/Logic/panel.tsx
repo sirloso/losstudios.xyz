@@ -1,7 +1,6 @@
 import { Rotater } from './ThreeController'
 import * as Three from 'three'
 import { CSS3DObject, CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer'
-import { GUI } from 'dat.gui'
 
 export class Panel {
     canvasID: string
@@ -198,7 +197,6 @@ export class WorkPanel {
                         this.cssObj.parent.remove(this.cssObj)
                         this.obj.add(newColor)
                         this.obj.matrixWorldNeedsUpdate = true
-                        console.log(newColor)
                         this.tmpDiv = newColor
                 }
             }

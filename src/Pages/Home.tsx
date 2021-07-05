@@ -15,6 +15,11 @@ const Home = (props: HomeProps) => {
     const [detail, updateDetail] = useState(false)
     const [loaded, updateLoaded] = useState(false)
     const [animate, updateAnimate] = useState(false)
+
+    const [showLogo, updateShowLogo] = useState(false)
+    const [showWork, updateShowWork] = useState(true)
+    const [showAbout, updateShowAbout] = useState(true)
+
     const home = useRef()
     const css = useRef()
     const webgl = useRef()
@@ -37,7 +42,7 @@ const Home = (props: HomeProps) => {
 
     useEffect(() => {
         if (!loaded && home && css && webgl) {
-            setupHome(home.current, css.current, webgl.current, createGallery)
+            setupHome(home.current, css.current, webgl.current)
             updateLoaded(true)
         }
 
@@ -56,7 +61,7 @@ const Home = (props: HomeProps) => {
     useEffect(()=>{
         if(data){
             console.log("setting up work")
-            // setupWork(data)
+            setupWork(createGallery)
             // setupAbout()
         }
     },[data])
@@ -64,9 +69,17 @@ const Home = (props: HomeProps) => {
     setTimeout(() => {
         if (!detail) updateDetail(true)
     }, 2000)
+
     return (
         <div className="Home">
-            <Header showLogo={false} showWork showAbout />
+            <Header
+                showLogo={showLogo}
+                showAbout={showAbout}
+                showWork={showWork}
+                updateLogo={updateShowLogo}
+                updateWork={updateShowWork}
+                updateAbout={updateShowAbout}
+                />
             <div id="HomeBody" ref={home}>
                 <div id="HomeLogo"
                     onTouchStartCapture={handleLogoMouseEnter}
@@ -109,15 +122,3 @@ const Home = (props: HomeProps) => {
 }
 
 export default Home
-
-/*
-
-                {
-                    detail && (
-                        <div id="HomeDetail" className="animate__animated animate__fadeIn">
-                            a creative technology studio
-                        </div>
-                    )
-                }
-
-*/

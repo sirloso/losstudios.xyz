@@ -3,6 +3,9 @@ export interface HeaderProps{
     showWork?: boolean
     showLogo?: boolean
     showAbout?: boolean
+    updateLogo?: (arg0: boolean) => void 
+    updateWork?: (arg0: boolean) => void
+    updateAbout?: (arg0: boolean) => void
 }
 
 export interface FooterProps{

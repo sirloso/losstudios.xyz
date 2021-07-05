@@ -25,8 +25,8 @@ export const mobileCamera = {
 
 export const cameraPosition = isMobile() ? mobileCamera : desktopCamera
 
-export const workPanelStartPos = {
-    x: 1000,
+export const workPanelFocusedPos = {
+    x: 3000,
     y: 0,
     z: 600
 }
@@ -36,4 +36,34 @@ export const apiBaseEndpoint = "http://localhost:1337"
 
 export enum apiEndpointExtentions{
     works  = "/works",
+}
+
+export const homePos = {
+    x: 0,
+    y: 0,
+    z: 1000
+}
+
+export const aboutPos = {
+    x: 1500,
+    y: 2000,
+    z: 1000
+}
+
+export const workStartPos = {
+    x: 3000,
+    y: 0,
+    z: 1000
+}
+
+export const workPanelPos = {
+    x: 3000,
+    y: 0,
+    z: 1
+}
+
+export const tileGroupPosStart = {
+    x: 3070,
+    y: -17,
+    z: 850
 }

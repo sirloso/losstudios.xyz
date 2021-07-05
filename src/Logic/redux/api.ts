@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react'
 import { apiBaseEndpoint,apiEndpointExtentions } from '../values'
 import { Work } from './workSlice'
 

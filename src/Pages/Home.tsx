@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 
 import Header from '../Components/Header'
 import { SlideShow } from '../Components/Gallery'
-import { setupHome, setupWork } from '../Logic/homeAnimator'
+import { setupHome, setupWork, setupAbout } from '../Logic/homeAnimator'
 import {
     handleLogoMouseEnter,
     handleLogoMouseLeave
@@ -20,6 +20,7 @@ const Home = (props: HomeProps) => {
     const [showWork, updateShowWork] = useState(true)
     const [showAbout, updateShowAbout] = useState(true)
 
+    const about = useRef()
     const home = useRef()
     const css = useRef()
     const webgl = useRef()
@@ -60,9 +61,8 @@ const Home = (props: HomeProps) => {
 
     useEffect(()=>{
         if(data){
-            console.log("setting up work")
             setupWork(createGallery)
-            // setupAbout()
+            setupAbout(about.current)
         }
     },[data])
 
@@ -112,6 +112,17 @@ const Home = (props: HomeProps) => {
                     }
                 </div>
                 <div id="workwork"></div>
+                <div id="about" ref={about}>
+                    <div id="aboutContent">
+                        Hello this is a test of about
+                        <br/>
+                        hi!
+                        wooooo
+                        <br/>
+                        asldkjfalsdjf
+                        <br/>
+                    </div>
+                </div>
             </div>
             <div id="renderers">
                 <div id="css" ref={css} />

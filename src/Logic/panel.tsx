@@ -205,7 +205,6 @@ export class WorkPanel {
         }
     }
 
-
     resetColor() {
         if (this.tmpDiv) {
             this.tmpDiv.parent.remove(this.tmpDiv)

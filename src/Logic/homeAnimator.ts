@@ -3,7 +3,7 @@ import { WorkPanel, Panel } from './panel'
 import * as DAT from 'dat.gui'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer';
-import { SQUARE_SIZE, tileGroupPosStart, workPanelPos } from './values';
+import { aboutPos, PANEL_404, SQUARE_SIZE, tileGroupPosStart, workPanelFocusedPos, workPanelPos } from './values';
 import {
 	createPanel,
 	createTiles,
@@ -36,6 +36,7 @@ let m = new THREE.Vector2()
 
 let zoomed = false
 let titlePanel: Panel
+let infoPanel: Panel
 let aboutPanel: Panel
 let workPanel: WorkPanel
 let tileGroup: THREE.Group
@@ -59,6 +60,7 @@ let scene = new THREE.Scene()
 let controls: OrbitControls
 
 export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElement) => {
+	console.log("setting up mobile")
 	// main page
 	let sceneBoundingBox = home.getBoundingClientRect()
 	renderer.setSize(sceneBoundingBox.width, sceneBoundingBox.height)
@@ -108,7 +110,8 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 
 
 	css.appendChild(titlePanel.renderer.domElement)
-	// controls = new OrbitControls(camera, titlePanel.renderer.domElement)
+	controls = new OrbitControls(camera, titlePanel.renderer.domElement)
+	controls.enabled = false
 
 	scene.add(titlePanel.obj)
 
@@ -116,13 +119,13 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 	homeAbout.style.width = "500px"
 	homeAbout.style.height = "500px"
 
-	aboutPanel = createPanel(homeAbout, sceneBoundingBox, "black", false)
+	infoPanel = createPanel(homeAbout, sceneBoundingBox, "black", false)
 	// aboutPanel.obj.position.set(0,57,-30000)
-	aboutPanel.obj.position.set(0, 57, 0)
+	infoPanel.obj.position.set(0, 57, 0)
 	// aboutPanel.obj.rotateX(THREE.MathUtils.degToRad(95))
 
 
-	scene.add(aboutPanel.obj)
+	scene.add(infoPanel.obj)
 
 	cssrenderer = titlePanel.renderer
 	animate(renderer, cssrenderer, camera, scene)
@@ -165,9 +168,9 @@ export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTML
 	homeAbout.style.width = "500px"
 	homeAbout.style.height = "500px"
 
-	aboutPanel = createPanel(homeAbout, sceneBoundingBox, "black", false)
+	infoPanel = createPanel(homeAbout, sceneBoundingBox, "black", false)
 	// aboutPanel.obj.position.set(0,57,-30000)
-	aboutPanel.obj.position.set(0, 57, 0)
+	infoPanel.obj.position.set(0, 57, 0)
 	// aboutPanel.obj.rotateX(THREE.MathUtils.degToRad(95))
 
 	cssrenderer = titlePanel.renderer
@@ -177,7 +180,7 @@ export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTML
 	workPanel = createWorkPanel()
 	handlerObj.workPanel = workPanel
 
-	scene.add(aboutPanel.obj)
+	scene.add(infoPanel.obj)
 
 	camera.updateMatrixWorld()
 
@@ -186,7 +189,8 @@ export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTML
 	animate(renderer, cssrenderer, camera, scene)
 }
 
-export const setupWork = (ga: (title: string) => void) => {
+export const setupWorkMobile = (ga: (title:string) => void ) => {
+
 	// work
 	workPanel = createWorkPanel()
 	handlerObj.workPanel = workPanel
@@ -216,7 +220,57 @@ export const setupWork = (ga: (title: string) => void) => {
 	// gui.add(tileGroup.position, "z")
 }
 
-export const setupAbout = () => {
+export const setupWork = (ga: (title: string) => void) => {
+	if(isMobile()){
+		setupWorkMobile(ga)
+		return
+	}
+	// work
+	workPanel = createWorkPanel()
+	handlerObj.workPanel = workPanel
+	scene.add(workPanel.obj)
+	workPanel.obj.position.set(workPanelPos.x, workPanelPos.y, workPanelPos.z)
+
+	// tiles
+	let geometry = new THREE.BoxGeometry(SQUARE_SIZE, SQUARE_SIZE, 0.125);
+	let titles = ['one', 'two', 'trhe', 'four', 'fix', '8', 'a', 'b', 'c', 'd', 'e', '1', '2', '3', '4', '123123']
+	let gallery = [
+		"https://nsc.nyc3.digitaloceanspaces.com/028b1fcfd219e13b4ccb9730fce149e2.jpg",
+		"https://nsc.nyc3.digitaloceanspaces.com/0916a7105953013e63163bdd14e400e5.jpg",
+		"https://nsc.nyc3.digitaloceanspaces.com/1b216267fbb791c07454464904b926dc.jpg"
+	]
+	let tiles = createTiles(titles, geometry, gallery, ga)
+	tileGroup = tiles.tileGroup
+	handlerObj.tileGroup = tileGroup
+	//@ts-ignore
+	window.tiles = tiles
+
+	// if(mobile) scene.add(tileGroup)
+	scene.add(tileGroup)
+
+	tileGroup.position.set(tileGroupPosStart.x,tileGroupPosStart.y,tileGroupPosStart.z)
+	// gui.add(tileGroup.position, "x")
+	// gui.add(tileGroup.position, "y")
+	// gui.add(tileGroup.position, "z")
+}
+
+export const setupAbout = (el: HTMLElement) => {
+	if(isMobile()){
+		setupAboutMobile(el)
+	}
+
+	el.style.width = "500px"
+	el.style.height = "500px"
+	let boundingBox = el.getBoundingClientRect()
+	let panel = createPanel(el,boundingBox,"black",false)
+
+	panel.obj.position.set(aboutPos.x,aboutPos.y,aboutPos.z-900)
+
+	scene.add(panel.obj)
+
+}
+
+export const setupAboutMobile = (el: HTMLElement) => {
 
 }
 
@@ -233,6 +287,7 @@ function animate(renderer: THREE.Renderer, cssrenderer: CSS3DRenderer, camera: T
 
 	scene.updateMatrixWorld()
 
+	
 	cssrenderer.render(scene, camera)
 	renderer.render(scene, camera);
 
@@ -279,4 +334,36 @@ window.addEventListener('touchend', (event) => {
 
 export const zo = () => {
 	return zoomOutOfWork(handlerObj)
+}
+
+export const goToWork = (h,work: string,fourohfour: boolean) => {
+
+	// set camera to correct location
+	camera.position.set(workPanelFocusedPos.x,workPanelFocusedPos.y,workPanelFocusedPos.z)
+	camera.updateProjectionMatrix()
+
+	// check for work, if none 404 square
+	if(fourohfour){
+		// 404
+		h.workPanel.hover(PANEL_404)
+		// set orbit controls
+		let stopOrbit = startOrbit404(h.workPanel.obj.position)
+		return stopOrbit
+	}
+
+	// set back panel and desc panel 
+	h.workPanel.hover(work)			
+	// h.workDescPanel.hover(`${work}_desc`)
+}
+
+export const startOrbit404 = (pos) => {
+	// note: 404 square will probably be a moving orbit control
+	controls.target = pos
+	controls.enabled = true
+	controls.autoRotate = true
+
+	return () => {
+		controls.enabled = false 
+		controls.autoRotate = false
+	}
 }

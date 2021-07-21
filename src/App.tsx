@@ -10,7 +10,7 @@ const App = (props:any) => {
     return(
         <div id="App" >
             <Router >
-                    <Home path="/"/>
+                    <Home path="*"/>
             </Router>
         </div>
     )

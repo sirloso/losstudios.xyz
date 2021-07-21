@@ -67,3 +67,29 @@ export const tileGroupPosStart = {
     y: -17,
     z: 850
 }
+
+export const workStartPosMobile = {
+    x: 3000,
+    y: 0,
+    z: 1000
+}
+
+export const workPanelPosMobile = {
+    x: 3000,
+    y: 0,
+    z: 1
+}
+
+export const tileGroupPosStartMobile = {
+    x: 3070,
+    y: -17,
+    z: 850
+}
+
+export const aboutPosMobile = {
+    x: 1500,
+    y: 2000,
+    z: 1000
+}
+
+export const PANEL_404 = "404_panel"

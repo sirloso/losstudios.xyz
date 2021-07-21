@@ -249,6 +249,7 @@ function zoomIntoWork(h) {
         .easing(TWEEN.Easing.Linear.None)
         .onUpdate(function () {
             h.camera.position.set(start.x, start.y, start.z);
+            h.camera.updateProjectionMatrix();
         })
         .onComplete(function () {
             h.zooming = false

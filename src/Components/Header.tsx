@@ -37,7 +37,7 @@ const Header = (props: HeaderProps) => {
     const hideLogo = () => {
         props.updateAbout(true)
         props.updateWork(true)
-        props.updateLogo(true)
+        props.updateLogo(false)
     }
 
     return(

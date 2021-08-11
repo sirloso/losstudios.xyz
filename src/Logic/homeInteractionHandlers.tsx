@@ -228,7 +228,7 @@ export function onMouseMove(h) {
     }
 }
 
-let speed = 0.01
+let speed = 0.125
 let lastY = 0 
 export function onMouseScroll(h){
     h.event.preventDefault()

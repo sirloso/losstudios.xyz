@@ -10,6 +10,7 @@ import {
     homePos,
     aboutPos
 } from './values'
+import { Pages } from "./types"
 export const handleLogoMouseEnter = () => {
     // if(aboutPanel.obj.rotation.x == 0) return
     // // @ts-ignore
@@ -95,8 +96,15 @@ let sy = 0
 let vec = new THREE.Vector3(); // create once and reuse
 let clearMouse
 
+export function onScroll(h){
+    h.event.preventDefault()
+    // check if on work page
+    // check scroll direction
+    // scroll up if not at bottom
+    // scroll down if not at top
+}
+
 export function onTouchEnd({ event, scrolling, zooming, lastobj, workPanel, camera, tileGroup, rc }) {
-    console.log("scrolling", scrolling)
     event.preventDefault()
     if (zooming && !lastobj) return
     try {
@@ -173,7 +181,7 @@ export function onWindowResize({ camera, renderer, cssrenderer, scene }) {
 }
 
 export function onMouseMove(h) {
-    event.preventDefault()
+    h.event.preventDefault()
     h.m.x = (h.event.clientX / window.innerWidth) * 2 - 1 + offsetX
     h.m.y = - (h.event.clientY / window.innerHeight) * 2 + 1 + offsetY
     h.rc.setFromCamera(h.m, h.camera);
@@ -217,6 +225,34 @@ export function onMouseMove(h) {
         if (!h.zooming && !h.zoomed) h.workPanel.resetColor()
         h.lastobj = null
         // }
+    }
+}
+
+let speed = 0.01
+let lastY = 0 
+export function onMouseScroll(h){
+    h.event.preventDefault()
+    if(h.currentPage !== Pages.WORK) return
+    if(h.mobile) return
+    try{
+
+        // var deltaY = (move - sy);
+        var box = new THREE.Box3().setFromObject(h.tileGroup);
+        let height = box.max.y - box.min.y
+
+        // console.log("DELTA",deltaY)
+        let delta = h.event.deltaY
+        // this can be hardcoded as it's the bottom
+        if (h.tileGroup.position.y + delta * speed > -17 ) return 
+        if (h.tileGroup.position.y + delta * speed < -(height + -17) ) return 
+
+        // top is 220
+        // bottom is -17
+
+        h.tileGroup.position.y += (delta * speed);
+        console.log(height, h.tileGroup.position.y)
+    }catch(e){
+        console.log(e)
     }
 }
 
@@ -314,6 +350,7 @@ const removeWorkDesc = (h) => {
 }
 
 export const moveToWork = (h) => {
+	h.currentPage = Pages.WORK
     h.scrolling = true
 
     let start = from(h.camera)
@@ -335,6 +372,7 @@ export const moveToWork = (h) => {
 }
 
 export const moveToAbout = (h) => {
+	h.currentPage = Pages.ABOUT
     h.scrolling = true
 
     let start = from(h.camera)
@@ -356,6 +394,7 @@ export const moveToAbout = (h) => {
 }
 
 export const moveToHome = (h) => {
+	h.currentPage = Pages.HOME
     h.scrolling = true
 
     let start = from(h.camera)

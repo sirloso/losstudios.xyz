@@ -3,13 +3,14 @@ import { WorkPanel, Panel } from './panel'
 import * as DAT from 'dat.gui'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer';
-import { aboutPos, PANEL_404, SQUARE_SIZE, tileGroupPosStart, workPanelFocusedPos, workPanelPos } from './values';
+import { aboutPos, homePos, PANEL_404, SQUARE_SIZE, tileGroupPosStart, workPanelFocusedPos, workPanelPos, workStartPos } from './values';
 import {
 	createPanel,
 	createTiles,
 	createWorkPanel
 } from './homeThreeCreators'
-import { isMobile } from './values'
+import { isMobile, mobile } from './values'
+import { Pages } from './types'
 import {
 	onWindowResize,
 	onMouseMove,
@@ -17,10 +18,11 @@ import {
 	onTouchMove,
 	onTouchStart,
 	onTouchEnd,
-	zoomOutOfWork
+	zoomOutOfWork,
+	onMouseScroll
 } from './homeInteractionHandlers'
 
-let scrolling, zooming
+let scrolling, zooming,currentPage
 let lastobj = {
 	lastobj: null
 }
@@ -54,7 +56,8 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
 
 let hover = false
-// let gui = new DAT.GUI()
+// let gui = new DAT.GUI({autoPlace: false})
+let gui = new DAT.GUI()
 let scene = new THREE.Scene()
 
 let controls: OrbitControls
@@ -70,7 +73,7 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 
 
 	// camera
-	camera.position.set(-8, 0, 1200);
+	// camera.position.set(-8, 0, 1200);
 
 	// get div to use
 	let homeTitle = document.getElementById("HomeLogo")
@@ -113,6 +116,10 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 	controls = new OrbitControls(camera, titlePanel.renderer.domElement)
 	controls.enabled = false
 
+	camera.position.set(workStartPos.x,workStartPos.y,workStartPos.z)
+	camera.updateProjectionMatrix()
+	controls.target = camera.position
+
 	scene.add(titlePanel.obj)
 
 	let homeAbout = document.getElementById("HomeAbout")
@@ -124,6 +131,7 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 	infoPanel.obj.position.set(0, 57, 0)
 	// aboutPanel.obj.rotateX(THREE.MathUtils.degToRad(95))
 
+	handlerObj.currentPage = Pages.HOME
 
 	scene.add(infoPanel.obj)
 
@@ -195,7 +203,11 @@ export const setupWorkMobile = (ga: (title:string) => void ) => {
 	workPanel = createWorkPanel()
 	handlerObj.workPanel = workPanel
 	scene.add(workPanel.obj)
-	workPanel.obj.position.set(workPanelPos.x, workPanelPos.y, workPanelPos.z)
+	workPanel.obj.position.set(
+		mobile.workPanel.x,
+		mobile.workPanel.y,
+		mobile.workPanel.z
+		)
 
 	// tiles
 	let geometry = new THREE.BoxGeometry(SQUARE_SIZE, SQUARE_SIZE, 0.125);
@@ -214,7 +226,11 @@ export const setupWorkMobile = (ga: (title:string) => void ) => {
 	// if(mobile) scene.add(tileGroup)
 	scene.add(tileGroup)
 
-	tileGroup.position.set(tileGroupPosStart.x,tileGroupPosStart.y,tileGroupPosStart.z)
+	tileGroup.position.set(
+		mobile.tileGroup.x,
+		mobile.tileGroup.y,
+		mobile.tileGroup.z
+		)
 	// gui.add(tileGroup.position, "x")
 	// gui.add(tileGroup.position, "y")
 	// gui.add(tileGroup.position, "z")
@@ -250,7 +266,7 @@ export const setupWork = (ga: (title: string) => void) => {
 
 	tileGroup.position.set(tileGroupPosStart.x,tileGroupPosStart.y,tileGroupPosStart.z)
 	// gui.add(tileGroup.position, "x")
-	// gui.add(tileGroup.position, "y")
+	gui.add(tileGroup.position, "y")
 	// gui.add(tileGroup.position, "z")
 }
 
@@ -262,7 +278,7 @@ export const setupAbout = (el: HTMLElement) => {
 	el.style.width = "500px"
 	el.style.height = "500px"
 	let boundingBox = el.getBoundingClientRect()
-	let panel = createPanel(el,boundingBox,"black",false)
+	let panel = createPanel(el,boundingBox,"white",false)
 
 	panel.obj.position.set(aboutPos.x,aboutPos.y,aboutPos.z-900)
 
@@ -308,7 +324,8 @@ export const handlerObj = {
 	rc,
 	tileGroup,
 	m,
-	event: undefined
+	event: undefined,
+	currentPage
 }
 
 window.addEventListener('resize', () => {
@@ -331,13 +348,17 @@ window.addEventListener('touchend', (event) => {
 	handlerObj.event = event
 	onTouchEnd(handlerObj)
 }, false)
+window.addEventListener('wheel',(e)=>{
+	handlerObj.event = e
+	onMouseScroll(handlerObj)
+},false)
 
 export const zo = () => {
 	return zoomOutOfWork(handlerObj)
 }
 
 export const goToWork = (h,work: string,fourohfour: boolean) => {
-
+	handlerObj.currentPage = Pages.WORK
 	// set camera to correct location
 	camera.position.set(workPanelFocusedPos.x,workPanelFocusedPos.y,workPanelFocusedPos.z)
 	camera.updateProjectionMatrix()
@@ -357,6 +378,7 @@ export const goToWork = (h,work: string,fourohfour: boolean) => {
 }
 
 export const startOrbit404 = (pos) => {
+	handlerObj.currentPage = Pages.FOUROFOUR
 	// note: 404 square will probably be a moving orbit control
 	controls.target = pos
 	controls.enabled = true

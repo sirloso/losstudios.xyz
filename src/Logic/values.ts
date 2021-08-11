@@ -93,3 +93,16 @@ export const aboutPosMobile = {
 }
 
 export const PANEL_404 = "404_panel"
+
+export const mobile = {
+    workPanel: {
+        x: 3000,
+        y: 0,
+        z: 938
+    },
+    tileGroup:{
+        x: 3010,
+        y: 0,
+        z: 950
+    }
+}

@@ -23,3 +23,10 @@ export interface SlideShowProps{
 export interface HomeProps extends RouteComponentProps{}
 export interface WorkProps extends RouteComponentProps{}
 export interface AboutProps extends RouteComponentProps{}
+
+export enum Pages{
+    HOME = "home",
+    WORK = "work",
+    ABOUT = "about",
+    FOUROFOUR = "404"
+}

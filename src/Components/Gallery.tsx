@@ -13,10 +13,9 @@ export function SlideShow (images: Array<string>, id: string ){
 		nextArrow: NextArrow(slideRef)
 	}
 
-
 	return(
-		<div className="slideShow animate__animated animate__fadeIn" key={id} id={id}>
-			<Fade  ref={slideRef} {...slideOpts} className="slideShow" easing="ease">
+		<div className="slideShow" key={id} id={id}>
+			<Fade ref={slideRef} {...slideOpts} className="slideShow" easing="ease">
 			{
 					images.map((img: string, idx) => {
 						return (

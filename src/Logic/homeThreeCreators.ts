@@ -6,6 +6,7 @@ import {
 	NUM_ROWS,
 	TILES_PER_ROW,
 } from './values'
+import { Gallery } from './redux/api'
 
 export const createWorkPanel = () => {
 	let backPanel = new WorkPanel()
@@ -30,8 +31,8 @@ export const createPanel = (div: HTMLElement, sceneBoundingBox: DOMRect, color: 
 export const createTiles = (
 	titles: Array<string>,
 	geometry: THREE.BoxGeometry,
-	g: Array<string>,
-	galleryArray: (title: string) => void 
+	galleries: Array<Array<Gallery>>,
+	galleryArray: (title: string,gallery: Array<Gallery>) => void 
 ) => {
 	const tiles = []
 	const tileGroup = new THREE.Group()
@@ -40,7 +41,7 @@ export const createTiles = (
 		const tile = new Tile(
 			geometry,
 			titles[i],
-			g,
+			galleries[i],
 			galleryArray
 		)
 		tiles.push(tile)

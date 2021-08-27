@@ -9,7 +9,8 @@ import {
 } from '../Logic/homeInteractionHandlers'
 import { HomeProps } from '../Logic/types'
 import { useAppDispatch } from '../Logic/redux/workSlice'
-import { useGetWorksQuery } from '../Logic/redux/api'
+import { useGetWorksQuery,Gallery, Formats } from '../Logic/redux/api'
+import { Breakpoints, apiUrl } from '../Logic/values'
 
 const Home = (props: HomeProps) => {
     const [detail, updateDetail] = useState(false)
@@ -33,8 +34,22 @@ const Home = (props: HomeProps) => {
         "https://nsc.nyc3.digitaloceanspaces.com/1b216267fbb791c07454464904b926dc.jpg"
     ]
 
-    const createGallery = (tag: string) => {
-        let ss = SlideShow(gallery, tag)
+    const getFormatSize = (formats: Formats) => {
+        if(formats.small && window.innerWidth <= Breakpoints.small) return "small"
+        if(formats.medium && window.innerWidth <= Breakpoints.medium) return "medium"
+        if(formats.large && window.innerWidth >= Breakpoints.large) return "large"
+
+        if(!formats.small) return "thumbnail"
+        if(!formats.medium) return "small"
+        if(!formats.large) return "medium" 
+    }
+
+    const createGallery = (tag: string,gallery: Array<Gallery> = []) => {
+        let sizedGallery = gallery.map( g =>{
+            let size = getFormatSize(g.formats) 
+            return apiUrl + g.formats[size].url
+        })
+        let ss = SlideShow(sizedGallery, tag)
         GalleryArray.push(ss)
         updateGallery(GalleryArray)
     }
@@ -61,7 +76,7 @@ const Home = (props: HomeProps) => {
 
     useEffect(()=>{
         if(data){
-            setupWork(createGallery)
+            setupWork(createGallery,data)
             setupAbout(about.current)
         }
     },[data])

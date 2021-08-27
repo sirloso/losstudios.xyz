@@ -24,6 +24,10 @@ body {
     overflow: hidden;
 }
 
+#back_button{
+    margin-right: 15px;
+}
+
 #root {
     width: 100%;
     height: 100%;
@@ -94,6 +98,7 @@ body {
 
 #HeaderRight {
     display: flex;
+    justify-content: space-between;
 }
 
 .MenuItem {

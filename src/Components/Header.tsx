@@ -1,5 +1,4 @@
-import { navigate } from '@reach/router'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { handlerObj } from '../Logic/homeAnimator'
 import { moveToHome, moveToWork, moveToAbout } from '../Logic/homeInteractionHandlers'

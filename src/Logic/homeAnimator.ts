@@ -1,9 +1,9 @@
 import * as THREE from 'three'
-import { WorkPanel, Panel } from './panel'
+import { WorkPanel, Panel, ButtonPanel } from './panel'
 import * as DAT from 'dat.gui'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer';
-import { aboutPos, homePos, PANEL_404, SQUARE_SIZE, tileGroupPosStart, workPanelFocusedPos, workPanelPos, workStartPos } from './values';
+import { aboutPos, cameraPosition, homePos, PANEL_404, SQUARE_SIZE, tileGroupPosStart, workButtonPos, workPanelFocusedPos, workPanelPos, workStartPos } from './values';
 import {
 	createPanel,
 	createTiles,
@@ -21,6 +21,8 @@ import {
 	zoomOutOfWork,
 	onMouseScroll
 } from './homeInteractionHandlers'
+import { Work } from './redux/workSlice';
+import { Gallery } from './redux/api'
 
 let scrolling, zooming,currentPage
 let lastobj = {
@@ -42,6 +44,8 @@ let infoPanel: Panel
 let aboutPanel: Panel
 let workPanel: WorkPanel
 let tileGroup: THREE.Group
+let transitionButton: ButtonPanel
+let workDescription : Panel
 
 let interaction
 
@@ -57,7 +61,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
 let hover = false
 // let gui = new DAT.GUI({autoPlace: false})
-let gui = new DAT.GUI()
+// let gui = new DAT.GUI()
 let scene = new THREE.Scene()
 
 let controls: OrbitControls
@@ -70,7 +74,6 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 	webgl.appendChild(renderer.domElement)
 
 	scene.background = new THREE.Color('white')
-
 
 	// camera
 	// camera.position.set(-8, 0, 1200);
@@ -153,10 +156,12 @@ export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTML
 
 	scene.background = new THREE.Color('white')
 
-
 	// camera
-	camera.position.set(0, 0, 1000);
-
+	camera.position.set(
+		cameraPosition.x,
+		cameraPosition.y,
+		cameraPosition.z
+	);
 
 	// get div to use
 	let homeTitle = document.getElementById("HomeLogo")
@@ -195,10 +200,13 @@ export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTML
 	// controls = new OrbitControls(camera,cssrenderer.domElement)
 	// controls.target = new THREE.Vector3(980,-17,850)
 	animate(renderer, cssrenderer, camera, scene)
+
+	// @ts-ignore
+	window.h = handlerObj
 }
 
-export const setupWorkMobile = (ga: (title:string) => void ) => {
-
+export const setupWorkMobile = (ga: (title:string,gallery: Array<Gallery>) => void ,data:Array<Work>) => {
+	console.log("data",data)
 	// work
 	workPanel = createWorkPanel()
 	handlerObj.workPanel = workPanel
@@ -211,12 +219,14 @@ export const setupWorkMobile = (ga: (title:string) => void ) => {
 
 	// tiles
 	let geometry = new THREE.BoxGeometry(SQUARE_SIZE, SQUARE_SIZE, 0.125);
-	let titles = ['one', 'two', 'trhe', 'four', 'fix', '8', 'a', 'b', 'c', 'd', 'e', '1', '2', '3', '4', '123123']
-	let gallery = [
-		"https://nsc.nyc3.digitaloceanspaces.com/028b1fcfd219e13b4ccb9730fce149e2.jpg",
-		"https://nsc.nyc3.digitaloceanspaces.com/0916a7105953013e63163bdd14e400e5.jpg",
-		"https://nsc.nyc3.digitaloceanspaces.com/1b216267fbb791c07454464904b926dc.jpg"
-	]
+	// let titles = ['one', 'two', 'trhe', 'four', 'fix', '8', 'a', 'b', 'c', 'd', 'e', '1', '2', '3', '4', '123123']
+	// let gallery = [
+	// 	"https://nsc.nyc3.digitaloceanspaces.com/028b1fcfd219e13b4ccb9730fce149e2.jpg",
+	// 	"https://nsc.nyc3.digitaloceanspaces.com/0916a7105953013e63163bdd14e400e5.jpg",
+	// 	"https://nsc.nyc3.digitaloceanspaces.com/1b216267fbb791c07454464904b926dc.jpg"
+	// ]
+	let titles = data.map( d => d.Title )
+	let gallery = data.map( d => d.Gallery )
 	let tiles = createTiles(titles, geometry, gallery, ga)
 	tileGroup = tiles.tileGroup
 	handlerObj.tileGroup = tileGroup
@@ -234,11 +244,23 @@ export const setupWorkMobile = (ga: (title:string) => void ) => {
 	// gui.add(tileGroup.position, "x")
 	// gui.add(tileGroup.position, "y")
 	// gui.add(tileGroup.position, "z")
+
+	// TODO: add transition block 
+	transitionButton = new ButtonPanel(150,50)
+	transitionButton.mesh.position.set(
+		workButtonPos.x,
+		workButtonPos.y,
+		workButtonPos.z
+	)
+	handlerObj.transitionButton = transitionButton
+	transitionButton.mesh.visible = false
+	scene.add(transitionButton.mesh)
+	// TODO: add work description
 }
 
-export const setupWork = (ga: (title: string) => void) => {
+export const setupWork = (ga: (title: string,gallery: Array<Gallery>) => void,data: Array<Work>) => {
 	if(isMobile()){
-		setupWorkMobile(ga)
+		setupWorkMobile(ga,data)
 		return
 	}
 	// work
@@ -249,12 +271,14 @@ export const setupWork = (ga: (title: string) => void) => {
 
 	// tiles
 	let geometry = new THREE.BoxGeometry(SQUARE_SIZE, SQUARE_SIZE, 0.125);
-	let titles = ['one', 'two', 'trhe', 'four', 'fix', '8', 'a', 'b', 'c', 'd', 'e', '1', '2', '3', '4', '123123']
-	let gallery = [
-		"https://nsc.nyc3.digitaloceanspaces.com/028b1fcfd219e13b4ccb9730fce149e2.jpg",
-		"https://nsc.nyc3.digitaloceanspaces.com/0916a7105953013e63163bdd14e400e5.jpg",
-		"https://nsc.nyc3.digitaloceanspaces.com/1b216267fbb791c07454464904b926dc.jpg"
-	]
+	// let titles = ['one', 'two', 'trhe', 'four', 'fix', '8', 'a', 'b', 'c', 'd', 'e', '1', '2', '3', '4', '123123']
+	// let gallery = [
+	// 	"https://nsc.nyc3.digitaloceanspaces.com/028b1fcfd219e13b4ccb9730fce149e2.jpg",
+	// 	"https://nsc.nyc3.digitaloceanspaces.com/0916a7105953013e63163bdd14e400e5.jpg",
+	// 	"https://nsc.nyc3.digitaloceanspaces.com/1b216267fbb791c07454464904b926dc.jpg"
+	// ]
+	let titles = data.map( d => d.Title )
+	let gallery = data.map( d => d.Gallery )
 	let tiles = createTiles(titles, geometry, gallery, ga)
 	tileGroup = tiles.tileGroup
 	handlerObj.tileGroup = tileGroup
@@ -266,8 +290,25 @@ export const setupWork = (ga: (title: string) => void) => {
 
 	tileGroup.position.set(tileGroupPosStart.x,tileGroupPosStart.y,tileGroupPosStart.z)
 	// gui.add(tileGroup.position, "x")
-	gui.add(tileGroup.position, "y")
+	// gui.add(tileGroup.position, "y")
 	// gui.add(tileGroup.position, "z")
+
+	// TODO: add transition block 
+	transitionButton = new ButtonPanel(150,50)
+	transitionButton.mesh.position.set(
+		workButtonPos.x,
+		workButtonPos.y,
+		workButtonPos.z
+	)
+	handlerObj.transitionButton = transitionButton
+	transitionButton.mesh.visible = false
+	scene.add(transitionButton.mesh)
+	handlerObj.currentPage = Pages.WORK
+	// TODO: add work description
+
+	// let workDesc = document.getElementById("workDesc")
+	// let sceneBoundingBox = workDesc.getBoundingClientRect()
+	// workDescription = createPanel(workDesc, sceneBoundingBox, "black")
 }
 
 export const setupAbout = (el: HTMLElement) => {
@@ -325,7 +366,9 @@ export const handlerObj = {
 	tileGroup,
 	m,
 	event: undefined,
-	currentPage
+	currentPage,
+	transitionButton,
+	onWorkDesc : false
 }
 
 window.addEventListener('resize', () => {
@@ -360,7 +403,7 @@ export const zo = () => {
 export const goToWork = (h,work: string,fourohfour: boolean) => {
 	handlerObj.currentPage = Pages.WORK
 	// set camera to correct location
-	camera.position.set(workPanelFocusedPos.x,workPanelFocusedPos.y,workPanelFocusedPos.z)
+	camera.position.set(workStartPos.x,workStartPos.y,workStartPos.z)
 	camera.updateProjectionMatrix()
 
 	// check for work, if none 404 square

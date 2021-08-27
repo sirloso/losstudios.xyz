@@ -1,8 +1,13 @@
+export const apiUrl = "http://localhost:1337"
 export const MOBILE_BREAKPOINT = 800
 export const isMobile = () => {
 	return window.innerWidth <= MOBILE_BREAKPOINT
 }
-
+export const Breakpoints = {
+    small : MOBILE_BREAKPOINT,
+    medium: 1200,
+    large: 1201
+}
 export const NUM_ROWS = 35
 export const TILES_PER_ROW = 2
 export const SQUARE_SIZE = 25
@@ -12,9 +17,12 @@ export const offsetX = 0//-.001
 export const offsetY = 0//.10
 
 export const desktopCamera = {
-    x: 1.5,
-    y: 3.0,
-    z: 5.5
+    x: 0,
+    y: 0,
+    z: 1000
+    // x: 3000,
+    // y: 0,
+    // z: 1000
 }
 
 export const mobileCamera = {
@@ -54,6 +62,18 @@ export const workStartPos = {
     x: 3000,
     y: 0,
     z: 1000
+}
+
+export const workButtonPos = {
+    x: 3500,
+    y: 0,
+    z: 1
+}
+
+export const workDescPanel = {
+    x: 4010,
+    y: 0,
+    z: 600
 }
 
 export const workPanelPos = {

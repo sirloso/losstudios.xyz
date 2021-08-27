@@ -215,3 +215,14 @@ export class WorkPanel {
     }
 }
 
+export class ButtonPanel{
+    geometry: Three.BoxGeometry
+    material: Three.MeshBasicMaterial
+    mesh: Three.Mesh
+
+    constructor(width: number,height: number){
+        this.geometry =  new Three.BoxGeometry(width,height,5)
+        this.material = new Three.MeshBasicMaterial({color: "black"})
+        this.mesh = new Three.Mesh(this.geometry,this.material)
+    }
+}

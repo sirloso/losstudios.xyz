@@ -8,7 +8,8 @@ import {
     workStartPos,
     workPanelFocusedPos,
     homePos,
-    aboutPos
+    aboutPos,
+    workDescPanel
 } from './values'
 import { Pages } from "./types"
 export const handleLogoMouseEnter = () => {
@@ -118,7 +119,7 @@ export function onTouchEnd({ event, scrolling, zooming, lastobj, workPanel, came
         console.log(e)
         scrolling = false
     }
-    console.log("scrolling", scrolling)
+
     let mouse = { x: 0, y: 0 }
 
     mouse.x = (event.changedTouches[0].clientX / window.innerWidth) * 2 - 1;
@@ -169,6 +170,7 @@ export function onTouchStart(event) {
 }
 
 export function onWindowResize({ camera, renderer, cssrenderer, scene }) {
+    location.reload()
     camera.aspect = window.innerWidth / window.innerHeight;
 
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -186,7 +188,7 @@ export function onMouseMove(h) {
     h.m.y = - (h.event.clientY / window.innerHeight) * 2 + 1 + offsetY
     h.rc.setFromCamera(h.m, h.camera);
     // calculate objects intersecting the picking ray
-    var intersects = h.scene === undefined || h.tileGroup === undefined ? [] : h.rc.intersectObjects(h.tileGroup.children);
+    var intersects = h.scene === undefined || h.tileGroup === undefined ? [] : h.rc.intersectObjects([h.transitionButton.mesh ,...h.tileGroup.children]);
     // knowing this will only contain one object
     if (intersects[0] && !h.scrolling && !clearMouse && !h.mobile) {
         // intersects[0].object._rotate(
@@ -196,6 +198,10 @@ export function onMouseMove(h) {
         document.body.style.cursor = 'pointer'
 
         let intersected = intersects[0].object
+        if(intersected == h.transitionButton.mesh){
+            h.lastObj = intersected
+            return
+        } 
         // update back panel to color of tile
         let img = intersected.controller.heroDiv || intersected.hero
 
@@ -260,19 +266,60 @@ export function onMouseDown(h) {
     h.event.preventDefault()
     if (h.zooming && !h.lastobj && h.mobile) return
     try {
-        if (event.type === 'mousedown' && h.lastobj && !h.scrolling) {
+        if(h.lastObj == h.transitionButton.mesh && h.zoomed){
+            if(!h.onWorkDesc){
+                moveToDesc(h)
+                h.onWorkDesc = true
+                return
+            }else{
+                zoomIntoWork(h)
+                h.onWorkDesc = false
+                h.lastobj = h.transitionButton
+                return 
+            }
+        } 
+        // uncertain if h.event is correctly assigned
+        if (h.event.type === 'mousedown' && h.lastobj && !h.scrolling) {
             if (h.lastobj === h.workPanel.mesh) return
             // this was used to draw the small squares
             if (h.lastobj.hover) h.lastobj.hover(1)
             zoomIntoWork(h)
         }
+        // if(h.event.type==="mousedown" && h.lastobj === h.transitionButton.mesh)
     } catch (e) {
         console.log(e)
     }
 }
 
+function moveToDesc(h){
+    let to = workDescPanel
+    h.zooming = true
+    h.zoomed = false
+    h.lastobj = null
+    let start = from(h.camera)
+    let tween = new TWEEN.Tween(start)
+        .to(to, 1000)
+        .easing(TWEEN.Easing.Linear.None)
+        .onUpdate(function () {
+            h.camera.position.set(start.x, start.y, start.z);
+            h.camera.updateProjectionMatrix();
+        })
+        .onComplete(function () {
+            h.zooming = false
+            h.zoomed = true
+            h.desc = true
+            // let arrows = Array.from(document.getElementsByClassName("arrow"))
+            // arrows.forEach((e) => {
+            //     //@ts-ignore
+            //     e.style.visibility = "visible"
+            // })zoomIntoWork
+            // h.transitionButton.mesh.visible = true
+        })
+        .start();
+}
+
 function zoomIntoWork(h) {
-    if (!h.lastobj) return
+    // if (!h.lastobj) return
 
     let to = workPanelFocusedPos
 
@@ -295,10 +342,25 @@ function zoomIntoWork(h) {
                 //@ts-ignore
                 e.style.visibility = "visible"
             })
+            h.transitionButton.mesh.visible = true
         })
         .start();
 
     h.camera.updateProjectionMatrix();
+    // showWork()
+
+    let header = Array.from(window.document.getElementsByClassName("Header")) || []
+    if(header.length !== 0 ) {
+        let node = header[0].children[1]
+        // don't add another back button if present
+        if(header[0].children[1].children.length >= 2) return
+        let back = document.createElement("div")
+        back.id = "back_button"
+        back.innerText = "back "
+        back.className = "hover"
+        back.onclick = ()=>{zoomOutOfWork(h)}
+        node.prepend(back)
+    }
 }
 
 let from = (camera) => {
@@ -310,17 +372,22 @@ let from = (camera) => {
 }
 
 export function zoomOutOfWork(h) {
-    h.scrolling = true
+    h.zooming = true
+    // remove back button
+    let bb = document.getElementById("back_button")
+    bb.parentElement.removeChild(bb)
+    h.transitionButton.mesh.visible = false
+    h.workPanel.resetColor()
     let start = from(h.camera)
     let tween = new TWEEN.Tween(start)
-        .to({ ...cameraPosition }, 1000)
+        .to({ ...workStartPos }, 1000)
         .easing(TWEEN.Easing.Linear.None)
         .onUpdate(function () {
             h.camera.position.set(start.x, start.y, start.z);
         })
         .onComplete(function () {
             h.zoomed = false
-            h.scrolling = false
+            h.zooming = false
             let arrows = Array.from(document.getElementsByClassName("arrow"))
             arrows.forEach((e) => {
                 //@ts-ignore
@@ -329,9 +396,9 @@ export function zoomOutOfWork(h) {
         })
         .start();
 
-    h.camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z)
-    h.camera.fov = 75
-    h.camera.updateProjectionMatrix();
+    // h.camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z)
+    // h.camera.fov = 75
+    // h.camera.updateProjectionMatrix();
     //     modalMode = false
 
 }
@@ -340,7 +407,6 @@ const addWorkDesc = (h) => {
     let newPanel = createWorkPanel()
 
     h.scene.add(newPanel)
-
 
     h.newPanel = h
 }
@@ -413,4 +479,8 @@ export const moveToHome = (h) => {
         })
 
     tween.start()
+}
+
+export const showWork = () =>{
+
 }

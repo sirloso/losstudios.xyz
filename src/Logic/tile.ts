@@ -1,4 +1,5 @@
 import { ThreeController } from './ThreeController'
+import { Gallery } from './redux/api'
 import * as Three from 'three'
 import { P5Controller } from './P5Controller'
 import { ReactComponentElement } from 'react'
@@ -10,9 +11,10 @@ export class Tile {
     canvasID: string
     color: string
     gallery: [ReactComponentElement<any>,string]
+    _gallery: Array<Gallery>
     pc: P5Controller
 
-    constructor(geometry: Three.BufferGeometry, title = 'los studios', images: Array<string>,ga: (title:string)=>void ) {
+    constructor(geometry: Three.BufferGeometry, title = 'los studios', images: Array<Gallery>,ga: (title:string,gallery: Array<Gallery>)=>void ) {
         this.discard = this.discard.bind(this)
         let tag = this.getTag(title)
         this.pc = new P5Controller(title,tag)
@@ -24,7 +26,7 @@ export class Tile {
         //     ga.push({ title:title ,gallery:this.gallery[0]})
         // } 
 
-        ga(title)
+        ga(title,images)
 
         this.tc = new ThreeController(geometry, title, tag)
 
@@ -35,6 +37,7 @@ export class Tile {
         this.pc.parentRedraw = this.tc.redraw
         //@ts-ignore
         this.tc.discard = this.discard
+        this._gallery = images
 
         // this.tc.registerCanvas()
     }

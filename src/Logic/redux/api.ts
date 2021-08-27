@@ -37,13 +37,16 @@ export interface WorkCMSSchema{
 export interface Gallery{
   id: number
   name: string
-  formats: {
+  formats: Formats
+}
+
+export interface Formats{
     thumbnail?:Photo
     large?: Photo
     medium?: Photo
     small?: Photo
   }
-}
+
 
 export interface Photo{
   name: string

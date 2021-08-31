@@ -61,7 +61,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
 let hover = false
 // let gui = new DAT.GUI({autoPlace: false})
-// let gui = new DAT.GUI()
+let gui = new DAT.GUI()
 let scene = new THREE.Scene()
 
 let controls: OrbitControls
@@ -141,6 +141,8 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 	cssrenderer = titlePanel.renderer
 	animate(renderer, cssrenderer, camera, scene)
 
+	//@ts-ignore
+	window.h = handlerObj
 }
 
 export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElement) => {
@@ -232,6 +234,7 @@ export const setupWorkMobile = (ga: (title:string,gallery: Array<Gallery>) => vo
 	handlerObj.tileGroup = tileGroup
 	//@ts-ignore
 	window.tiles = tiles
+	tiles.tiles.forEach( t => t.tc.registerCanvas() )
 
 	// if(mobile) scene.add(tileGroup)
 	scene.add(tileGroup)
@@ -241,9 +244,9 @@ export const setupWorkMobile = (ga: (title:string,gallery: Array<Gallery>) => vo
 		mobile.tileGroup.y,
 		mobile.tileGroup.z
 		)
-	// gui.add(tileGroup.position, "x")
-	// gui.add(tileGroup.position, "y")
-	// gui.add(tileGroup.position, "z")
+	gui.add(tileGroup.position, "x")
+	gui.add(tileGroup.position, "y")
+	gui.add(tileGroup.position, "z")
 
 	// TODO: add transition block 
 	transitionButton = new ButtonPanel(150,50)
@@ -259,6 +262,7 @@ export const setupWorkMobile = (ga: (title:string,gallery: Array<Gallery>) => vo
 }
 
 export const setupWork = (ga: (title: string,gallery: Array<Gallery>) => void,data: Array<Work>) => {
+	console.log("setting up work")
 	if(isMobile()){
 		setupWorkMobile(ga,data)
 		return

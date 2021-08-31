@@ -106,6 +106,7 @@ export function onScroll(h){
 }
 
 export function onTouchEnd({ event, scrolling, zooming, lastobj, workPanel, camera, tileGroup, rc }) {
+    console.log("touch")
     event.preventDefault()
     if (zooming && !lastobj) return
     try {
@@ -130,12 +131,12 @@ export function onTouchEnd({ event, scrolling, zooming, lastobj, workPanel, came
 
     let obj = intersects[0]
     if (obj && !scrolling && !clearMouse && obj.object != workPanel) {
-        obj.object.colorize()
+        // obj.object.colorize()
         lastobj = obj
     } else {
         if (lastobj) {
-            vec.set(0, 0, 0)
-            lastobj.object.resetColor()
+            // vec.set(0, 0, 0)
+            // lastobj.object.resetColor()
             lastobj = null
         }
     }

@@ -1,6 +1,7 @@
 import { ReactComponentElement } from 'react'
 import { CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer'
 import * as THREE from 'three'
+import { isMobile } from './values'
 export class Rotater{
     _width: number
     _height: number
@@ -71,7 +72,7 @@ export class ThreeController {
             textures.push(
                 new THREE.MeshPhongMaterial({
                     color: 'black',
-                    opacity: this.opacity,
+                    opacity: isMobile() ? 1.0 : this.opacity,
                     transparent: true,
                 })
             )
@@ -165,7 +166,7 @@ export class ThreeController {
         this.mesh.material[4] = new THREE.MeshPhongMaterial({
            color: "black",
            transparent: true,
-           opacity: this.opacity 
+           opacity: isMobile() ? 1.0 : this.opacity,
         })
     }
 

@@ -9,8 +9,19 @@ import {
 } from '../Logic/homeInteractionHandlers'
 import { HomeProps } from '../Logic/types'
 import { useAppDispatch } from '../Logic/redux/workSlice'
+import { Work } from '../Logic/redux/workSlice'
 import { useGetWorksQuery,Gallery, Formats } from '../Logic/redux/api'
 import { Breakpoints, apiUrl } from '../Logic/values'
+
+const data2Map = ( data: Work[] ) => {
+    let m = new Map<string,Work>()
+
+    data.forEach((d:Work)=>{
+        m[d.id] = d
+    })
+
+    return m
+}
 
 const Home = (props: HomeProps) => {
     const [detail, updateDetail] = useState(false)
@@ -20,6 +31,9 @@ const Home = (props: HomeProps) => {
     const [showLogo, updateShowLogo] = useState(false)
     const [showWork, updateShowWork] = useState(true)
     const [showAbout, updateShowAbout] = useState(true)
+
+    const [currentArticle,updateCurrentArticle] = useState({})
+    const [tagMap,updateTagMap] = useState({} as Map<string,Work>)
 
     const about = useRef()
     const home = useRef()
@@ -54,11 +68,18 @@ const Home = (props: HomeProps) => {
         updateGallery(GalleryArray)
     }
 
+
+    useEffect(()=>{
+        console.log("HELLO",currentArticle)
+    },[
+        currentArticle
+    ])
+
     const { data, error, isLoading } = useGetWorksQuery("no")
 
     useEffect(() => {
         if (!loaded && home && css && webgl) {
-            setupHome(home.current, css.current, webgl.current)
+            setupHome(home.current, css.current, webgl.current, updateCurrentArticle)
             updateLoaded(true)
         }
 
@@ -78,8 +99,10 @@ const Home = (props: HomeProps) => {
         if(data){
             setupWork(createGallery,data)
             setupAbout(about.current)
+            console.log(data2Map(data))
         }
     },[data])
+
 
     setTimeout(() => {
         if (!detail) updateDetail(true)

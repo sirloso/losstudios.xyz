@@ -132,11 +132,29 @@ export function onTouchEnd({ event, scrolling, zooming, lastobj, workPanel, came
     let obj = intersects[0]
     if (obj && !scrolling && !clearMouse && obj.object != workPanel) {
         // obj.object.colorize()
-        lastobj = obj
+        // lastobj.hover(1)
+        lastobj = obj.object
+
+        if(!lastobj.controller) return
+
+        let img = lastobj.controller.heroDiv || lastobj.controller.hero || ""
+
+        console.log(img)
+        // if the last object is the same as work panel object
+        // then we should reset everything
+        let hoverobj = workPanel.hover(img)
+
+        if(img){
+            console.log("HELL")
+            lastobj.controller.updateHeroDiv(hoverobj)
+        }
+
+        // if (lastobj.registerCanvas) lastobj.registerCanvas()
+        
     } else {
         if (lastobj) {
             // vec.set(0, 0, 0)
-            // lastobj.object.resetColor()
+            workPanel.resetColor()
             lastobj = null
         }
     }
@@ -285,6 +303,8 @@ export function onMouseDown(h) {
             // this was used to draw the small squares
             if (h.lastobj.hover) h.lastobj.hover(1)
             zoomIntoWork(h)
+            // register data to be used by the website
+            h.uca(h.lastobj.hero)
         }
         // if(h.event.type==="mousedown" && h.lastobj === h.transitionButton.mesh)
     } catch (e) {

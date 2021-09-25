@@ -116,9 +116,10 @@ export const PANEL_404 = "404_panel"
 
 export const mobile = {
     workPanel: {
-        x: 2992,
+        x: 3000,
         y: 0,
-        z: 905
+        // z: 905
+        z: 890
     },
     tileGroup:{
         x: 3005,

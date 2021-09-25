@@ -66,12 +66,15 @@ let scene = new THREE.Scene()
 
 let controls: OrbitControls
 
-export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElement) => {
+export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElement, uca: (data:any) => {} ) => {
 	console.log("setting up mobile")
 	// main page
 	let sceneBoundingBox = home.getBoundingClientRect()
 	renderer.setSize(sceneBoundingBox.width, sceneBoundingBox.height)
 	webgl.appendChild(renderer.domElement)
+
+	//@ts-ignore
+	handlerObj.uca = uca
 
 	scene.background = new THREE.Color('white')
 
@@ -143,13 +146,20 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 
 	//@ts-ignore
 	window.h = handlerObj
+
+	gui.add(camera.position,"x")
+	gui.add(camera.position,"y")
+	gui.add(camera.position,"z")
 }
 
-export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElement) => {
+export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElement, uca: (data:any) => {}) => {
 	if (isMobile()) {
-		setupMobile(home, css, webgl)
+		setupMobile(home, css, webgl, uca)
 		return
 	}
+
+	//@ts-ignore
+	handlerObj.uca = uca
 
 	// main page
 	let sceneBoundingBox = home.getBoundingClientRect()
@@ -244,9 +254,6 @@ export const setupWorkMobile = (ga: (title:string,gallery: Array<Gallery>) => vo
 		mobile.tileGroup.y,
 		mobile.tileGroup.z
 		)
-	gui.add(tileGroup.position, "x")
-	gui.add(tileGroup.position, "y")
-	gui.add(tileGroup.position, "z")
 
 	// TODO: add transition block 
 	transitionButton = new ButtonPanel(150,50)
@@ -293,9 +300,6 @@ export const setupWork = (ga: (title: string,gallery: Array<Gallery>) => void,da
 	scene.add(tileGroup)
 
 	tileGroup.position.set(tileGroupPosStart.x,tileGroupPosStart.y,tileGroupPosStart.z)
-	// gui.add(tileGroup.position, "x")
-	// gui.add(tileGroup.position, "y")
-	// gui.add(tileGroup.position, "z")
 
 	// TODO: add transition block 
 	transitionButton = new ButtonPanel(150,50)

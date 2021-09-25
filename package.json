@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "dependencies": {
+    "@contentful/rich-text-react-renderer": "^15.4.0",
     "@reach/router": "^1.3.4",
     "@reduxjs/toolkit": "^1.6.0",
     "@tweenjs/tween.js": "^18.6.4",

@@ -3,7 +3,7 @@ import { WorkPanel, Panel, ButtonPanel } from './panel'
 import * as DAT from 'dat.gui'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer';
-import { aboutPos, cameraPosition, homePos, PANEL_404, SQUARE_SIZE, tileGroupPosStart, workButtonPos, workPanelFocusedPos, workPanelPos, workStartPos } from './values';
+import { aboutPos, cameraPosition, homePos, homePosMobile, PANEL_404, SQUARE_SIZE, tileGroupPosStart, workButtonPos, workPanelFocusedPos, workPanelPos, workStartPos } from './values';
 import {
 	createPanel,
 	createTiles,
@@ -122,7 +122,12 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 	controls = new OrbitControls(camera, titlePanel.renderer.domElement)
 	controls.enabled = false
 
-	camera.position.set(workStartPos.x,workStartPos.y,workStartPos.z)
+	// camera.position.set(workStartPos.x,workStartPos.y,workStartPos.z)
+	camera.position.set(
+		homePosMobile.x,
+		homePosMobile.y,
+		homePosMobile.z,
+	)
 	camera.updateProjectionMatrix()
 	controls.target = camera.position
 
@@ -137,6 +142,8 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 	infoPanel.obj.position.set(0, 57, 0)
 	// aboutPanel.obj.rotateX(THREE.MathUtils.degToRad(95))
 
+	// workPanel = createWorkPanel()
+	// handlerObj.workPanel = workPanel
 	handlerObj.currentPage = Pages.HOME
 
 	scene.add(infoPanel.obj)
@@ -147,9 +154,9 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 	//@ts-ignore
 	window.h = handlerObj
 
-	gui.add(camera.position,"x")
-	gui.add(camera.position,"y")
-	gui.add(camera.position,"z")
+	// gui.add(camera.position,"x")
+	// gui.add(camera.position,"y")
+	// gui.add(camera.position,"z")
 }
 
 export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElement, uca: (data:any) => {}) => {

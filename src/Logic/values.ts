@@ -1,4 +1,5 @@
-export const apiUrl = "http://localhost:1337"
+// export const apiUrl = "http://localhost:1337"
+export const apiUrl = "http://cms.losstudios.xyz"
 export const MOBILE_BREAKPOINT = 800
 export const isMobile = () => {
 	return window.innerWidth <= MOBILE_BREAKPOINT
@@ -40,7 +41,9 @@ export const workPanelFocusedPos = {
 }
 
 // export const apiBaseEndpoint = process.env.PRODUCTION ? "":"http://localhost:1337" 
-export const apiBaseEndpoint = "http://localhost:1337"
+// export const apiBaseEndpoint = "http://localhost:1337"
+export const apiBaseEndpoint = "http://cms.losstudios.xyz"
+// export const apiBaseEndpoint = "http://197.168.0.10:1337"
 
 export enum apiEndpointExtentions{
     works  = "/works",
@@ -50,6 +53,12 @@ export const homePos = {
     x: 0,
     y: 0,
     z: 1000
+}
+
+export const homePosMobile = {
+    x: -12,
+    y: 0,
+    z: 1200
 }
 
 export const aboutPos = {
@@ -116,10 +125,10 @@ export const PANEL_404 = "404_panel"
 
 export const mobile = {
     workPanel: {
-        x: 3000,
+        x: 2792,
         y: 0,
-        // z: 905
-        z: 890
+        z: 905
+        // z: 890
     },
     tileGroup:{
         x: 3005,

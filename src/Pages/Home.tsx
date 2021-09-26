@@ -97,9 +97,9 @@ const Home = (props: HomeProps) => {
 
     useEffect(()=>{
         if(data){
+            console.log(data)
             setupWork(createGallery,data)
             setupAbout(about.current)
-            console.log(data2Map(data))
         }
     },[data])
 

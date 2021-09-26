@@ -106,20 +106,17 @@ export function onScroll(h){
 }
 
 export function onTouchEnd({ event, scrolling, zooming, lastobj, workPanel, camera, tileGroup, rc }) {
-    console.log("touch")
+    console.log("touch",scrolling,lastobj)
     event.preventDefault()
     if (zooming && !lastobj) return
-    try {
         if (lastobj && !scrolling) {
             if (lastobj === workPanel.mesh) return
             // this was used to draw the small squares
             // if (lastobj.hover) lastobj.hover(1)
             // zoomIn()
         }
-    } catch (e) {
-        console.log(e)
-        scrolling = false
-    }
+        // console.log(e)
+    scrolling = false
 
     let mouse = { x: 0, y: 0 }
 
@@ -128,11 +125,12 @@ export function onTouchEnd({ event, scrolling, zooming, lastobj, workPanel, came
 
     rc.setFromCamera(mouse, camera)
     let intersects = rc.intersectObjects(tileGroup.children);
-
     let obj = intersects[0]
+    console.log(obj,scrolling,clearMouse,obj ? obj.object != workPanel : "no obj")
     if (obj && !scrolling && !clearMouse && obj.object != workPanel) {
         // obj.object.colorize()
         // lastobj.hover(1)
+        console.log("were here")
         lastobj = obj.object
 
         if(!lastobj.controller) return

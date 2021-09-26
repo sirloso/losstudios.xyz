@@ -1,5 +1,5 @@
 // export const apiUrl = "http://localhost:1337"
-export const apiUrl = "http://cms.losstudios.xyz"
+export const apiUrl = "https://cms.losstudios.xyz"
 export const MOBILE_BREAKPOINT = 800
 export const isMobile = () => {
 	return window.innerWidth <= MOBILE_BREAKPOINT
@@ -42,7 +42,7 @@ export const workPanelFocusedPos = {
 
 // export const apiBaseEndpoint = process.env.PRODUCTION ? "":"http://localhost:1337" 
 // export const apiBaseEndpoint = "http://localhost:1337"
-export const apiBaseEndpoint = "http://cms.losstudios.xyz"
+export const apiBaseEndpoint = "https://cms.losstudios.xyz"
 // export const apiBaseEndpoint = "http://197.168.0.10:1337"
 
 export enum apiEndpointExtentions{

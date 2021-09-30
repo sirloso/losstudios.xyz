@@ -12,6 +12,7 @@ import { useAppDispatch } from '../Logic/redux/workSlice'
 import { Work } from '../Logic/redux/workSlice'
 import { useGetWorksQuery,Gallery, Formats } from '../Logic/redux/api'
 import { Breakpoints, apiUrl } from '../Logic/values'
+import ReactMarkdown from 'react-markdown'
 
 const data2Map = ( data: Work[] ) => {
     let m = new Map<string,Work>()
@@ -79,6 +80,7 @@ const Home = (props: HomeProps) => {
 
     useEffect(() => {
         if (!loaded && home && css && webgl) {
+            // @ts-ignore
             setupHome(home.current, css.current, webgl.current, updateCurrentArticle)
             updateLoaded(true)
         }
@@ -103,10 +105,14 @@ const Home = (props: HomeProps) => {
         }
     },[data])
 
-
+    console.log(data)
     setTimeout(() => {
         if (!detail) updateDetail(true)
     }, 2000)
+
+    const transformImage = (href,children,title): string=>{
+        return apiUrl + href
+    }
 
     return (
         <div className="Home">
@@ -119,6 +125,20 @@ const Home = (props: HomeProps) => {
                 updateAbout={updateShowAbout}
                 />
             <div id="HomeBody" ref={home}>
+            {
+                data && data.map((d)=>{
+                    return(
+                        <div>
+                            <ReactMarkdown transformImageUri={transformImage} linkTarget="_blank">
+                                {
+                                    d.Body
+                                }
+                            </ReactMarkdown>
+                        </div>
+                    )
+                })
+                
+            }
                 <div id="HomeLogo"
                     onTouchStartCapture={handleLogoMouseEnter}
                     onTouchEndCapture={handleLogoMouseLeave}

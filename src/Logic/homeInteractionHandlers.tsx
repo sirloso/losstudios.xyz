@@ -106,7 +106,7 @@ export function onScroll(h){
 }
 
 export function onTouchEnd({ event, scrolling, zooming, lastobj, workPanel, camera, tileGroup, rc }) {
-    console.log("touch",scrolling,lastobj)
+    // console.log("touch",scrolling,lastobj)
     event.preventDefault()
     if (zooming && !lastobj) return
         if (lastobj && !scrolling) {
@@ -126,24 +126,24 @@ export function onTouchEnd({ event, scrolling, zooming, lastobj, workPanel, came
     rc.setFromCamera(mouse, camera)
     let intersects = rc.intersectObjects(tileGroup.children);
     let obj = intersects[0]
-    console.log(obj,scrolling,clearMouse,obj ? obj.object != workPanel : "no obj")
+    // console.log(obj,scrolling,clearMouse,obj ? obj.object != workPanel : "no obj")
     if (obj && !scrolling && !clearMouse && obj.object != workPanel) {
         // obj.object.colorize()
         // lastobj.hover(1)
-        console.log("were here")
+        // console.log("were here")
         lastobj = obj.object
 
         if(!lastobj.controller) return
 
         let img = lastobj.controller.heroDiv || lastobj.controller.hero || ""
 
-        console.log(img)
+        // console.log(img)
         // if the last object is the same as work panel object
         // then we should reset everything
         let hoverobj = workPanel.hover(img)
 
         if(img){
-            console.log("HELL")
+            // console.log("HELL")
             lastobj.controller.updateHeroDiv(hoverobj)
         }
 
@@ -220,12 +220,20 @@ export function onMouseMove(h) {
             return
         } 
         // update back panel to color of tile
+        // get either the html element or the id
         let img = intersected.controller.heroDiv || intersected.hero
-
+        // pass id or element to work panel
         let obj = h.workPanel.hover(img)
 
+        let imgDesc = intersected.controller.descDiv || intersected.hero+"_desc"
+        // pass id
+        let workObj = h.workDescPanel.hover(imgDesc)
+
         // save created 3d object
-        if (!intersected.controller.heroDiv) intersected.controller.updateHeroDiv(obj)
+        if (!intersected.controller.heroDiv){
+            intersected.controller.updateHeroDiv(obj)
+            intersected.controller.updateDescDiv(workObj)
+        }
 
         if (intersects[0].object.registerCanvas) intersects[0].object.registerCanvas()
 
@@ -245,7 +253,10 @@ export function onMouseMove(h) {
         vec.set(0, 0, 0)
         // set rotation to zero
         //     lastobj._rotate(0, 0)
-        if (!h.zooming && !h.zoomed) h.workPanel.resetColor()
+        if (!h.zooming && !h.zoomed){
+            h.workPanel.resetColor()
+            h.workDescPanel.resetColor()
+        }
         h.lastobj = null
         // }
     }
@@ -273,7 +284,7 @@ export function onMouseScroll(h){
         // bottom is -17
 
         h.tileGroup.position.y += (delta * speed);
-        console.log(height, h.tileGroup.position.y)
+        // console.log(height, h.tileGroup.position.y)
     }catch(e){
         console.log(e)
     }
@@ -362,6 +373,9 @@ function zoomIntoWork(h) {
                 e.style.visibility = "visible"
             })
             h.transitionButton.mesh.visible = true
+            h.workDescPanel.obj.visible = true
+            h.workDescPanel.tmpDiv.element.style.visibility = "visible"
+            // h.workDescPanel.
         })
         .start();
 
@@ -396,6 +410,8 @@ export function zoomOutOfWork(h) {
     let bb = document.getElementById("back_button")
     bb.parentElement.removeChild(bb)
     h.transitionButton.mesh.visible = false
+    h.workDescPanel.obj.visible = false
+    h.workDescPanel.tmpDiv.element.style.visibility = "hidden"
     h.workPanel.resetColor()
     let start = from(h.camera)
     let tween = new TWEEN.Tween(start)

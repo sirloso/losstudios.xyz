@@ -258,6 +258,17 @@ canvas {
     bottom: var(--spacing);
 }
 
+
+.writeup{
+    width: 770px;
+    margin-left: 5px;
+    height: 500px;
+    overflow: scroll;
+    visibility: hidden;
+    /* background-color: white; */
+    font-size: 0.9em;
+}
+
 /*
  Mobile
 */
@@ -305,4 +316,10 @@ canvas {
       z-index: 2000;
   top: 50%;
   left: 50%;
+}
+
+#writeups{
+    position: absolute;
+    /* top: -1000; */
+    z-index: 0;
 }

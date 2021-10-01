@@ -36,6 +36,7 @@ export class ThreeController {
     // opacity = 1
     geometry: THREE.BufferGeometry
     c:HTMLCanvasElement 
+    cdesc: HTMLCanvasElement
     tag: string
     title: string
     mesh: THREE.Mesh
@@ -45,6 +46,7 @@ export class ThreeController {
     hero: string
     heroDiv: CSS3DObject
     heroTexture: THREE.Texture
+    descDiv: CSS3DObject
     constructor(geometry: THREE.BufferGeometry,  canvasTitle = 'defaultCanvas0',tag:string) {
         this.geometry = geometry
         this.tag = tag
@@ -55,6 +57,7 @@ export class ThreeController {
         this.colorize = this.colorize.bind(this)
         this.resetColor = this.resetColor.bind(this)
         this.updateHeroDiv = this.updateHeroDiv.bind(this)
+        this.updateDescDiv = this.updateDescDiv.bind(this)
         this.title = canvasTitle
         this.hero = canvasTitle
         let textures = []
@@ -124,6 +127,8 @@ export class ThreeController {
     async registerCanvas() {
         this.c = document.getElementById(this.tag) as HTMLCanvasElement
         if(!this.c) return
+        // this.cdesc = document.getElementById(`${this.hero}_desc`) as HTMLCanvasElement
+        // if(!this.c || !this.cdesc) return
         let ctx = this.c.getContext("2d")
 
         let texture = new THREE.CanvasTexture(ctx.canvas) 
@@ -172,6 +177,10 @@ export class ThreeController {
 
     updateHeroDiv(div: CSS3DObject){
         if(!this.heroDiv) this.heroDiv = div
+    }
+
+    updateDescDiv(div: CSS3DObject){
+        if(!this.descDiv) this.descDiv = div
     }
 
     resetColor(){

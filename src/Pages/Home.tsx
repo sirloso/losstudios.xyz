@@ -71,7 +71,6 @@ const Home = (props: HomeProps) => {
 
 
     useEffect(()=>{
-        console.log("HELLO",currentArticle)
     },[
         currentArticle
     ])
@@ -99,13 +98,11 @@ const Home = (props: HomeProps) => {
 
     useEffect(()=>{
         if(data){
-            console.log(data)
             setupWork(createGallery,data)
             setupAbout(about.current)
         }
     },[data])
 
-    console.log(data)
     setTimeout(() => {
         if (!detail) updateDetail(true)
     }, 2000)
@@ -125,20 +122,22 @@ const Home = (props: HomeProps) => {
                 updateAbout={updateShowAbout}
                 />
             <div id="HomeBody" ref={home}>
-            {
-                data && data.map((d)=>{
-                    return(
-                        <div>
-                            <ReactMarkdown transformImageUri={transformImage} linkTarget="_blank">
-                                {
-                                    d.Body
-                                }
-                            </ReactMarkdown>
-                        </div>
-                    )
-                })
-                
-            }
+            <div id="writeups">
+                {
+                    data && data.map((d)=>{
+                        return(
+                            <div className="writeup" id={`${d.Title}_desc`}>
+                                <ReactMarkdown transformImageUri={transformImage} linkTarget="_blank">
+                                    {
+                                        d.Body
+                                    }
+                                </ReactMarkdown>
+                            </div>
+                        )
+                    })
+                    
+                }
+            </div>
                 <div id="HomeLogo"
                     onTouchStartCapture={handleLogoMouseEnter}
                     onTouchEndCapture={handleLogoMouseLeave}

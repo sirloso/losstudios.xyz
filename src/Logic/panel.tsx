@@ -133,6 +133,8 @@ export class WorkPanel {
 
         //@ts-ignore
         this.mesh = new Three.Mesh(this.geometry, textures)
+        //@ts-ignore
+        this.mesh.getParent = () => { return this }
         // this.mesh.hover = this.hover
         //@ts-ignore
         this.mesh._rotate = () => { }
@@ -173,11 +175,11 @@ export class WorkPanel {
             // implementing div lookup here
             // in the chance that react isn't fast enough to create gallery component
             if (!this.tmpDiv) {
-                console.log(newColor)
+                // console.log(newColor)
                 if(typeof newColor === "string"){
 
                 let div = document.getElementById(newColor)
-                console.log("DLJ",div)
+                // console.log("DLJ",div)
                 this.tmpDiv = new CSS3DObject(div)
 
                 this.cssObj.parent.remove(this.cssObj)
@@ -196,7 +198,7 @@ export class WorkPanel {
 
                 return this.tmpDiv
                 }else{
-                        console.log(newColor)
+                        // console.log(newColor)
                         this.cssObj.parent.remove(this.cssObj)
                         this.obj.add(newColor)
                         this.obj.matrixWorldNeedsUpdate = true

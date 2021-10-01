@@ -3,7 +3,7 @@ import { WorkPanel, Panel, ButtonPanel } from './panel'
 import * as DAT from 'dat.gui'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer';
-import { aboutPos, cameraPosition, homePos, homePosMobile, PANEL_404, SQUARE_SIZE, tileGroupPosStart, workButtonPos, workPanelFocusedPos, workPanelPos, workStartPos } from './values';
+import { workDescPanelPos, aboutPos, cameraPosition, homePos, homePosMobile, PANEL_404, SQUARE_SIZE, tileGroupPosStart, workButtonPos, workPanelFocusedPos, workPanelPos, workStartPos } from './values';
 import {
 	createPanel,
 	createTiles,
@@ -43,6 +43,7 @@ let titlePanel: Panel
 let infoPanel: Panel
 let aboutPanel: Panel
 let workPanel: WorkPanel
+let workDescPanel: WorkPanel
 let tileGroup: THREE.Group
 let transitionButton: ButtonPanel
 let workDescription : Panel
@@ -53,7 +54,7 @@ let cssrenderer: CSS3DRenderer
 let renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
 // renderer.autoClear = false
 renderer.setClearColor(0x000000, 0);
-renderer.setPixelRatio(window.devicePixelRatio);
+// renderer.setPixelRatio(window.devicePixelRatio);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
@@ -61,7 +62,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
 let hover = false
 // let gui = new DAT.GUI({autoPlace: false})
-let gui = new DAT.GUI()
+// let gui = new DAT.GUI()
 let scene = new THREE.Scene()
 
 let controls: OrbitControls
@@ -286,6 +287,12 @@ export const setupWork = (ga: (title: string,gallery: Array<Gallery>) => void,da
 	handlerObj.workPanel = workPanel
 	scene.add(workPanel.obj)
 	workPanel.obj.position.set(workPanelPos.x, workPanelPos.y, workPanelPos.z)
+	// work desc panel
+	workDescPanel = createWorkPanel()
+	handlerObj.workDescPanel = workDescPanel
+	scene.add(workDescPanel.obj)	
+	workDescPanel.obj.position.set(workDescPanelPos.x,workDescPanelPos.y,workDescPanelPos.z)
+	workDescPanel.obj.visible = false
 
 	// tiles
 	let geometry = new THREE.BoxGeometry(SQUARE_SIZE, SQUARE_SIZE, 0.125);
@@ -383,7 +390,8 @@ export const handlerObj = {
 	event: undefined,
 	currentPage,
 	transitionButton,
-	onWorkDesc : false
+	onWorkDesc : false,
+	workDescPanel
 }
 
 window.addEventListener('resize', () => {

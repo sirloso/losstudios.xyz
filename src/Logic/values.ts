@@ -134,5 +134,11 @@ export const mobile = {
         x: 3005,
         y: 0,
         z: 908
-    }
+    },
+}
+
+export const workDescPanelPos = {
+    x: 4035,
+    y: 0,
+    z: 1
 }

@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { isMobile } from './values'
+import { isMobile, SQUARE_SIZE } from './values'
 import { Tile } from './tile'
 import { Panel, WorkPanel } from './panel'
 import {
@@ -47,7 +47,7 @@ export const createTiles = (
 		tiles.push(tile)
 		tileGroup.add(tile.tc.obj)
 		if (isMobile()) {
-			let rowOffest = i * -3  //- 9
+			let rowOffest = i * -(SQUARE_SIZE + 5)
 			tiles[i].tc.mesh.position.set(0.5, rowOffest, -1)
 		} else {
 			let colOffset = i % TILES_PER_ROW * NUM_ROWS 

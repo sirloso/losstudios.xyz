@@ -9,21 +9,10 @@ import {
     moveToWork
 } from '../Logic/homeInteractionHandlers'
 import { HomeProps } from '../Logic/types'
-import { useAppDispatch } from '../Logic/redux/workSlice'
 import { Work } from '../Logic/redux/workSlice'
 import { useGetWorksQuery,Gallery, Formats } from '../Logic/redux/api'
 import { Breakpoints, apiUrl } from '../Logic/values'
 import ReactMarkdown from 'react-markdown'
-
-const data2Map = ( data: Work[] ) => {
-    let m = new Map<string,Work>()
-
-    data.forEach((d:Work)=>{
-        m[d.id] = d
-    })
-
-    return m
-}
 
 const Home = (props: HomeProps) => {
     const [detail, updateDetail] = useState(false)
@@ -114,6 +103,7 @@ const Home = (props: HomeProps) => {
 
     const m2w = () => {
         updateShowWork(false)
+        // @ts-ignore
         moveToWork(window.h)
     }
 

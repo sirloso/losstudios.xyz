@@ -5,7 +5,8 @@ import { SlideShow } from '../Components/Gallery'
 import { setupHome, setupWork, setupAbout } from '../Logic/homeAnimator'
 import {
     handleLogoMouseEnter,
-    handleLogoMouseLeave
+    handleLogoMouseLeave,
+    moveToWork
 } from '../Logic/homeInteractionHandlers'
 import { HomeProps } from '../Logic/types'
 import { useAppDispatch } from '../Logic/redux/workSlice'
@@ -111,6 +112,11 @@ const Home = (props: HomeProps) => {
         return apiUrl + href
     }
 
+    const m2w = () => {
+        updateShowWork(false)
+        moveToWork(window.h)
+    }
+
     return (
         <div className="Home">
             <Header
@@ -146,7 +152,7 @@ const Home = (props: HomeProps) => {
                     className="hover animate__animated animate__fadeIn">
                     Los Studios
                 </div>
-                <div id="HomeAbout" className="animate__animated animate__fadeIn ">
+                <div id="HomeAbout" onClick={m2w} className="hover animate__animated animate__fadeIn ">
                     <div id="leftAlign">
                         a creative technology studio <br />
                         specializing in

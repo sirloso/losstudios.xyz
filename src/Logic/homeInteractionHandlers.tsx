@@ -12,6 +12,7 @@ import {
     workDescPanel
 } from './values'
 import { Pages } from "./types"
+import { goToWork } from './homeAnimator'
 
 export const handleLogoMouseEnter = () => {
 }

@@ -391,7 +391,8 @@ export const handlerObj = {
 	currentPage,
 	transitionButton,
 	onWorkDesc : false,
-	workDescPanel
+	workDescPanel,
+	titlePanel
 }
 
 window.addEventListener('resize', () => {

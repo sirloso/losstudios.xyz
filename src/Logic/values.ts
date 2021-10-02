@@ -129,6 +129,7 @@ export const mobile = {
         y: 0,
         z: 905
         // z: 890
+        // z: 1
     },
     tileGroup:{
         x: 3005,

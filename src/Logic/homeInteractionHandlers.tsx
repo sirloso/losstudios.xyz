@@ -216,7 +216,7 @@ export function onMouseMove(h) {
 
         let intersected = intersects[0].object
         if(intersected == h.transitionButton.mesh){
-            h.lastObj = intersected
+            h.lastobj = intersected
             return
         } 
         // update back panel to color of tile
@@ -294,8 +294,8 @@ export function onMouseDown(h) {
     h.event.preventDefault()
     if (h.zooming && !h.lastobj && h.mobile) return
     try {
-        if(h.lastObj == h.transitionButton.mesh && h.zoomed){
-            if(!h.onWorkDesc){
+        if(h.lastobj == h.transitionButton.mesh && h.zoomed){
+            if(!h.onWorkDesc && h.lastobj){
                 moveToDesc(h)
                 h.onWorkDesc = true
                 return

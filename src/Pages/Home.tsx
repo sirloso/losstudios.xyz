@@ -152,7 +152,7 @@ const Home = (props: HomeProps) => {
                         specializing in
                     </div>
                     <div id="rightAlign">
-                        hardware
+                        prototyping hardware
                         <br />
                         &
                         <br />

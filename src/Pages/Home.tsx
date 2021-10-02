@@ -126,7 +126,7 @@ const Home = (props: HomeProps) => {
                 {
                     data && data.map((d)=>{
                         return(
-                            <div className="writeup" id={`${d.Title}_desc`}>
+                            <div className="writeup animate__animated animate__fadeIn" id={`${d.Title}_desc`}>
                                 <ReactMarkdown transformImageUri={transformImage} linkTarget="_blank">
                                     {
                                         d.Body

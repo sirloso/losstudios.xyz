@@ -11,6 +11,15 @@ const checkForInteractionButton = () => {
     if(bb){
         bb.parentNode.removeChild(bb)
     }
+    // @ts-ignore
+    let h = window.h
+    if(h){
+        try{
+            h.workDescPanel.tmpDiv.element.style.visibility = "hidden"
+            h.workDescPanel.obj.visible = false
+            h.transitionButton.mesh.visible = false
+        }catch(e){}
+    }
 }
 
 const Header = (props: HeaderProps) => {

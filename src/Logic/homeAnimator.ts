@@ -54,7 +54,7 @@ let cssrenderer: CSS3DRenderer
 let renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
 // renderer.autoClear = false
 renderer.setClearColor(0x000000, 0);
-// renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setPixelRatio(window.devicePixelRatio);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 

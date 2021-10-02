@@ -280,6 +280,7 @@ function moveToDesc(h){
             h.zooming = false
             h.zoomed = true
             h.desc = true
+            h.workDescPanel.tmpDiv.element.style.visibility = "visible"
             // let arrows = Array.from(document.getElementsByClassName("arrow"))
             // arrows.forEach((e) => {
             //     //@ts-ignore
@@ -293,6 +294,7 @@ function moveToDesc(h){
 function zoomIntoWork(h) {
     // if (!h.lastobj) return
 
+    h.workDescPanel.tmpDiv.element.style.visibility = "hidden"
     let to = workPanelFocusedPos
 
     h.zooming = true
@@ -314,9 +316,9 @@ function zoomIntoWork(h) {
                 //@ts-ignore
                 e.style.visibility = "visible"
             })
+
             h.transitionButton.mesh.visible = true
             h.workDescPanel.obj.visible = true
-            h.workDescPanel.tmpDiv.element.style.visibility = "visible"
             // h.workDescPanel.
         })
         .start();

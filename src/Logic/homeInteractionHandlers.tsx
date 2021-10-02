@@ -12,69 +12,11 @@ import {
     workDescPanel
 } from './values'
 import { Pages } from "./types"
+
 export const handleLogoMouseEnter = () => {
-    // if(aboutPanel.obj.rotation.x == 0) return
-    // // @ts-ignore
-    // window.setupHome = false
-    // let pos = {
-    // 	// x: 0,
-    // 	// y: 57,
-    // 	// z: -30000
-    // 	v:THREE.MathUtils.radToDeg(aboutPanel.obj.rotation.x)
-    // }
-    // let end = {
-    // 	// x:0,
-    // 	// y: 57,
-    // 	// z: 0
-    // 	v:0
-    // }
-    // new TWEEN	
-    // .Tween(
-    // 	pos,10000
-    // )
-    // .to(
-    // 	end
-    // )
-    // .easing(TWEEN.Easing.Cubic.Out)
-    // .onUpdate(function () {
-    //     aboutPanel.obj.rotation.set(THREE.MathUtils.degToRad(pos.v),0,0);
-    //     aboutPanel.obj.matrixWorldNeedsUpdate = true
-    // })
-    // .onComplete(function () {
-    // })
-    // .start();
-    // camera.updateProjectionMatrix();
 }
 
 export const handleLogoMouseLeave = () => {
-    // let pos = {
-    // 	// x: aboutPanel.obj.position.x,
-    // 	// y: aboutPanel.obj.position.y,
-    // 	// z: aboutPanel.obj.position.z
-    // 	v: 0
-    // }
-    // let end = {
-    // 	// x:0,
-    // 	// y: 57,
-    // 	// z: -30000
-    // 	v: 95 
-    // }
-    // new TWEEN	
-    // .Tween(
-    // 	pos,2000
-    // )
-    // .to(
-    // 	end
-    // )
-    // .easing(TWEEN.Easing.Cubic.Out)
-    // .onUpdate(function () {
-    //     aboutPanel.obj.rotation.set(THREE.MathUtils.degToRad(pos.v),0,0);
-    //     aboutPanel.obj.matrixWorldNeedsUpdate = true
-    // })
-    // .onComplete(function () {
-    // })
-    // .start();
-    //     camera.updateProjectionMatrix();
 }
 
 let lastTap
@@ -389,7 +331,7 @@ function zoomIntoWork(h) {
         if(header[0].children[1].children.length >= 2) return
         let back = document.createElement("div")
         back.id = "back_button"
-        back.innerText = "back "
+        back.innerText = "work "
         back.className = "hover"
         back.onclick = ()=>{zoomOutOfWork(h)}
         node.prepend(back)

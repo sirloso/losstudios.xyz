@@ -5,18 +5,29 @@ import { moveToHome, moveToWork, moveToAbout } from '../Logic/homeInteractionHan
 
 import { HeaderProps } from '../Logic/types'
 
+let backButtonId = "back_button"
+const checkForInteractionButton = () => {
+    let bb = document.getElementById(backButtonId)
+    if(bb){
+        bb.parentNode.removeChild(bb)
+    }
+}
+
 const Header = (props: HeaderProps) => {
     const navAbout = () =>{
+        checkForInteractionButton()
         moveToAbout(handlerObj)
         hideAbout()
     } 
 
     const navWork = () =>{
+        checkForInteractionButton()
         moveToWork(handlerObj)
         hideWork()
     } 
 
     const navHome = () =>{
+        checkForInteractionButton()
         moveToHome(handlerObj)
         hideLogo()
     }

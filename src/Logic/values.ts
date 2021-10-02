@@ -49,17 +49,18 @@ export enum apiEndpointExtentions{
     works  = "/works",
 }
 
-export const homePos = {
-    x: 0,
-    y: 0,
-    z: 1000
-}
-
 export const homePosMobile = {
     x: -12,
     y: 0,
     z: 1200
 }
+
+export const homePos = isMobile() ? homePosMobile : {
+    x: 0,
+    y: 0,
+    z: 1000
+}
+
 
 export const aboutPos = {
     x: 1500,

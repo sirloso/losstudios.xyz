@@ -34,6 +34,10 @@ body {
     margin: 0;
 }
 
+#App{
+    /* background-color: blue; */
+}
+
 .hover:hover {
     cursor: pointer;
 }
@@ -161,7 +165,7 @@ canvas {
     height: 90%;
     position: absolute;
     top: 10%;
-    left: 0;
+    left: 2.5%;
 }
 
 #css,#cssScene {
@@ -295,12 +299,21 @@ canvas {
     }
 
     #bg,.react-slideshow-container{
-        width: 50px;
-        height: 50px;
+        width: 1000px;
+        height: 1000px;
         background-repeat: no-repeat;
         background-size: contain;
         background-position: center;
     }
+
+    #prevArrow,#nextArrow{
+        font-size: small;
+        color: white;
+        position: absolute;
+        right: 0;
+        --spacing: 50px;
+    }
+
 }
 
 #about{

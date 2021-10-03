@@ -54,7 +54,7 @@ let cssrenderer: CSS3DRenderer
 let renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
 // renderer.autoClear = false
 renderer.setClearColor(0x000000, 0);
-renderer.setPixelRatio(window.devicePixelRatio);
+// renderer.setPixelRatio(window.devicePixelRatio);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
@@ -78,6 +78,7 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 	handlerObj.uca = uca
 
 	scene.background = new THREE.Color('white')
+	// scene.background = new THREE.Color("red")
 
 	// camera
 	// camera.position.set(-8, 0, 1200);
@@ -154,10 +155,6 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 
 	//@ts-ignore
 	window.h = handlerObj
-
-	// gui.add(camera.position,"x")
-	// gui.add(camera.position,"y")
-	// gui.add(camera.position,"z")
 }
 
 export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTMLElement, uca: (data:any) => {}) => {
@@ -237,6 +234,13 @@ export const setupWorkMobile = (ga: (title:string,gallery: Array<Gallery>) => vo
 		mobile.workPanel.z
 		)
 
+	// work desc panel
+	workDescPanel = createWorkPanel()
+	handlerObj.workDescPanel = workDescPanel
+	scene.add(workDescPanel.obj)	
+	workDescPanel.obj.position.set(workDescPanelPos.x,workDescPanelPos.y,workDescPanelPos.z)
+	workDescPanel.obj.visible = false
+
 	// tiles
 	let geometry = new THREE.BoxGeometry(SQUARE_SIZE, SQUARE_SIZE, 0.125);
 	// let titles = ['one', 'two', 'trhe', 'four', 'fix', '8', 'a', 'b', 'c', 'd', 'e', '1', '2', '3', '4', '123123']
@@ -253,6 +257,12 @@ export const setupWorkMobile = (ga: (title:string,gallery: Array<Gallery>) => vo
 	//@ts-ignore
 	window.tiles = tiles
 	tiles.tiles.forEach( t => t.tc.registerCanvas() )
+	// work desc panel
+	workDescPanel = createWorkPanel()
+	handlerObj.workDescPanel = workDescPanel
+	scene.add(workDescPanel.obj)	
+	workDescPanel.obj.position.set(workDescPanelPos.x,workDescPanelPos.y,workDescPanelPos.z)
+	workDescPanel.obj.visible = false
 
 	// if(mobile) scene.add(tileGroup)
 	scene.add(tileGroup)

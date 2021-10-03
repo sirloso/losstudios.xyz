@@ -34,11 +34,18 @@ export const mobileCamera = {
 
 export const cameraPosition = isMobile() ? mobileCamera : desktopCamera
 
-export const workPanelFocusedPos = {
+export const workPanelFocusedPosMobile = {
+    x: 3001.5,
+    y: 0,
+    z: 100
+}
+
+export const workPanelFocusedPos = isMobile() ? workPanelFocusedPosMobile : {
     x: 3000,
     y: 0,
     z: 600
 }
+
 
 // export const apiBaseEndpoint = process.env.PRODUCTION ? "":"http://localhost:1337" 
 // export const apiBaseEndpoint = "http://localhost:1337"
@@ -75,12 +82,18 @@ export const workStartPos = {
 }
 
 export const workButtonPos = {
-    x: 3500,
-    y: 0,
-    z: 1
+    x: 3100,
+    y: -175,
+    z: -500
 }
 
-export const workDescPanel = {
+export const workDescPanelMobile = {
+    x: 4110,
+    y: 0,
+    z: 100
+}
+
+export const workDescPanel = isMobile() ? workDescPanelMobile : {
     x: 4010,
     y: 0,
     z: 600
@@ -126,20 +139,28 @@ export const PANEL_404 = "404_panel"
 
 export const mobile = {
     workPanel: {
-        x: 2792,
-        y: 0,
-        z: 905
-        // z: 890
-        // z: 1
+        // x: 2792,
+        // y: 0,
+        // z: 905
+        x: 3001.5,
+        y: 250,
+        // z: 785
+        z: -1800
     },
     tileGroup:{
-        x: 3005,
+        x: 3000,
         y: 0,
         z: 908
     },
 }
 
-export const workDescPanelPos = {
+export const workDescPanelPosMobile = {
+    x: 4100,
+    y: 200,
+    z: -1800
+}
+
+export const workDescPanelPos =  isMobile() ? workDescPanelPosMobile : {
     x: 4035,
     y: 0,
     z: 1

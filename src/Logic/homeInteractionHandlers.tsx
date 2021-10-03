@@ -48,7 +48,7 @@ export function onScroll(h){
     // scroll down if not at top
 }
 
-export function onTouchEnd({ event, scrolling, zooming, lastobj, workPanel, camera, tileGroup, rc }) {
+export function onTouchEnd({ workDescPanel, event, scrolling, zooming, lastobj, workPanel, camera, tileGroup, rc, transitionButton }) {
     // console.log("touch",scrolling,lastobj)
     event.preventDefault()
     if (zooming && !lastobj) return
@@ -67,7 +67,7 @@ export function onTouchEnd({ event, scrolling, zooming, lastobj, workPanel, came
     mouse.y = -(event.changedTouches[0].clientY / window.innerHeight) * 2 + 1;
 
     rc.setFromCamera(mouse, camera)
-    let intersects = rc.intersectObjects(tileGroup.children);
+    let intersects = rc.intersectObjects([ transitionButton.mesh, ...tileGroup.children ]);
     let obj = intersects[0]
     // console.log(obj,scrolling,clearMouse,obj ? obj.object != workPanel : "no obj")
     if (obj && !scrolling && !clearMouse && obj.object != workPanel) {
@@ -76,7 +76,14 @@ export function onTouchEnd({ event, scrolling, zooming, lastobj, workPanel, came
         // console.log("were here")
         lastobj = obj.object
 
+
+        if(lastobj === transitionButton.mesh){
+            // @ts-ignore
+            moveToDesc(window.h)
+        }
+
         if(!lastobj.controller) return
+
 
         let img = lastobj.controller.heroDiv || lastobj.controller.hero || ""
 
@@ -84,6 +91,18 @@ export function onTouchEnd({ event, scrolling, zooming, lastobj, workPanel, came
         // if the last object is the same as work panel object
         // then we should reset everything
         let hoverobj = workPanel.hover(img)
+
+
+        let imgDesc = lastobj.controller.descDiv || lastobj.hero+"_desc"
+        // pass id
+        let workObj = workDescPanel.hover(imgDesc)
+        lastobj.controller.updateDescDiv(workObj)
+        try{
+            // @ts-ignore
+            zoomIntoWork(window.h)
+        }catch(e){
+            console.log(e)
+        }
 
         if(img){
             // console.log("HELL")
@@ -336,7 +355,20 @@ function zoomIntoWork(h) {
         back.id = "back_button"
         back.innerText = "work "
         back.className = "hover"
-        back.onclick = ()=>{zoomOutOfWork(h)}
+        back.onclick = ()=>{
+            try{
+                zoomOutOfWork(h)
+            }catch(e){
+                console.log(e)
+            }
+        }
+        back.ontouchend = () => {
+            try{
+                zoomOutOfWork(h)
+            }catch(e){
+                console.log(e)
+            }
+        }
         node.prepend(back)
     }
 }

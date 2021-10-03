@@ -102,7 +102,7 @@ export class WorkPanel {
         this.hover = this.hover.bind(this)
 
         // set up geometry and mesh
-        if (window.innerWidth < 800) this.geometry = new Three.BoxGeometry(25, 45, 0.1)
+        if (window.innerWidth < 800) this.geometry = new Three.BoxGeometry(1000, 1205, 0.1)
         else this.geometry = new Three.BoxGeometry(700, 500, 0.1)
         let textures: Array<Three.MeshBasicMaterial> = []
         //@ts-ignore
@@ -143,7 +143,6 @@ export class WorkPanel {
         this.obj.add(this.cssObj)
         //@ts-ignore
         this.obj.hover = this.hover
-
 
     }
 

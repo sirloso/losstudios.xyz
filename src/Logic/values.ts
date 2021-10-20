@@ -95,7 +95,7 @@ export const workButtonPosMobile = {
 }
 
 export const workButtonPos = {
-    x: 3500,
+    x: 3510,
     y: -148,
     z: 0
 }

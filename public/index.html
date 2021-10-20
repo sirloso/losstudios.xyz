@@ -10,7 +10,7 @@
             var ctx = canvas.getContext('2d');
 
             function isColor(strColor){
-                return /^#[0-9A-F]{3}$/i.test(strColor)
+                return /^([0-9A-F]{3}){1,2}$/i.test(strColor)
             }
 
 

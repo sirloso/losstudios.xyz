@@ -1,5 +1,6 @@
 const THREE = require("three")
 const TWEEN = require("@tweenjs/tween.js")
+import { isMobile } from './values'
 import { createWorkPanel } from './homeThreeCreators'
 import {
     offsetX,
@@ -93,10 +94,11 @@ export function onTouchEnd({ workDescPanel, event, scrolling, zooming, lastobj, 
         let hoverobj = workPanel.hover(img)
 
 
-        let imgDesc = lastobj.controller.descDiv || lastobj.hero+"_desc"
+        // let imgDesc = lastobj.controller.descDiv || lastobj.hero+"_desc"
         // pass id
-        let workObj = workDescPanel.hover(imgDesc)
-        lastobj.controller.updateDescDiv(workObj)
+        // let workObj = workDescPanel.hover(imgDesc)
+        // lastobj.controller.updateDescDiv(workObj)
+
         try{
             // @ts-ignore
             zoomIntoWork(window.h)
@@ -149,16 +151,16 @@ export function onTouchStart(event) {
 }
 
 export function onWindowResize({ camera, renderer, cssrenderer, scene }) {
-    location.reload()
-    camera.aspect = window.innerWidth / window.innerHeight;
+    // location.reload()
+    // camera.aspect = window.innerWidth / window.innerHeight;
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    cssrenderer.setSize(window.innerWidth, window.innerHeight)
+    // renderer.setSize(window.innerWidth, window.innerHeight);
+    // cssrenderer.setSize(window.innerWidth, window.innerHeight)
 
-    camera.updateProjectionMatrix();
+    // camera.updateProjectionMatrix();
 
-    cssrenderer.render(scene, camera)
-    renderer.render(scene, camera);
+    // cssrenderer.render(scene, camera)
+    // renderer.render(scene, camera);
 }
 
 export function onMouseMove(h) {
@@ -314,7 +316,7 @@ function moveToDesc(h){
 function zoomIntoWork(h) {
     // if (!h.lastobj) return
 
-    h.workDescPanel.tmpDiv.element.style.visibility = "hidden"
+    if(!isMobile()) h.workDescPanel.tmpDiv.element.style.visibility = "hidden"
     let to = workPanelFocusedPos
 
     h.zooming = true
@@ -338,7 +340,7 @@ function zoomIntoWork(h) {
             })
 
             h.transitionButton.mesh.visible = true
-            h.workDescPanel.obj.visible = true
+            if(!isMobile()) h.workDescPanel.obj.visible = true
             // h.workDescPanel.
         })
         .start();
@@ -387,8 +389,10 @@ export function zoomOutOfWork(h) {
     let bb = document.getElementById("back_button")
     bb.parentElement.removeChild(bb)
     h.transitionButton.mesh.visible = false
-    h.workDescPanel.obj.visible = false
-    h.workDescPanel.tmpDiv.element.style.visibility = "hidden"
+    if(!isMobile()){
+        h.workDescPanel.obj.visible = false
+        h.workDescPanel.tmpDiv.element.style.visibility = "hidden"
+    }
     h.workPanel.resetColor()
     let start = from(h.camera)
     let tween = new TWEEN.Tween(start)

@@ -62,7 +62,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
 let hover = false
 // let gui = new DAT.GUI({autoPlace: false})
-// let gui = new DAT.GUI()
+let gui = new DAT.GUI()
 let scene = new THREE.Scene()
 
 let controls: OrbitControls
@@ -175,9 +175,12 @@ export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTML
 
 	// camera
 	camera.position.set(
-		cameraPosition.x,
-		cameraPosition.y,
-		cameraPosition.z
+		// cameraPosition.x,
+		// cameraPosition.y,
+		// cameraPosition.z
+		workStartPos.x,
+		workStartPos.y,
+		workStartPos.z,
 	);
 
 	// get div to use
@@ -240,6 +243,7 @@ export const setupWorkMobile = (ga: (title:string,gallery: Array<Gallery>) => vo
 	scene.add(workDescPanel.obj)	
 	workDescPanel.obj.position.set(workDescPanelPos.x,workDescPanelPos.y,workDescPanelPos.z)
 	workDescPanel.obj.visible = false
+	workDescPanel.geometry.scale(1.25,1,1)
 
 	// tiles
 	let geometry = new THREE.BoxGeometry(SQUARE_SIZE, SQUARE_SIZE, 0.125);
@@ -281,7 +285,7 @@ export const setupWorkMobile = (ga: (title:string,gallery: Array<Gallery>) => vo
 		workButtonPos.z
 	)
 	handlerObj.transitionButton = transitionButton
-	transitionButton.mesh.visible = false
+	transitionButton.mesh.visible = true
 	scene.add(transitionButton.mesh)
 	// TODO: add work description
 }
@@ -337,6 +341,10 @@ export const setupWork = (ga: (title: string,gallery: Array<Gallery>) => void,da
 	scene.add(transitionButton.mesh)
 	handlerObj.currentPage = Pages.WORK
 	// TODO: add work description
+
+	gui.add(workDescPanel.obj.position,"x")
+	gui.add(workDescPanel.obj.position,"y")
+	gui.add(workDescPanel.obj.position,"z")
 
 	// let workDesc = document.getElementById("workDesc")
 	// let sceneBoundingBox = workDesc.getBoundingClientRect()

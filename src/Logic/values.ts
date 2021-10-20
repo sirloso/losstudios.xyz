@@ -43,7 +43,8 @@ export const workPanelFocusedPosMobile = {
 export const workPanelFocusedPos = isMobile() ? workPanelFocusedPosMobile : {
     x: 3000,
     y: 0,
-    z: 600
+    // z: 600
+    z: 750
 }
 
 
@@ -75,16 +76,28 @@ export const aboutPos = {
     z: 1000
 }
 
-export const workStartPos = {
+export const workStartPosMobile = {
     x: 3000,
     y: 0,
     z: 1000
 }
 
-export const workButtonPos = {
+export const workStartPos = isMobile() ? workStartPosMobile : {
+    x: 3000,
+    y: 0,
+    z: 1000
+}
+
+export const workButtonPosMobile = {
     x: 3100,
     y: -175,
     z: -500
+}
+
+export const workButtonPos = {
+    x: 3500,
+    y: -148,
+    z: 0
 }
 
 export const workDescPanelMobile = {
@@ -96,11 +109,12 @@ export const workDescPanelMobile = {
 export const workDescPanel = isMobile() ? workDescPanelMobile : {
     x: 4010,
     y: 0,
-    z: 600
+    // z: 600
+    z: 1000
 }
 
 export const workPanelPos = {
-    x: 3000,
+    x: 2900,
     y: 0,
     z: 1
 }
@@ -111,11 +125,6 @@ export const tileGroupPosStart = {
     z: 850
 }
 
-export const workStartPosMobile = {
-    x: 3000,
-    y: 0,
-    z: 1000
-}
 
 export const workPanelPosMobile = {
     x: 3000,
@@ -156,12 +165,13 @@ export const mobile = {
 
 export const workDescPanelPosMobile = {
     x: 4100,
-    y: 200,
+    y: 0,
     z: -1800
 }
 
 export const workDescPanelPos =  isMobile() ? workDescPanelPosMobile : {
-    x: 4035,
+    // x: 4035,
+    x: 3950,
     y: 0,
     z: 1
 }

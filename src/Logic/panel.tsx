@@ -101,9 +101,10 @@ export class WorkPanel {
         this.updateVisibility = this.updateVisibility.bind(this)
         this.hover = this.hover.bind(this)
 
+        let scale = 1.5
         // set up geometry and mesh
-        if (window.innerWidth < 800) this.geometry = new Three.BoxGeometry(1000, 1205, 0.1)
-        else this.geometry = new Three.BoxGeometry(700, 500, 0.1)
+        if (window.innerWidth < 800) this.geometry = new Three.BoxGeometry(1000 , 1205 , 0.1)
+        else this.geometry = new Three.BoxGeometry(700 * scale , 500 * scale, 0.1)
         let textures: Array<Three.MeshBasicMaterial> = []
         //@ts-ignore
         let color = window.color ? window.color : Math.floor(Math.random() * 16777215).toString(16)

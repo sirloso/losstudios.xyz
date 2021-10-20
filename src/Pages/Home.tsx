@@ -139,7 +139,7 @@ const Home = (props: HomeProps) => {
                     onTouchEndCapture={handleLogoMouseLeave}
                     onMouseEnter={handleLogoMouseEnter}
                     onMouseLeave={handleLogoMouseLeave}
-                    className="hover animate__animated animate__fadeIn">
+                    className="animate__animated animate__fadeIn">
                     Los Studios
                 </div>
                 <div id="HomeAbout" onClick={m2w} className="hover animate__animated animate__fadeIn ">

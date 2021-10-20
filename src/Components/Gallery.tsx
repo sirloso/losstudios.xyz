@@ -20,8 +20,7 @@ export function SlideShow (images: Array<string>, id: string ){
 					images.map((img: string, idx) => {
 						return (
 							<div className="each-slide" key={idx}>
-								<div id="bg" style={{ 'backgroundImage': `url(${img})` }}>
-								</div>
+								<img id="bg" src={img} style={{ 'backgroundImage': `url(${img})` }}/>
 							</div>
 						)
 					})

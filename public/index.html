@@ -9,8 +9,17 @@
             canvas.width = 16; canvas.height = 16;
             var ctx = canvas.getContext('2d');
 
+            function isColor(strColor){
+                return /^#[0-9A-F]{3}$/i.test(strColor)
+            }
+
+
             // background
             let color = Math.floor(Math.random() * 16777215).toString(16)
+            if(!isColor(color)){
+                color = Math.floor(Math.random() * 16777215).toString(16)
+            }
+            console.log(color)
             ctx.fillStyle = `#${color}`;
             window.color = color
             ctx.fillRect(0, 0, 16, 16);

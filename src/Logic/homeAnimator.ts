@@ -62,7 +62,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
 let hover = false
 // let gui = new DAT.GUI({autoPlace: false})
-let gui = new DAT.GUI()
+// let gui = new DAT.GUI()
 let scene = new THREE.Scene()
 
 let controls: OrbitControls
@@ -175,12 +175,12 @@ export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTML
 
 	// camera
 	camera.position.set(
-		// cameraPosition.x,
-		// cameraPosition.y,
-		// cameraPosition.z
-		workStartPos.x,
-		workStartPos.y,
-		workStartPos.z,
+		cameraPosition.x,
+		cameraPosition.y,
+		cameraPosition.z
+		// workStartPos.x,
+		// workStartPos.y,
+		// workStartPos.z,
 	);
 
 	// get div to use
@@ -341,10 +341,6 @@ export const setupWork = (ga: (title: string,gallery: Array<Gallery>) => void,da
 	scene.add(transitionButton.mesh)
 	handlerObj.currentPage = Pages.WORK
 	// TODO: add work description
-
-	gui.add(workDescPanel.obj.position,"x")
-	gui.add(workDescPanel.obj.position,"y")
-	gui.add(workDescPanel.obj.position,"z")
 
 	// let workDesc = document.getElementById("workDesc")
 	// let sceneBoundingBox = workDesc.getBoundingClientRect()

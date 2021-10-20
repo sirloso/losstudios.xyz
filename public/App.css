@@ -34,12 +34,12 @@ body {
     margin: 0;
 }
 
-#App {
-    /* background-color: blue; */
-}
-
 .hover:hover {
     cursor: pointer;
+}
+
+.smallArrow{
+    width: 15px;
 }
 
 .Home {
@@ -63,10 +63,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.hover:hover {
-    cursor: pointer;
 }
 
 #HomeAbout {
@@ -272,16 +268,18 @@ canvas {
     color: white;
     position: absolute;
     right: 0;
-    --spacing: 25px;
+    /* --spacing: 25px; */
+    --spacing: 45%;
 }
 
 #prevArrow {
     top: var(--spacing);
-    /* left: 0; */
+    left: 0;
 }
 
 #nextArrow {
     bottom: var(--spacing);
+    left: 0;
 }
 
 

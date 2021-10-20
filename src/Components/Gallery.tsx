@@ -55,8 +55,10 @@ export const SlideShow2 = (images: Array<string>,id: string) => {
 const PrevArrow = (ref: React.MutableRefObject<any>)=>{
 	const prev = ref.current ? ()=>{alert("HELLO");ref.current.goBack();} : ()=>{}
 	return(
-		<div className="hover arrow" id="prevArrow" onClick={prev} onTouchEnd={prev}>
-			prev
+		<div className="arrow" id="prevArrow" onClick={prev} onTouchEnd={prev}>
+			<div className="hover smallArrow">
+				prev	
+			</div>
 		</div>
 	)
 }
@@ -64,8 +66,10 @@ const PrevArrow = (ref: React.MutableRefObject<any>)=>{
 const NextArrow = (ref: React.MutableRefObject<any>)=>{
 	const next = ref.current ? ref.current.goNext() : ()=>{}
 	return(
-		<div className="hover arrow" id="nextArrow" onClick={next} onTouchEnd={next}>
-			next
+		<div className="arrow" id="nextArrow" onClick={next} onTouchEnd={next}>
+			<div className="hover smallArrow">
+				next
+			</div>
 		</div>
 	)
 }

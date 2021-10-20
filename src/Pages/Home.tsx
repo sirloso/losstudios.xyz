@@ -103,6 +103,7 @@ const Home = (props: HomeProps) => {
 
     const m2w = () => {
         updateShowWork(false)
+        updateShowLogo(true)
         // @ts-ignore
         moveToWork(window.h)
     }

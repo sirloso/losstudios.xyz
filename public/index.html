@@ -4,24 +4,26 @@
     <link rel="shortcut icon" type="image/png" href="./defaultFavicon.png" />
     
     <script>
+        // colorize icon and work windows
+        function isColor(strColor){
+            return /^([0-9A-F]{3}){1,2}$/i.test(strColor)
+        }
+
+
+        // background
+        let color = Math.floor(Math.random() * 16777215).toString(16)
+        if(!isColor(color)){
+            color = Math.floor(Math.random() * 16777215).toString(16)
+        }
+        window.color = color
+
+        // if desktop set icon
         if (!navigator.userAgent.includes("Chrome") && !navigator.userAgent.includes("Apple") || window.innerWidth >= 800) {
             var canvas = document.createElement('canvas');
             canvas.width = 16; canvas.height = 16;
             var ctx = canvas.getContext('2d');
 
-            function isColor(strColor){
-                return /^([0-9A-F]{3}){1,2}$/i.test(strColor)
-            }
-
-
-            // background
-            let color = Math.floor(Math.random() * 16777215).toString(16)
-            if(!isColor(color)){
-                color = Math.floor(Math.random() * 16777215).toString(16)
-            }
-            console.log(color)
-            ctx.fillStyle = `#${color}`;
-            window.color = color
+            ctx.fillStyle = `#${window.color}`;
             ctx.fillRect(0, 0, 16, 16);
 
 

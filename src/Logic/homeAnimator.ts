@@ -3,7 +3,7 @@ import { WorkPanel, Panel, ButtonPanel } from './panel'
 import * as DAT from 'dat.gui'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer';
-import { workDescPanelPos, aboutPos, cameraPosition, homePos, homePosMobile, PANEL_404, SQUARE_SIZE, tileGroupPosStart, workButtonPos, workPanelFocusedPos, workPanelPos, workStartPos } from './values';
+import { workDescPanelPos, aboutPos, cameraPosition, homePos, homePosMobile, PANEL_404, SQUARE_SIZE, tileGroupPosStart, workButtonPos, workPanelFocusedPos, workPanelPos, workStartPos, workButtonPosMobile } from './values';
 import {
 	createPanel,
 	createTiles,
@@ -126,9 +126,12 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 
 	// camera.position.set(workStartPos.x,workStartPos.y,workStartPos.z)
 	camera.position.set(
-		homePosMobile.x,
-		homePosMobile.y,
-		homePosMobile.z,
+		// homePosMobile.x,
+		// homePosMobile.y,
+		// homePosMobile.z,
+		workStartPos.x,
+		workStartPos.y,
+		workStartPos.z,
 	)
 	camera.updateProjectionMatrix()
 	controls.target = camera.position
@@ -242,8 +245,8 @@ export const setupWorkMobile = (ga: (title:string,gallery: Array<Gallery>) => vo
 	handlerObj.workDescPanel = workDescPanel
 	scene.add(workDescPanel.obj)	
 	workDescPanel.obj.position.set(workDescPanelPos.x,workDescPanelPos.y,workDescPanelPos.z)
-	workDescPanel.obj.visible = false
-	workDescPanel.geometry.scale(1.25,1,1)
+	// workDescPanel.obj.visible = false
+	// workDescPanel.geometry.scale(1.25,1,1)
 
 	// tiles
 	let geometry = new THREE.BoxGeometry(SQUARE_SIZE, SQUARE_SIZE, 0.125);
@@ -262,11 +265,11 @@ export const setupWorkMobile = (ga: (title:string,gallery: Array<Gallery>) => vo
 	window.tiles = tiles
 	tiles.tiles.forEach( t => t.tc.registerCanvas() )
 	// work desc panel
-	workDescPanel = createWorkPanel()
-	handlerObj.workDescPanel = workDescPanel
-	scene.add(workDescPanel.obj)	
-	workDescPanel.obj.position.set(workDescPanelPos.x,workDescPanelPos.y,workDescPanelPos.z)
-	workDescPanel.obj.visible = false
+	// workDescPanel = createWorkPanel()
+	// handlerObj.workDescPanel = workDescPanel
+	// scene.add(workDescPanel.obj)	
+	// workDescPanel.obj.position.set(workDescPanelPos.x,workDescPanelPos.y,workDescPanelPos.z)
+	// workDescPanel.obj.visible = false
 
 	// if(mobile) scene.add(tileGroup)
 	scene.add(tileGroup)
@@ -280,12 +283,12 @@ export const setupWorkMobile = (ga: (title:string,gallery: Array<Gallery>) => vo
 	// TODO: add transition block 
 	transitionButton = new ButtonPanel(150,50)
 	transitionButton.mesh.position.set(
-		workButtonPos.x,
-		workButtonPos.y,
-		workButtonPos.z
+		workButtonPosMobile.x,
+		workButtonPosMobile.y,
+		workButtonPosMobile.z
 	)
 	handlerObj.transitionButton = transitionButton
-	transitionButton.mesh.visible = true
+	// transitionButton.mesh.visible = true
 	scene.add(transitionButton.mesh)
 	// TODO: add work description
 }

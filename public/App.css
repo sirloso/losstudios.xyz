@@ -369,11 +369,19 @@ canvas {
 
     #prevArrow,
     #nextArrow {
-        font-size: small;
+        font-size: 1.5em;
         color: white;
         position: absolute;
-        right: 0;
-        --spacing: 50px;
+        --spacing: 500px;
+        --wSpacing: 400px;
     }
 
+    #nextArrow {
+        top: var(--spacing);
+        left: 400px;
+    }
+    #prevArrow {
+        top: var(--spacing);
+        left: -420px;
+    }
 }

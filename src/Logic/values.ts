@@ -109,7 +109,7 @@ export const workButtonPos = {
 
 export const workDescPanelMobile = {
     x: 3001.5,
-    y: -990,
+    y: -1005,
     // z: -1800
     z: 1
 }

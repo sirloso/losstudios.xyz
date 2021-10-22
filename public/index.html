@@ -2,19 +2,201 @@
 
 <head>
     <link rel="shortcut icon" type="image/png" href="./defaultFavicon.png" />
-    
     <script>
-        // colorize icon and work windows
-        function isColor(strColor){
-            return /^([0-9A-F]{3}){1,2}$/i.test(strColor)
+        function addStyle(styleString) {
+            const style = document.createElement('style');
+            style.textContent = styleString;
+            document.head.append(style);
         }
-
+        // colorize icon and work windows
+        const CSS_COLOR_NAMES_LIGHT = [
+            "AliceBlue",
+            "AntiqueWhite",
+            "Aqua",
+            "Aquamarine",
+            "Azure",
+            "Beige",
+            "BlanchedAlmond",
+            "Cornsilk",
+            "MediumSpringGreen",
+            "MistyRose",
+            "FloralWhite",
+            "Fuchsia",
+            "Gainsboro",
+            "GhostWhite",
+            "HoneyDew",
+            "Ivory",
+            "Khaki",
+            "Lavender",
+            "LavenderBlush",
+            "LawnGreen",
+            "LemonChiffon",
+            "LightCyan",
+            "LightGoldenRodYellow",
+            "LightYellow",
+            "Linen",
+            "Moccasin",
+            "NavajoWhite",
+            "OldLace",
+            "PaleGoldenRod",
+            "PaleGreen",
+            "PaleTurquoise",
+            "PapayaWhip",
+            "SeaShell",
+            "Snow",
+            "SpringGreen",
+            "WhiteSmoke",
+            "Yellow",
+            "Blue",
+        ]
+        const CSS_COLOR_NAMES_DARK = [
+            "Bisque",
+            "BlueViolet",
+            "Brown",
+            "BurlyWood",
+            "CadetBlue",
+            "Chocolate",
+            "Coral",
+            "CornflowerBlue",
+            "Crimson",
+            "DarkBlue",
+            "DarkCyan",
+            "DarkGoldenRod",
+            "DarkGray",
+            "DarkGrey",
+            "DarkGreen",
+            "DarkKhaki",
+            "DarkMagenta",
+            "DarkOliveGreen",
+            "DarkOrange",
+            "DarkOrchid",
+            "DarkRed",
+            "DarkSalmon",
+            "DarkSeaGreen",
+            "DarkSlateBlue",
+            "DarkSlateGray",
+            "DarkSlateGrey",
+            "DarkTurquoise",
+            "DarkViolet",
+            "DeepPink",
+            "DeepSkyBlue",
+            "DimGray",
+            "DimGrey",
+            "DodgerBlue",
+            "FireBrick",
+            "ForestGreen",
+            "Gold",
+            "GoldenRod",
+            "Gray",
+            "Grey",
+            "Green",
+            "HotPink",
+            "IndianRed",
+            "Indigo",
+            "LightBlue",
+            "LightCoral",
+            "LightGray",
+            "LightGrey",
+            "LightGreen",
+            "LightPink",
+            "LightSalmon",
+            "LightSeaGreen",
+            "LightSkyBlue",
+            "LightSlateGray",
+            "LightSlateGrey",
+            "LightSteelBlue",
+            "LimeGreen",
+            "Magenta",
+            "Maroon",
+            "MediumAquaMarine",
+            "MediumBlue",
+            "MediumOrchid",
+            "MediumPurple",
+            "MediumSeaGreen",
+            "MediumSlateBlue",
+            "MediumTurquoise",
+            "MediumVioletRed",
+            "MidnightBlue",
+            "MintCream",
+            "Navy",
+            "Olive",
+            "OliveDrab",
+            "Orange",
+            "OrangeRed",
+            "Orchid",
+            "PaleVioletRed",
+            "PeachPuff",
+            "Peru",
+            "Pink",
+            "Plum",
+            "PowderBlue",
+            "Purple",
+            "RebeccaPurple",
+            "Red",
+            "RosyBrown",
+            "RoyalBlue",
+            "SaddleBrown",
+            "Salmon",
+            "SandyBrown",
+            "SeaGreen",
+            "Sienna",
+            "Silver",
+            "SkyBlue",
+            "SlateBlue",
+            "SlateGray",
+            "SlateGrey",
+            "SteelBlue",
+            "Tan",
+            "Teal",
+            "Thistle",
+            "Tomato",
+            "Turquoise",
+            "Violet",
+            "Wheat",
+            "YellowGreen",
+        ];
 
         // background
-        let color = Math.floor(Math.random() * 16777215).toString(16)
-        if(!isColor(color)){
-            color = Math.floor(Math.random() * 16777215).toString(16)
+        // let color = Math.floor(Math.random() * 16777215).toString(16)
+        // if (!isColor(color)) {
+        //     color = Math.floor(Math.random() * 16777215).toString(16)
+        // }
+
+        // let color = CSS_COLOR_NAMES[Math.floor(Math.random() * CSS_COLOR_NAMES.length)]
+
+        let CSS_COLOR_NAMES = Math.random() <= 0.5 ? CSS_COLOR_NAMES_DARK : CSS_COLOR_NAMES_LIGHT
+
+        if(CSS_COLOR_NAMES === CSS_COLOR_NAMES_DARK){
+            addStyle(`
+                .writeup{
+                    color: white;
+                };
+            `)
+            addStyle(`
+                .smallArrow{
+                    color: white;
+                };
+            `)
+        }else{
+            addStyle(`
+                .writeup{
+                    color: black;
+                };
+            `)
+            addStyle(`
+                .smallArrow{
+                    color: black;
+                };
+            `)
         }
+
+        let idx = localStorage.getItem("idx")
+        idx = idx ? JSON.parse(idx) : 0
+        let color = CSS_COLOR_NAMES[idx % CSS_COLOR_NAMES_LIGHT.length]
+
+        localStorage.setItem("idx",idx+1)
+
+        console.log(color)
         window.color = color
 
         // if desktop set icon
@@ -23,7 +205,8 @@
             canvas.width = 16; canvas.height = 16;
             var ctx = canvas.getContext('2d');
 
-            ctx.fillStyle = `#${window.color}`;
+            // ctx.fillStyle = `#${window.color}`;
+            ctx.fillStyle = `${window.color}`;
             ctx.fillRect(0, 0, 16, 16);
 
 

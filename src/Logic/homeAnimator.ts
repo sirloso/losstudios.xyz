@@ -178,12 +178,12 @@ export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTML
 
 	// camera
 	camera.position.set(
-		cameraPosition.x,
-		cameraPosition.y,
-		cameraPosition.z
-		// workStartPos.x,
-		// workStartPos.y,
-		// workStartPos.z,
+		// cameraPosition.x,
+		// cameraPosition.y,
+		// cameraPosition.z
+		workStartPos.x,
+		workStartPos.y,
+		workStartPos.z,
 	);
 
 	// get div to use

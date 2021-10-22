@@ -108,7 +108,8 @@ export class WorkPanel {
         let textures: Array<Three.MeshBasicMaterial> = []
         //@ts-ignore
         let color = window.color ? window.color : Math.floor(Math.random() * 16777215).toString(16)
-        this.homeColor = new Three.Color(`#${color}`)
+        // this.homeColor = new Three.Color(`#${color}`)
+        this.homeColor = new Three.Color(`${color}`)
 
         for (let i = 0; i < 6; i++) {
             textures.push(

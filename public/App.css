@@ -161,7 +161,7 @@ canvas {
     height: 90%;
     position: absolute;
     top: 10%;
-    left: 2.5%;
+    /* left: 2.5%; */
 }
 
 #css,
@@ -291,7 +291,6 @@ canvas {
     visibility: hidden;
     /* background-color: white; */
     /* font-size: 0.8em; */
-    color: white;
 }
 
 #about {

@@ -103,7 +103,7 @@ export class WorkPanel {
 
         let scale = 1.5
         // set up geometry and mesh
-        if (window.innerWidth < 800) this.geometry = new Three.BoxGeometry(1000 , 1205 , 0.1)
+        if (window.innerWidth < 800) this.geometry = new Three.BoxGeometry(1000 , 1250 , 0.1)
         else this.geometry = new Three.BoxGeometry(700 * scale , 500 * scale, 0.1)
         let textures: Array<Three.MeshBasicMaterial> = []
         //@ts-ignore

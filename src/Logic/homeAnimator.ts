@@ -126,12 +126,12 @@ export const setupMobile = async (home: HTMLElement, css: HTMLElement, webgl: HT
 
 	// camera.position.set(workStartPos.x,workStartPos.y,workStartPos.z)
 	camera.position.set(
-		// homePosMobile.x,
-		// homePosMobile.y,
-		// homePosMobile.z,
-		workStartPos.x,
-		workStartPos.y,
-		workStartPos.z,
+		homePosMobile.x,
+		homePosMobile.y,
+		homePosMobile.z,
+		// workStartPos.x,
+		// workStartPos.y,
+		// workStartPos.z,
 	)
 	camera.updateProjectionMatrix()
 	controls.target = camera.position
@@ -229,7 +229,6 @@ export const setupHome = async (home: HTMLElement, css: HTMLElement, webgl: HTML
 }
 
 export const setupWorkMobile = (ga: (title:string,gallery: Array<Gallery>) => void ,data:Array<Work>) => {
-	console.log("data",data)
 	// work
 	workPanel = createWorkPanel()
 	handlerObj.workPanel = workPanel
@@ -245,7 +244,7 @@ export const setupWorkMobile = (ga: (title:string,gallery: Array<Gallery>) => vo
 	handlerObj.workDescPanel = workDescPanel
 	scene.add(workDescPanel.obj)	
 	workDescPanel.obj.position.set(workDescPanelPos.x,workDescPanelPos.y,workDescPanelPos.z)
-	// workDescPanel.obj.visible = false
+	workDescPanel.obj.visible = false
 	// workDescPanel.geometry.scale(1.25,1,1)
 
 	// tiles
@@ -288,13 +287,12 @@ export const setupWorkMobile = (ga: (title:string,gallery: Array<Gallery>) => vo
 		workButtonPosMobile.z
 	)
 	handlerObj.transitionButton = transitionButton
-	// transitionButton.mesh.visible = true
+	transitionButton.mesh.visible = false
 	scene.add(transitionButton.mesh)
 	// TODO: add work description
 }
 
 export const setupWork = (ga: (title: string,gallery: Array<Gallery>) => void,data: Array<Work>) => {
-	console.log("setting up work")
 	if(isMobile()){
 		setupWorkMobile(ga,data)
 		return

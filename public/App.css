@@ -354,7 +354,7 @@ canvas {
         /* overflow-y: hidden; */
         overflow-y: scroll;
         visibility: hidden;
-        background-color: red;
+        /* background-color: red; */
         font-size: 2em;
         color: white;
     }

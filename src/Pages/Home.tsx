@@ -60,11 +60,6 @@ const Home = (props: HomeProps) => {
     }
 
 
-    useEffect(()=>{
-    },[
-        currentArticle
-    ])
-
     const { data, error, isLoading } = useGetWorksQuery("no")
 
     useEffect(() => {

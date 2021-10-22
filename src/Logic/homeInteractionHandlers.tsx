@@ -1,6 +1,6 @@
 const THREE = require("three")
 const TWEEN = require("@tweenjs/tween.js")
-import { isMobile } from './values'
+import { isMobile, workButtonPos, workButtonPosMobile, workButtonPosMobileBottom } from './values'
 import { createWorkPanel } from './homeThreeCreators'
 import {
     offsetX,
@@ -49,78 +49,103 @@ export function onScroll(h){
     // scroll down if not at top
 }
 
-export function onTouchEnd({ workDescPanel, event, scrolling, zooming, lastobj, workPanel, camera, tileGroup, rc, transitionButton }) {
+export function onTouchEnd(h) {
     // console.log("touch",scrolling,lastobj)
     event.preventDefault()
-    if (zooming && !lastobj) return
-        if (lastobj && !scrolling) {
-            if (lastobj === workPanel.mesh) return
+    if (h.zooming && !h.lastobj) return
+        if (h.lastobj && !h.scrolling) {
+            if (h.lastobj === h.workPanel.mesh) return
             // this was used to draw the small squares
             // if (lastobj.hover) lastobj.hover(1)
             // zoomIn()
         }
         // console.log(e)
-    scrolling = false
+    h.scrolling = false
 
     let mouse = { x: 0, y: 0 }
 
-    mouse.x = (event.changedTouches[0].clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.changedTouches[0].clientY / window.innerHeight) * 2 + 1;
+    mouse.x = (h.event.changedTouches[0].clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(h.event.changedTouches[0].clientY / window.innerHeight) * 2 + 1;
 
-    rc.setFromCamera(mouse, camera)
-    let intersects = rc.intersectObjects([ transitionButton.mesh, ...tileGroup.children ]);
+    h.rc.setFromCamera(mouse, h.camera)
+    let intersects = h.rc.intersectObjects([ h.transitionButton.mesh, ...h.tileGroup.children ]);
     let obj = intersects[0]
-    // console.log(obj,scrolling,clearMouse,obj ? obj.object != workPanel : "no obj")
-    if (obj && !scrolling && !clearMouse && obj.object != workPanel) {
+    if (obj && !h.scrolling && obj.object != h.workPanel) {
         // obj.object.colorize()
         // lastobj.hover(1)
         // console.log("were here")
-        lastobj = obj.object
+        h.lastobj = obj.object
 
 
-        if(lastobj === transitionButton.mesh){
+        // console.log("LASTOBJ", h.lastobj, h.lastobj==h.transitionButton.object.object)
+        if(h.lastobj === h.transitionButton.mesh){
             // @ts-ignore
-            moveToDesc(window.h)
+            if(!h.onWorkDesc){
+            // @ts-ignore
+                moveToDesc(h)
+            // @ts-ignore
+                h.onWorkDesc = true
+                return
+            }else{
+            // @ts-ignore
+                zoomIntoWork(h)
+            // @ts-ignore
+                h.onWorkDesc = false
+            // @ts-ignore
+                lastobj = h.transitionButton
+                return 
+            }
         }
 
-        if(!lastobj.controller) return
+        // if(!h.lastobj.controller) return
 
-
-        let img = lastobj.controller.heroDiv || lastobj.controller.hero || ""
+        let img = h.lastobj.controller.heroDiv || h.lastobj.controller.hero || ""
 
         // console.log(img)
         // if the last object is the same as work panel object
         // then we should reset everything
-        let hoverobj = workPanel.hover(img)
+        let hoverobj = h.workPanel.hover(img)
 
+        // set description for panel
+        let imgDesc = h.lastobj.controller.descDiv || h.lastobj.hero+"_desc"
+        // pass id
+        let workObj = h.workDescPanel.hover(imgDesc)
+
+        // save created 3d object
+        if (!h.lastobj.controller.heroDiv){
+            h.lastobj.controller.updateHeroDiv(hoverobj)
+            h.lastobj.controller.updateDescDiv(workObj)
+        }
 
         // let imgDesc = lastobj.controller.descDiv || lastobj.hero+"_desc"
         // pass id
         // let workObj = workDescPanel.hover(imgDesc)
         // lastobj.controller.updateDescDiv(workObj)
 
+        console.log("helllllll")
         try{
             // @ts-ignore
-            zoomIntoWork(window.h)
+            zoomIntoWork(h)
+            // h.uca(h.lastobj.hero)
         }catch(e){
             console.log(e)
         }
 
         if(img){
             // console.log("HELL")
-            lastobj.controller.updateHeroDiv(hoverobj)
+            h.lastobj.controller.updateHeroDiv(hoverobj)
         }
 
         // if (lastobj.registerCanvas) lastobj.registerCanvas()
         
     } else {
-        if (lastobj) {
+        if (h.lastobj) {
             // vec.set(0, 0, 0)
-            workPanel.resetColor()
-            lastobj = null
+            h.workPanel.resetColor()
+            h.lastobj = null
         }
     }
-    scrolling = false
+    h.scrolling = false
 }
 
 export function onTouchMove(h) {
@@ -144,6 +169,7 @@ export function onTouchMove(h) {
     }
 
     h.tileGroup.position.y += (deltaY * speed);
+    console.log(h.scrolling)
 }
 
 export function onTouchStart(event) {
@@ -189,6 +215,7 @@ export function onMouseMove(h) {
         // pass id or element to work panel
         let obj = h.workPanel.hover(img)
 
+        // set description for panel
         let imgDesc = intersected.controller.descDiv || intersected.hero+"_desc"
         // pass id
         let workObj = h.workDescPanel.hover(imgDesc)
@@ -291,6 +318,24 @@ function moveToDesc(h){
     h.zoomed = false
     h.lastobj = null
     let start = from(h.camera)
+
+    let buttonStart = {
+        x: h.transitionButton.mesh.position.x,
+        y: h.transitionButton.mesh.position.y,
+        z: h.transitionButton.mesh.position.z,
+    }
+    let buttonAnimation = new TWEEN.Tween(buttonStart)
+        .to(workButtonPosMobileBottom)
+        .easing(TWEEN.Easing.Linear.None)
+        .onUpdate(function () {
+            h.transitionButton.mesh.position.set(
+                buttonStart.x,
+                buttonStart.y,
+                buttonStart.z,
+            )
+        })
+    if(isMobile()) buttonAnimation.start()
+
     let tween = new TWEEN.Tween(start)
         .to(to, 1000)
         .easing(TWEEN.Easing.Linear.None)
@@ -302,6 +347,7 @@ function moveToDesc(h){
             h.zooming = false
             h.zoomed = true
             h.desc = true
+            h.workDescPanel.obj.visible = true
             h.workDescPanel.tmpDiv.element.style.visibility = "visible"
             // let arrows = Array.from(document.getElementsByClassName("arrow"))
             // arrows.forEach((e) => {
@@ -310,13 +356,14 @@ function moveToDesc(h){
             // })zoomIntoWork
             // h.transitionButton.mesh.visible = true
         })
-        .start();
+        .start()
 }
 
 function zoomIntoWork(h) {
     // if (!h.lastobj) return
 
-    if(!isMobile()) h.workDescPanel.tmpDiv.element.style.visibility = "hidden"
+    // if(!isMobile())
+     h.workDescPanel.tmpDiv.element.style.visibility = "hidden"
     let to = workPanelFocusedPos
 
     h.zooming = true
@@ -341,9 +388,26 @@ function zoomIntoWork(h) {
 
             h.transitionButton.mesh.visible = true
             if(!isMobile()) h.workDescPanel.obj.visible = true
-            // h.workDescPanel.
+            h.workDescPanel
         })
         .start();
+
+    let buttonStart = {
+        x: h.transitionButton.mesh.position.x,
+        y: h.transitionButton.mesh.position.y,
+        z: h.transitionButton.mesh.position.z,
+    }
+    let buttonAnimation = new TWEEN.Tween(buttonStart)
+        .to(workButtonPosMobile)
+        .easing(TWEEN.Easing.Linear.None)
+        .onUpdate(function () {
+            h.transitionButton.mesh.position.set(
+                buttonStart.x,
+                buttonStart.y,
+                buttonStart.z,
+            )
+        })
+        if(isMobile()) buttonAnimation.start()
 
     h.camera.updateProjectionMatrix();
     // showWork()
@@ -389,10 +453,10 @@ export function zoomOutOfWork(h) {
     let bb = document.getElementById("back_button")
     bb.parentElement.removeChild(bb)
     h.transitionButton.mesh.visible = false
-    if(!isMobile()){
+    // if(!isMobile()){
         h.workDescPanel.obj.visible = false
         h.workDescPanel.tmpDiv.element.style.visibility = "hidden"
-    }
+    // }
     h.workPanel.resetColor()
     let start = from(h.camera)
     let tween = new TWEEN.Tween(start)
@@ -432,6 +496,7 @@ const removeWorkDesc = (h) => {
 }
 
 export const moveToWork = (h) => {
+    console.log("move to work")
 	h.currentPage = Pages.WORK
     h.scrolling = true
 

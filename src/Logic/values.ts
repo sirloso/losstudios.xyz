@@ -90,8 +90,15 @@ export const workStartPos = isMobile() ? workStartPosMobile : {
 
 export const workButtonPosMobile = {
     x: 3001.5,
-    y: -245,
-    z: -1200
+    y: -170,
+    z: -800
+}
+
+
+export const workButtonPosMobileBottom = {
+    x: 3001.5,
+    y: -1250,
+    z: -800
 }
 
 export const workButtonPos = {
@@ -101,9 +108,10 @@ export const workButtonPos = {
 }
 
 export const workDescPanelMobile = {
-    x: 4110,
-    y: 0,
-    z: 100
+    x: 3001.5,
+    y: -990,
+    // z: -1800
+    z: 1
 }
 
 export const workDescPanel = isMobile() ? workDescPanelMobile : {
@@ -165,7 +173,7 @@ export const mobile = {
 
 export const workDescPanelPosMobile = {
     x: 3001.5,
-    y: -960,
+    y: -950,
     z: -1800
 }
 

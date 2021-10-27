@@ -27,6 +27,14 @@ const Header = (props: HeaderProps) => {
         checkForInteractionButton()
         moveToAbout(handlerObj)
         hideAbout()
+        //@ts-ignore
+        window.h.workDescPanel.resetColor()
+        //@ts-ignore
+        window.h.workPanel.resetColor()
+        //@ts-ignore
+        window.h.lastobj = null
+        //@ts-ignore
+        window.h.transitionButton.mesh.visible = false
     } 
 
     const navWork = () =>{
@@ -39,6 +47,14 @@ const Header = (props: HeaderProps) => {
         checkForInteractionButton()
         moveToHome(handlerObj)
         hideLogo()
+        //@ts-ignore
+        window.h.workDescPanel.resetColor()
+        //@ts-ignore
+        window.h.workPanel.resetColor()
+        //@ts-ignore
+        window.h.lastobj = null
+        //@ts-ignore
+        window.h.transitionButton.mesh.visible = false
     }
 
     const hideWork = () => {

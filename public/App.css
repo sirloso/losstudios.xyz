@@ -160,7 +160,7 @@ canvas {
     width: 90%;
     height: 90%;
     position: absolute;
-    top: 10%;
+    top: 11%;
     /* left: 2.5%; */
 }
 
@@ -335,13 +335,21 @@ canvas {
         --animate-duration: 10s;
     }
 
+    .react-slideshow-container{
+        height: 100%;
+        width: 100%;
+        /* overflow: hidden; */
+    }
+
     .slideShow {
         --animate-duration: 4s;
-        width: 50px;
-        height: 50px;
-        display: flex;
+        width: 1000px;
+        height: 1000px;
+        /* width: 1000px;
+        height: ; */
+        /* display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: center; */
     }
 
     .writeup {
@@ -358,30 +366,40 @@ canvas {
         color: white;
     }
 
-    #bg,
-    .react-slideshow-container {
+    .each-slide{
         width: 1000px;
-        height: 1000px;
-        background-repeat: no-repeat;
-        background-size: contain;
-        background-position: center;
+        height: 1500px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+     #bg
+     {
+        width: 1000px;
+        height: auto;
+    } 
+
+    .arrow{
+        visibility: hidden;
     }
 
     #prevArrow,
     #nextArrow {
+        z-index: 20000;
         font-size: 1.5em;
-        color: white;
-        position: absolute;
-        --spacing: 500px;
+        /* position: absolute; */
+        --spacing: -1000000px;
+        /* --spacing: 1000px; */
         --wSpacing: 400px;
     }
 
     #nextArrow {
         top: var(--spacing);
-        left: 400px;
+        left: 870px;
     }
     #prevArrow {
         top: var(--spacing);
-        left: -420px;
+        left: 55px;
     }
 }

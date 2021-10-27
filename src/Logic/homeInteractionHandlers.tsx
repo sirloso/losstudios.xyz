@@ -68,7 +68,11 @@ export function onTouchEnd(h) {
     mouse.y = -(h.event.changedTouches[0].clientY / window.innerHeight) * 2 + 1;
 
     h.rc.setFromCamera(mouse, h.camera)
-    let intersects = h.rc.intersectObjects([ h.transitionButton.mesh, ...h.tileGroup.children ]);
+    let intersects = h.rc.intersectObjects([ 
+        h.workDescPanel.obj,
+        h.transitionButton.mesh,
+        ...h.tileGroup.children,
+    ]);
     let obj = intersects[0]
     if (obj && !h.scrolling && obj.object != h.workPanel) {
         // obj.object.colorize()
@@ -122,7 +126,6 @@ export function onTouchEnd(h) {
         // let workObj = workDescPanel.hover(imgDesc)
         // lastobj.controller.updateDescDiv(workObj)
 
-        console.log("helllllll")
         try{
             // @ts-ignore
             zoomIntoWork(h)
@@ -139,10 +142,11 @@ export function onTouchEnd(h) {
         // if (lastobj.registerCanvas) lastobj.registerCanvas()
         
     } else {
-        if (h.lastobj) {
+        if (!h.lastobj) {
             // vec.set(0, 0, 0)
-            h.workPanel.resetColor()
-            h.lastobj = null
+            // h.workDescPanel.resetColor()
+            // h.workPanel.resetColor()
+            // h.lastobj = null
         }
     }
     h.scrolling = false
@@ -177,7 +181,7 @@ export function onTouchStart(event) {
 }
 
 export function onWindowResize({ camera, renderer, cssrenderer, scene }) {
-    // location.reload()
+    // window.location.href = window.location.href
     // camera.aspect = window.innerWidth / window.innerHeight;
 
     // renderer.setSize(window.innerWidth, window.innerHeight);

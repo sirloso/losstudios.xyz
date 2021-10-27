@@ -189,6 +189,7 @@
                 };
             `)
         }
+    
 
         let idx = localStorage.getItem("idx")
         idx = idx ? JSON.parse(idx) : 0
@@ -196,7 +197,6 @@
 
         localStorage.setItem("idx",idx+1)
 
-        console.log(color)
         window.color = color
 
         // if desktop set icon
